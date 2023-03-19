@@ -1,0 +1,65 @@
+//::///////////////////////////////////////////////
+//:: Example Item Event Script
+//:: x2_it_example
+//:: Copyright (c) 2003 Bioware Corp.
+//:://////////////////////////////////////////////
+/*
+    This is an example on how to use the
+    new default module events for NWN to
+    have all code concerning one item in
+    a single file.
+
+    Note that this system only works, if
+    the following events set on your module
+
+    OnEquip      - x2_mod_def_equ
+    OnUnEquip    - x2_mod_def_unequ
+    OnAcquire    - x2_mod_def_aqu
+    OnUnAcqucire - x2_mod_def_unaqu
+    OnActivate   - x2_mod_def_act
+
+*/
+//:://////////////////////////////////////////////
+//:: Created By: Georg Zoeller
+//:: Created On: 2003-09-10
+//:://////////////////////////////////////////////
+
+#include "x2_inc_switches"
+#include "loi_functions"
+#include "nw_i0_spells"
+void main()
+{
+    int nEvent =GetUserDefinedItemEventNumber();
+    object oPC;
+    object oItem;
+    object oTarget;
+    int nAffliction = GetPCAffliction(oTarget);
+    int nDamage = d6(2);
+
+    if (nEvent ==  X2_ITEM_EVENT_ACTIVATE)
+    // * This code runs when the Unique Power property of the item is used
+    // * Note that this event fires PCs only
+    {
+        oPC   = GetItemActivator();
+        oItem = GetItemActivated();
+        oTarget = GetItemActivatedTarget();
+
+        if(GetIsPC(oTarget)&&((GetPCAffliction(oTarget) == PC_AFFLICTION_VAMPIRE)||(GetPCAffliction(oTarget) == PC_AFFLICTION_VAMPIRE_DRIDER)))
+            {
+            if(!MySavingThrow(SAVING_THROW_WILL,oTarget,18,SAVING_THROW_TYPE_NONE,oTarget))
+                {
+                    SendMessageToPC(oTarget,"You stare into the small silver mirror presented to you...And your mind reels from being confronted with the reality that you have no reflection.");
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectParalyze(),oTarget,RoundsToSeconds(3));
+                }
+                else
+                {
+                    SendMessageToPC(oTarget,"You are unphased by your lack of reflection in the small silver mirror presented to you...");
+                }
+            }
+            else
+            {
+                SendMessageToPC(oTarget,"You are confronted with your own reflection, your thoughts are your own.");
+            }
+    }
+}
+

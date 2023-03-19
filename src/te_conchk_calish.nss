@@ -1,0 +1,16 @@
+//::///////////////////////////////////////////////
+//:: FileName te_conchk_calish
+//:://////////////////////////////////////////////
+//:://////////////////////////////////////////////
+//:: Created By: Script Wizard
+//:: Created On: 11/30/2017 7:18:17 PM
+//:://////////////////////////////////////////////
+int StartingConditional()
+{
+
+    // Make sure the player has the required feats
+    if(!GetHasFeat(1381, GetPCSpeaker()))
+        return FALSE;
+
+    return TRUE;
+}

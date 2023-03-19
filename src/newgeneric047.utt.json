@@ -1,0 +1,142 @@
+{
+  "__data_type": "UTT ",
+  "AutoRemoveKey": {
+    "type": "byte",
+    "value": 0
+  },
+  "Comment": {
+    "type": "cexostring",
+    "value": "This trigger allows you to define an area of a particular terrain.\r\n\r\nSet a variable integer on the trigger named \"TerrainType\", and give it the number corresponding to the terrain type you want below.\r\n\r\n0   Open\r\n10  Under water, clear\r\n11  Under water, murky\r\n20  Undergrowth - light Half movement, concealment 20%. -2 Tumble and Move Silently\r\n21  Undergrowth - heavy Quarter movement, Concealment 30%. -5 Tumble and Move Silently. +5 Hide\r\n30  Ice sheet       Half movement, -5 Balance and Tumble\r\n40  Rubble - light      Balance and Tumble -2\r\n41  Rubble - dense      Half movement, -5 Balance and Tumble, -2 Move Silently\r\n50  Scree - gradual     -2 Balance, Tumble and Move Silently\r\n51  Scree - steep       -5 Balance, Tumble and -2 Move Silently\r\n60  Trees           +2 AC, +1 Reflex\r\n61  Trees - massive     +4 AC, +2 Reflex\r\n70  Slope - gradual     +1 Melee vs foes downhill\r\n71  Slope - steep       Half movement, -2 Tumble, +1 Melee vs foes downhill\r\n80  Bog - shallow       Half movement, -2 Tumble, -2 Move Silently\r\n81  Bog - deep      Quarter movment, +4 AC, +2 Reflex, -2 Move Silently\r\n90  Trench / streambed  Half movement, +4 AC ranged, -1 AC melee\r\n91  Low wall        +4 AC ranged, +2 Reflex\r\n\r\nCustom terrains\r\n100 Road            +20% movement, -10 Hide\r\n"
+  },
+  "Cursor": {
+    "type": "byte",
+    "value": 0
+  },
+  "DisarmDC": {
+    "type": "byte",
+    "value": 0
+  },
+  "Faction": {
+    "type": "dword",
+    "value": 1
+  },
+  "HighlightHeight": {
+    "type": "float",
+    "value": 0.0
+  },
+  "KeyName": {
+    "type": "cexostring",
+    "value": ""
+  },
+  "LinkedTo": {
+    "type": "cexostring",
+    "value": ""
+  },
+  "LinkedToFlags": {
+    "type": "byte",
+    "value": 0
+  },
+  "LoadScreenID": {
+    "type": "word",
+    "value": 0
+  },
+  "LocalizedName": {
+    "type": "cexolocstring",
+    "value": {
+      "0": "Tactical Terrain (Acid)",
+      "id": 14759
+    }
+  },
+  "OnClick": {
+    "type": "resref",
+    "value": ""
+  },
+  "OnDisarm": {
+    "type": "resref",
+    "value": ""
+  },
+  "OnTrapTriggered": {
+    "type": "resref",
+    "value": ""
+  },
+  "PaletteID": {
+    "type": "byte",
+    "value": 6
+  },
+  "PortraitId": {
+    "type": "word",
+    "value": 0
+  },
+  "ScriptHeartbeat": {
+    "type": "resref",
+    "value": "mim_terrain_hb"
+  },
+  "ScriptOnEnter": {
+    "type": "resref",
+    "value": "mim_terrain"
+  },
+  "ScriptOnExit": {
+    "type": "resref",
+    "value": "mim_terrain"
+  },
+  "ScriptUserDefine": {
+    "type": "resref",
+    "value": ""
+  },
+  "Tag": {
+    "type": "cexostring",
+    "value": "Terrain"
+  },
+  "TemplateResRef": {
+    "type": "resref",
+    "value": "newgeneric047"
+  },
+  "TrapDetectable": {
+    "type": "byte",
+    "value": 1
+  },
+  "TrapDetectDC": {
+    "type": "byte",
+    "value": 0
+  },
+  "TrapDisarmable": {
+    "type": "byte",
+    "value": 1
+  },
+  "TrapFlag": {
+    "type": "byte",
+    "value": 0
+  },
+  "TrapOneShot": {
+    "type": "byte",
+    "value": 1
+  },
+  "TrapType": {
+    "type": "byte",
+    "value": 0
+  },
+  "Type": {
+    "type": "int",
+    "value": 0
+  },
+  "VarTable": {
+    "type": "list",
+    "value": [
+      {
+        "__struct_id": 0,
+        "Name": {
+          "type": "cexostring",
+          "value": "TerrainType"
+        },
+        "Type": {
+          "type": "dword",
+          "value": 1
+        },
+        "Value": {
+          "type": "int",
+          "value": 102
+        }
+      }
+    ]
+  }
+}
