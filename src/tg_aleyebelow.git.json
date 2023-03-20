@@ -1995,7 +1995,7 @@
         },
         "ChallengeRating": {
           "type": "float",
-          "value": 5.0
+          "value": 10.0
         },
         "ClassList": {
           "type": "list",
@@ -2008,7 +2008,7 @@
               },
               "ClassLevel": {
                 "type": "short",
-                "value": 5
+                "value": 8
               }
             }
           ]
@@ -2035,7 +2035,7 @@
         },
         "Conversation": {
           "type": "resref",
-          "value": "te_alyn"
+          "value": ""
         },
         "CRAdjust": {
           "type": "int",
@@ -2043,7 +2043,7 @@
         },
         "CurrentHitPoints": {
           "type": "short",
-          "value": 32
+          "value": 80
         },
         "DecayTime": {
           "type": "dword",
@@ -2055,7 +2055,9 @@
         },
         "Description": {
           "type": "cexolocstring",
-          "value": {}
+          "value": {
+            "0": "The Knights of Agis were well known, organized, and even perhaps feared."
+          }
         },
         "Dex": {
           "type": "byte",
@@ -2084,15 +2086,15 @@
               },
               "Cloth1Color": {
                 "type": "byte",
-                "value": 23
+                "value": 170
               },
               "Cloth2Color": {
                 "type": "byte",
-                "value": 23
+                "value": 170
               },
               "Cost": {
                 "type": "dword",
-                "value": 3
+                "value": 881
               },
               "Cursed": {
                 "type": "byte",
@@ -2108,15 +2110,15 @@
               },
               "Identified": {
                 "type": "byte",
-                "value": 1
+                "value": 0
               },
               "Leather1Color": {
                 "type": "byte",
-                "value": 23
+                "value": 170
               },
               "Leather2Color": {
                 "type": "byte",
-                "value": 23
+                "value": 170
               },
               "LocalizedName": {
                 "type": "cexolocstring",
@@ -2142,7 +2144,39 @@
               },
               "PropertiesList": {
                 "type": "list",
-                "value": []
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 7
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 1
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 23
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 2
+                    }
+                  }
+                ]
               },
               "StackSize": {
                 "type": "word",
@@ -2461,205 +2495,10 @@
               }
             },
             {
-              "__struct_id": 4,
-              "AddCost": {
-                "type": "dword",
-                "value": 0
-              },
-              "BaseItem": {
-                "type": "int",
-                "value": 26
-              },
-              "Charges": {
-                "type": "byte",
-                "value": 0
-              },
-              "Cost": {
-                "type": "dword",
-                "value": 5337
-              },
-              "Cursed": {
-                "type": "byte",
-                "value": 0
-              },
-              "DescIdentified": {
-                "type": "cexolocstring",
-                "value": {
-                  "0": "These exquisitely crafted boots are made primarily of materials worked by the expert hands of the Dark Elves in the Underdark.\n"
-                }
-              },
-              "Description": {
-                "type": "cexolocstring",
-                "value": {
-                  "0": ""
-                }
-              },
-              "Identified": {
-                "type": "byte",
-                "value": 1
-              },
-              "LocalizedName": {
-                "type": "cexolocstring",
-                "value": {
-                  "0": "Drow Boots"
-                }
-              },
-              "ModelPart1": {
-                "type": "byte",
-                "value": 12
-              },
-              "ModelPart2": {
-                "type": "byte",
-                "value": 12
-              },
-              "ModelPart3": {
-                "type": "byte",
-                "value": 12
-              },
-              "Plot": {
-                "type": "byte",
-                "value": 0
-              },
-              "PropertiesList": {
-                "type": "list",
-                "value": [
-                  {
-                    "__struct_id": 0,
-                    "ChanceAppear": {
-                      "type": "byte",
-                      "value": 100
-                    },
-                    "CostTable": {
-                      "type": "byte",
-                      "value": 2
-                    },
-                    "CostValue": {
-                      "type": "word",
-                      "value": 2
-                    },
-                    "Param1": {
-                      "type": "byte",
-                      "value": 255
-                    },
-                    "Param1Value": {
-                      "type": "byte",
-                      "value": 0
-                    },
-                    "PropertyName": {
-                      "type": "word",
-                      "value": 1
-                    },
-                    "Subtype": {
-                      "type": "word",
-                      "value": 0
-                    }
-                  },
-                  {
-                    "__struct_id": 0,
-                    "ChanceAppear": {
-                      "type": "byte",
-                      "value": 100
-                    },
-                    "CostTable": {
-                      "type": "byte",
-                      "value": 25
-                    },
-                    "CostValue": {
-                      "type": "word",
-                      "value": 5
-                    },
-                    "Param1": {
-                      "type": "byte",
-                      "value": 255
-                    },
-                    "Param1Value": {
-                      "type": "byte",
-                      "value": 0
-                    },
-                    "PropertyName": {
-                      "type": "word",
-                      "value": 52
-                    },
-                    "Subtype": {
-                      "type": "word",
-                      "value": 8
-                    }
-                  },
-                  {
-                    "__struct_id": 0,
-                    "ChanceAppear": {
-                      "type": "byte",
-                      "value": 100
-                    },
-                    "CostTable": {
-                      "type": "byte",
-                      "value": 0
-                    },
-                    "CostValue": {
-                      "type": "word",
-                      "value": 0
-                    },
-                    "Param1": {
-                      "type": "byte",
-                      "value": 255
-                    },
-                    "Param1Value": {
-                      "type": "byte",
-                      "value": 0
-                    },
-                    "PropertyName": {
-                      "type": "word",
-                      "value": 64
-                    },
-                    "Subtype": {
-                      "type": "word",
-                      "value": 1
-                    }
-                  }
-                ]
-              },
-              "StackSize": {
-                "type": "word",
-                "value": 1
-              },
-              "Stolen": {
-                "type": "byte",
-                "value": 0
-              },
-              "Tag": {
-                "type": "cexostring",
-                "value": "te_item_7006"
-              },
-              "TemplateResRef": {
-                "type": "resref",
-                "value": "te_item_7006"
-              },
-              "XOrientation": {
-                "type": "float",
-                "value": 0.0
-              },
-              "XPosition": {
-                "type": "float",
-                "value": -1.0
-              },
-              "YOrientation": {
-                "type": "float",
-                "value": 1.0
-              },
-              "YPosition": {
-                "type": "float",
-                "value": -1.0
-              },
-              "ZPosition": {
-                "type": "float",
-                "value": -1.0
-              }
-            },
-            {
               "__struct_id": 8,
               "AddCost": {
                 "type": "dword",
-                "value": 0
+                "value": 300
               },
               "BaseItem": {
                 "type": "int",
@@ -2671,7 +2510,7 @@
               },
               "Cost": {
                 "type": "dword",
-                "value": 5761
+                "value": 6061
               },
               "Cursed": {
                 "type": "byte",
@@ -2680,7 +2519,7 @@
               "DescIdentified": {
                 "type": "cexolocstring",
                 "value": {
-                  "0": "These thin leather gloves are several centuries old, but due to their lasting enchantments, they still provide archers with alacrity on the battlefield as first intended."
+                  "0": "These thin leather gloves are several centuries old, but due to their lasting enchantments, they still provide the wearer with greatly improved physical strength."
                 }
               },
               "Description": {
@@ -2759,6 +2598,56 @@
                 "type": "resref",
                 "value": "te_item_2015"
               },
+              "VarTable": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Masterwork"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "OgreStr"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 2
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Value"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 2150
+                    }
+                  }
+                ]
+              },
               "XOrientation": {
                 "type": "float",
                 "value": 0.0
@@ -2788,7 +2677,7 @@
               },
               "BaseItem": {
                 "type": "int",
-                "value": 202
+                "value": 1
               },
               "Charges": {
                 "type": "byte",
@@ -2796,7 +2685,7 @@
               },
               "Cost": {
                 "type": "dword",
-                "value": 2
+                "value": 1648
               },
               "Cursed": {
                 "type": "byte",
@@ -2804,33 +2693,37 @@
               },
               "DescIdentified": {
                 "type": "cexolocstring",
-                "value": {}
+                "value": {
+                  "0": "This well made longsword is several centuries old, but due the materials utilized in its construction, it still provides a superb advantage to the one bearing it in battle."
+                }
               },
               "Description": {
                 "type": "cexolocstring",
-                "value": {}
+                "value": {
+                  "0": ""
+                }
               },
               "Identified": {
                 "type": "byte",
-                "value": 1
+                "value": 0
               },
               "LocalizedName": {
                 "type": "cexolocstring",
                 "value": {
-                  "0": "Mug of Ale"
+                  "0": "Adamantine Longsword"
                 }
               },
               "ModelPart1": {
                 "type": "byte",
-                "value": 11
+                "value": 51
               },
               "ModelPart2": {
                 "type": "byte",
-                "value": 21
+                "value": 144
               },
               "ModelPart3": {
                 "type": "byte",
-                "value": 11
+                "value": 193
               },
               "Plot": {
                 "type": "byte",
@@ -2838,7 +2731,101 @@
               },
               "PropertiesList": {
                 "type": "list",
-                "value": []
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 2
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 1
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 6
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 28
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 1
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 85
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 29
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 11
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 86
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
+                  }
+                ]
               },
               "StackSize": {
                 "type": "word",
@@ -2850,11 +2837,267 @@
               },
               "Tag": {
                 "type": "cexostring",
-                "value": "zep_mug_02"
+                "value": "te_item_2006"
               },
               "TemplateResRef": {
                 "type": "resref",
-                "value": "zep_mug_02"
+                "value": "te_item_2006"
+              },
+              "VarTable": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Material"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 4
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Masterwork"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Value"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1825
+                    }
+                  }
+                ]
+              },
+              "XOrientation": {
+                "type": "float",
+                "value": 0.0
+              },
+              "XPosition": {
+                "type": "float",
+                "value": -1.0
+              },
+              "YOrientation": {
+                "type": "float",
+                "value": 1.0
+              },
+              "YPosition": {
+                "type": "float",
+                "value": -1.0
+              },
+              "ZPosition": {
+                "type": "float",
+                "value": -1.0
+              }
+            },
+            {
+              "__struct_id": 32,
+              "AddCost": {
+                "type": "dword",
+                "value": 1150
+              },
+              "BaseItem": {
+                "type": "int",
+                "value": 57
+              },
+              "Charges": {
+                "type": "byte",
+                "value": 0
+              },
+              "Cost": {
+                "type": "dword",
+                "value": 1250
+              },
+              "Cursed": {
+                "type": "byte",
+                "value": 0
+              },
+              "DescIdentified": {
+                "type": "cexolocstring",
+                "value": {
+                  "0": "This well made tower shield is several centuries old, but thanks to the materials utilized in its construction, it still provides a measure of protection from harm as first intended."
+                }
+              },
+              "Description": {
+                "type": "cexolocstring",
+                "value": {
+                  "0": "The tower shield is a veritable wall of protection, though it can be quite cumbersome to carry on an adventure."
+                }
+              },
+              "Identified": {
+                "type": "byte",
+                "value": 0
+              },
+              "LocalizedName": {
+                "type": "cexolocstring",
+                "value": {
+                  "0": "Adamantine Tower Shield"
+                }
+              },
+              "ModelPart1": {
+                "type": "byte",
+                "value": 31
+              },
+              "Plot": {
+                "type": "byte",
+                "value": 0
+              },
+              "PropertiesList": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 28
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 1
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 85
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 29
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 11
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 86
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
+                  }
+                ]
+              },
+              "StackSize": {
+                "type": "word",
+                "value": 1
+              },
+              "Stolen": {
+                "type": "byte",
+                "value": 0
+              },
+              "Tag": {
+                "type": "cexostring",
+                "value": "te_item_3005"
+              },
+              "TemplateResRef": {
+                "type": "resref",
+                "value": "te_item_3005"
+              },
+              "VarTable": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Masterwork"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Material"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 4
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Value"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1150
+                    }
+                  }
+                ]
               },
               "XOrientation": {
                 "type": "float",
@@ -2893,7 +3136,7 @@
               },
               "Cloth1Color": {
                 "type": "byte",
-                "value": 23
+                "value": 170
               },
               "Cloth2Color": {
                 "type": "byte",
@@ -2901,7 +3144,7 @@
               },
               "Cost": {
                 "type": "dword",
-                "value": 1
+                "value": 879
               },
               "Cursed": {
                 "type": "byte",
@@ -2917,7 +3160,7 @@
               },
               "Identified": {
                 "type": "byte",
-                "value": 1
+                "value": 0
               },
               "Leather1Color": {
                 "type": "byte",
@@ -2925,7 +3168,7 @@
               },
               "Leather2Color": {
                 "type": "byte",
-                "value": 23
+                "value": 170
               },
               "LocalizedName": {
                 "type": "cexolocstring",
@@ -2943,7 +3186,7 @@
               },
               "ModelPart1": {
                 "type": "byte",
-                "value": 8
+                "value": 31
               },
               "Plot": {
                 "type": "byte",
@@ -2951,7 +3194,39 @@
               },
               "PropertiesList": {
                 "type": "list",
-                "value": []
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 7
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 1
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 23
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 2
+                    }
+                  }
+                ]
               },
               "StackSize": {
                 "type": "word",
@@ -2963,11 +3238,11 @@
               },
               "Tag": {
                 "type": "cexostring",
-                "value": "PurpleCloak"
+                "value": "te_item_8016"
               },
               "TemplateResRef": {
                 "type": "resref",
-                "value": "purplecloak"
+                "value": "te_item_8016"
               },
               "XOrientation": {
                 "type": "float",
@@ -3006,7 +3281,7 @@
               },
               "Cost": {
                 "type": "dword",
-                "value": 14233
+                "value": 13706
               },
               "Cursed": {
                 "type": "byte",
@@ -3057,7 +3332,7 @@
                     },
                     "CostValue": {
                       "type": "word",
-                      "value": 2
+                      "value": 1
                     },
                     "Param1": {
                       "type": "byte",
@@ -3093,6 +3368,56 @@
               "TemplateResRef": {
                 "type": "resref",
                 "value": "te_item_3015"
+              },
+              "VarTable": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Masterwork"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Elemental"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Value"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 6000
+                    }
+                  }
+                ]
               },
               "XOrientation": {
                 "type": "float",
@@ -3200,6 +3525,68 @@
                       "type": "word",
                       "value": 0
                     }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 28
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 8
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 85
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 29
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 11
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 86
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
                   }
                 ]
               },
@@ -3218,6 +3605,56 @@
               "TemplateResRef": {
                 "type": "resref",
                 "value": "te_item_1010"
+              },
+              "VarTable": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Masterwork"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Value"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 2000
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "ArmorAC"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1
+                    }
+                  }
+                ]
               },
               "XOrientation": {
                 "type": "float",
@@ -3406,6 +3843,41 @@
                 "type": "resref",
                 "value": "te_item_3011"
               },
+              "VarTable": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Masterwork"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Value"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 19000
+                    }
+                  }
+                ]
+              },
               "XOrientation": {
                 "type": "float",
                 "value": 0.0
@@ -3431,7 +3903,7 @@
         },
         "FactionID": {
           "type": "word",
-          "value": 4
+          "value": 29
         },
         "FeatList": {
           "type": "list",
@@ -3595,7 +4067,7 @@
         "FirstName": {
           "type": "cexolocstring",
           "value": {
-            "0": "Sir Glenn"
+            "0": "Knight of Agis"
           }
         },
         "fortbonus": {
@@ -3612,7 +4084,7 @@
         },
         "HitPoints": {
           "type": "short",
-          "value": 32
+          "value": 80
         },
         "Int": {
           "type": "byte",
@@ -3630,317 +4102,6 @@
           "type": "byte",
           "value": 0
         },
-        "ItemList": {
-          "type": "list",
-          "value": [
-            {
-              "__struct_id": 0,
-              "AddCost": {
-                "type": "dword",
-                "value": 0
-              },
-              "BaseItem": {
-                "type": "int",
-                "value": 57
-              },
-              "Charges": {
-                "type": "byte",
-                "value": 0
-              },
-              "Cost": {
-                "type": "dword",
-                "value": 3024
-              },
-              "Cursed": {
-                "type": "byte",
-                "value": 0
-              },
-              "DescIdentified": {
-                "type": "cexolocstring",
-                "value": {
-                  "0": "This well made tower shield is several centuries old, but due to its lasting enchantments, it still provides a measure of protection from harm as first intended."
-                }
-              },
-              "Description": {
-                "type": "cexolocstring",
-                "value": {
-                  "0": "The tower shield is a veritable wall of protection, though it can be quite cumbersome to carry on an adventure."
-                }
-              },
-              "Identified": {
-                "type": "byte",
-                "value": 1
-              },
-              "LocalizedName": {
-                "type": "cexolocstring",
-                "value": {
-                  "0": "Adamantine Tower Shield"
-                }
-              },
-              "ModelPart1": {
-                "type": "byte",
-                "value": 31
-              },
-              "Plot": {
-                "type": "byte",
-                "value": 0
-              },
-              "PropertiesList": {
-                "type": "list",
-                "value": [
-                  {
-                    "__struct_id": 0,
-                    "ChanceAppear": {
-                      "type": "byte",
-                      "value": 100
-                    },
-                    "CostTable": {
-                      "type": "byte",
-                      "value": 2
-                    },
-                    "CostValue": {
-                      "type": "word",
-                      "value": 2
-                    },
-                    "Param1": {
-                      "type": "byte",
-                      "value": 255
-                    },
-                    "Param1Value": {
-                      "type": "byte",
-                      "value": 0
-                    },
-                    "PropertyName": {
-                      "type": "word",
-                      "value": 1
-                    },
-                    "Subtype": {
-                      "type": "word",
-                      "value": 0
-                    }
-                  }
-                ]
-              },
-              "Repos_PosX": {
-                "type": "word",
-                "value": 0
-              },
-              "Repos_Posy": {
-                "type": "word",
-                "value": 0
-              },
-              "StackSize": {
-                "type": "word",
-                "value": 1
-              },
-              "Stolen": {
-                "type": "byte",
-                "value": 0
-              },
-              "Tag": {
-                "type": "cexostring",
-                "value": "te_item_3005"
-              },
-              "TemplateResRef": {
-                "type": "resref",
-                "value": "te_item_3005"
-              },
-              "XOrientation": {
-                "type": "float",
-                "value": 0.0
-              },
-              "XPosition": {
-                "type": "float",
-                "value": -1.0
-              },
-              "YOrientation": {
-                "type": "float",
-                "value": 1.0
-              },
-              "YPosition": {
-                "type": "float",
-                "value": -1.0
-              },
-              "ZPosition": {
-                "type": "float",
-                "value": -1.0
-              }
-            },
-            {
-              "__struct_id": 1,
-              "AddCost": {
-                "type": "dword",
-                "value": 0
-              },
-              "BaseItem": {
-                "type": "int",
-                "value": 1
-              },
-              "Charges": {
-                "type": "byte",
-                "value": 0
-              },
-              "Cost": {
-                "type": "dword",
-                "value": 7248
-              },
-              "Cursed": {
-                "type": "byte",
-                "value": 0
-              },
-              "DescIdentified": {
-                "type": "cexolocstring",
-                "value": {
-                  "0": "In Tethyr, the longsword was considered a civilized weapon. This particular sword was sharp beyond belief."
-                }
-              },
-              "Description": {
-                "type": "cexolocstring",
-                "value": {
-                  "0": ""
-                }
-              },
-              "Identified": {
-                "type": "byte",
-                "value": 0
-              },
-              "LocalizedName": {
-                "type": "cexolocstring",
-                "value": {
-                  "0": "Tethyrian War Sword",
-                  "id": 166
-                }
-              },
-              "ModelPart1": {
-                "type": "byte",
-                "value": 44
-              },
-              "ModelPart2": {
-                "type": "byte",
-                "value": 234
-              },
-              "ModelPart3": {
-                "type": "byte",
-                "value": 19
-              },
-              "Plot": {
-                "type": "byte",
-                "value": 0
-              },
-              "PropertiesList": {
-                "type": "list",
-                "value": [
-                  {
-                    "__struct_id": 0,
-                    "ChanceAppear": {
-                      "type": "byte",
-                      "value": 100
-                    },
-                    "CostTable": {
-                      "type": "byte",
-                      "value": 2
-                    },
-                    "CostValue": {
-                      "type": "word",
-                      "value": 1
-                    },
-                    "Param1": {
-                      "type": "byte",
-                      "value": 255
-                    },
-                    "Param1Value": {
-                      "type": "byte",
-                      "value": 0
-                    },
-                    "PropertyName": {
-                      "type": "word",
-                      "value": 6
-                    },
-                    "Subtype": {
-                      "type": "word",
-                      "value": 0
-                    }
-                  },
-                  {
-                    "__struct_id": 0,
-                    "ChanceAppear": {
-                      "type": "byte",
-                      "value": 100
-                    },
-                    "CostTable": {
-                      "type": "byte",
-                      "value": 0
-                    },
-                    "CostValue": {
-                      "type": "word",
-                      "value": 0
-                    },
-                    "Param1": {
-                      "type": "byte",
-                      "value": 255
-                    },
-                    "Param1Value": {
-                      "type": "byte",
-                      "value": 0
-                    },
-                    "PropertyName": {
-                      "type": "word",
-                      "value": 43
-                    },
-                    "Subtype": {
-                      "type": "word",
-                      "value": 0
-                    }
-                  }
-                ]
-              },
-              "Repos_PosX": {
-                "type": "word",
-                "value": 2
-              },
-              "Repos_Posy": {
-                "type": "word",
-                "value": 0
-              },
-              "StackSize": {
-                "type": "word",
-                "value": 1
-              },
-              "Stolen": {
-                "type": "byte",
-                "value": 0
-              },
-              "Tag": {
-                "type": "cexostring",
-                "value": "te_item_8353"
-              },
-              "TemplateResRef": {
-                "type": "resref",
-                "value": "te_item_8353"
-              },
-              "XOrientation": {
-                "type": "float",
-                "value": 0.0
-              },
-              "XPosition": {
-                "type": "float",
-                "value": -1.0
-              },
-              "YOrientation": {
-                "type": "float",
-                "value": 1.0
-              },
-              "YPosition": {
-                "type": "float",
-                "value": -1.0
-              },
-              "ZPosition": {
-                "type": "float",
-                "value": -1.0
-              }
-            }
-          ]
-        },
         "LastName": {
           "type": "cexolocstring",
           "value": {
@@ -3957,7 +4118,7 @@
         },
         "MaxHitPoints": {
           "type": "short",
-          "value": 47
+          "value": 104
         },
         "NaturalAC": {
           "type": "byte",
@@ -3969,7 +4130,7 @@
         },
         "PerceptionRange": {
           "type": "byte",
-          "value": 11
+          "value": 9
         },
         "Phenotype": {
           "type": "int",
@@ -4282,7 +4443,7 @@
         },
         "WalkRate": {
           "type": "int",
-          "value": 4
+          "value": 5
         },
         "willbonus": {
           "type": "short",

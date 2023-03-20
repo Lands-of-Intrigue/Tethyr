@@ -21,6 +21,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -49,6 +53,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -76,12 +84,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Found out what the delay is, my <Lord/Lady>?"
+            "0": "\"Found out what the delay is, my <Lord/Lady>?\""
           }
         }
       },
       {
         "__struct_id": 1,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -110,6 +122,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -137,12 +153,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Perhaps you should have a word with the Lieutenant over there. Perhaps they will move quicker if they know one with status such as yourself is waiting."
+            "0": "\"Perhaps you should have a word with the Lieutenant over there. Maybe they will move quicker if they know one with status such as yourself is waiting.\""
           }
         }
       },
       {
         "__struct_id": 2,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -172,6 +192,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 3
@@ -186,6 +210,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -213,12 +241,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Ah, it seems that they're just about done, my <Lord/Lady>. Let's get you to Brost."
+            "0": "\"Ah, it seems that they're just about done, my <Lord/Lady>. Let's get you to Brost.\""
           }
         }
       },
       {
         "__struct_id": 3,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -247,6 +279,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -274,12 +310,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "<StartAction>[The man looks over you with disdain.]</Start> Go away, can't you see I'm busy peasant?"
+            "0": "<StartAction>[The man looks over you with disdain.]</Start> \"Go away, can't you see I'm busy, peasant?\""
           }
         }
       },
       {
         "__struct_id": 4,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -308,6 +348,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -335,12 +379,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "<StartAction>[The man looks over you with vague irritation.]</Start> Go away, can't you see I'm busy?"
+            "0": "<StartAction>[The man looks over you with vague irritation.]</Start> \"Go away, can't you see I'm busy?\""
           }
         }
       },
       {
         "__struct_id": 5,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -369,6 +417,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -396,12 +448,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Greetings my <Lord/Lady>. I apologize for the inconvience. I'm not sure what's happening...Some sort of checkpoint."
+            "0": "\"Greetings my <Lord/Lady>. I apologize for the inconvience. I'm not sure what's happening...Some sort of checkpoint.\""
           }
         }
       },
       {
         "__struct_id": 6,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -431,6 +487,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 7
@@ -457,7 +517,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Perhaps you could have a word with the Caravan Master?"
+            "0": "\"Perhaps you could have a word with the Caravan Master?\""
           }
         }
       }
@@ -465,7 +525,7 @@
   },
   "NumWords": {
     "type": "dword",
-    "value": 119
+    "value": 128
   },
   "PreventZoomIn": {
     "type": "byte",
@@ -476,6 +536,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -500,6 +564,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -527,12 +595,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Yes...]"
+            "0": "\"I have, yes.\""
           }
         }
       },
       {
         "__struct_id": 1,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -568,12 +640,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Okay...]"
+            "0": "\"I will do so.\""
           }
         }
       },
       {
         "__struct_id": 2,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -609,12 +685,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[I'm not finished here yet.]"
+            "0": "\"I'm not finished here yet.\""
           }
         }
       },
       {
         "__struct_id": 3,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -650,12 +730,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[I'm ready!]"
+            "0": "\"Thank you, I'm ready to go.\""
           }
         }
       },
       {
         "__struct_id": 4,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -691,12 +775,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Okay...]"
+            "0": "\"Okay.\""
           }
         }
       },
       {
         "__struct_id": 5,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -732,12 +820,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Okay...]"
+            "0": "\"Okay.\""
           }
         }
       },
       {
         "__struct_id": 6,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -762,6 +854,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -789,12 +885,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Okay...]"
+            "0": "\"Okay.\""
           }
         }
       },
       {
         "__struct_id": 7,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -830,7 +930,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Okay...]"
+            "0": "\"Okay.\""
           }
         }
       }
@@ -845,6 +945,10 @@
           "type": "resref",
           "value": "te_ent_up0chk"
         },
+        "ConditionParams": {
+          "type": "list",
+          "value": []
+        },
         "Index": {
           "type": "dword",
           "value": 5
@@ -855,6 +959,10 @@
         "Active": {
           "type": "resref",
           "value": "te_convclassmid"
+        },
+        "ConditionParams": {
+          "type": "list",
+          "value": []
         },
         "Index": {
           "type": "dword",
@@ -867,6 +975,10 @@
           "type": "resref",
           "value": "te_convclasslow"
         },
+        "ConditionParams": {
+          "type": "list",
+          "value": []
+        },
         "Index": {
           "type": "dword",
           "value": 3
@@ -878,6 +990,10 @@
           "type": "resref",
           "value": "te_ent_up2chk"
         },
+        "ConditionParams": {
+          "type": "list",
+          "value": []
+        },
         "Index": {
           "type": "dword",
           "value": 2
@@ -888,6 +1004,10 @@
         "Active": {
           "type": "resref",
           "value": "te_ent_up1chk"
+        },
+        "ConditionParams": {
+          "type": "list",
+          "value": []
         },
         "Index": {
           "type": "dword",

@@ -21,6 +21,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -50,6 +54,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 1
@@ -64,6 +72,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -97,6 +109,10 @@
       },
       {
         "__struct_id": 1,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -125,6 +141,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -152,12 +172,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Why yes, I do! It's not very far, only another day's walk give or take a few hours."
+            "0": "\"Why yes, I do! It's not very far, only another day's walk give or take a few hours.\""
           }
         }
       },
       {
         "__struct_id": 2,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -186,6 +210,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -213,12 +241,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "The road is clear. If you head straight down it, you'll come upon the Tejarn Gate as soon as you enter Brost County. Stay straight and true until you reach Fort Briarwood - that's where you'll turn southwards. After that, you'll see the road fork south and west. Take the west fork and you'll arrive in Brost, safe and sound."
+            "0": "\"The road is clear. If you head straight down it you'll come upon the Tejarn Gate as soon as you enter Brost County. Stay straight and true until you reach Fort Briarwood - that's where you'll turn southwards. After that, you'll see the road fork south and west. Take the west fork and you'll arrive in Brost, safe and sound.\""
           }
         }
       },
       {
         "__struct_id": 3,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -248,6 +280,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 4
@@ -274,7 +310,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Be wary of venturing off the road. While the roads between here and Brost are clear - there are dangers on either side lurking in the woods."
+            "0": "\"You're welcome.  Be wary of venturing off the road. While the roads between here and Brost are clear, there are dangers on either side lurking in the woods.\""
           }
         }
       }
@@ -282,7 +318,7 @@
   },
   "NumWords": {
     "type": "dword",
-    "value": 127
+    "value": 136
   },
   "PreventZoomIn": {
     "type": "byte",
@@ -293,6 +329,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -334,6 +374,10 @@
       },
       {
         "__struct_id": 1,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -358,6 +402,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -385,12 +433,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Do you know how to get to Brost?]"
+            "0": "\"Do you know the way to Brost?\""
           }
         }
       },
       {
         "__struct_id": 2,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -415,6 +467,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -442,12 +498,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Oh...]"
+            "0": "\"I see.  Is it safe?\""
           }
         }
       },
       {
         "__struct_id": 3,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -472,6 +532,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -499,12 +563,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Wow, thanks!]"
+            "0": "\"Thank you.\""
           }
         }
       },
       {
         "__struct_id": 4,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -540,7 +608,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Okay.]"
+            "0": "\"I'll keep that in mind, thanks.\"\n"
           }
         }
       }
@@ -554,6 +622,10 @@
         "Active": {
           "type": "resref",
           "value": ""
+        },
+        "ConditionParams": {
+          "type": "list",
+          "value": []
         },
         "Index": {
           "type": "dword",
