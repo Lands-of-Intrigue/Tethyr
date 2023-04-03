@@ -6,10 +6,6 @@
 //                                                                  //
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
-
-
-/* siobhan this script looks broken, delete?
-
 object oDest = GetPCItemLastEquipped();
 object oPC = GetItemPossessor(oDest);
 object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
@@ -31,4 +27,3 @@ void main()
         }
     }
 }
-*/

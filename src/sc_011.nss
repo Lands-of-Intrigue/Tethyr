@@ -5,7 +5,6 @@
 //:: Created By: Script Wizard
 //:: Created On: 8
 //:://////////////////////////////////////////////
-/* siobhan: I think this is not fully written - maybe can delete?
 int StartingConditional()
 {
 
@@ -26,4 +25,3 @@ int StartingConditional()
        }
     return FALSE;
 }
-*/

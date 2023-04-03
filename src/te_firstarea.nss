@@ -14,6 +14,7 @@ void main()
     object oUser = GetEnteringObject();
     object oItem = GetItemPossessedBy(oUser, "PC_Data_Object");
 
+
     if(GetHasFeat(3000,oUser) == FALSE)
     {
         NWNX_Creature_AddFeat(oUser, 3000);
@@ -36,6 +37,10 @@ void main()
         if (GetItemPossessedBy(oUser, "PC_Data_Object") == OBJECT_INVALID)
         {
             CreateItemOnObject("PC_Data_Object",oUser, 1);
+            AddJournalQuestEntry("quest_welcome",1,oUser);
+            AddJournalQuestEntry("quest_amn",1,oUser);
+            AddJournalQuestEntry("quest_calimshan",1,oUser);
+            AddJournalQuestEntry("quest_tethyr",1,oUser);
         }
 
         //Setup all initial integers, strings, and locations.
@@ -60,6 +65,7 @@ void main()
         //Make them level 3
         SetXP(oUser, 3000);
         AssignCommand(oUser, JumpToLocation(GetLocation(GetObjectByTag("WP_NewCharacter")))); //Put them in the Starting Area.
+
 
     }
     else if (GetIsPC(oUser) == TRUE)

@@ -373,10 +373,10 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 ////////////////////////////////////////////////////////////////////////////////
 //Begin PC Welcome:
 ////////////////////////////////////////////////////////////////////////////////
-    string sWelcome = COLOR_SGREEN+"Welcome to Spellplague: The Rebirth!";
-    sWelcome += "\n"+COLOR_SPERIWINKLE+"For information about our Campaign please refer to the Discord";
-    sWelcome += "\n"+COLOR_SPERIWINKLE+"This is a serious Roleplay Server, so above all, we ask that you stay "+COLOR_SRED+"In Character"+COLOR_SPERIWINKLE+" at all times.";
-    sWelcome += "\n"+COLOR_SRED+"Report all Custom Feature Bugs/Exploits in the Discord! And don't forget to send all NWN Bug Reports to Beamdog!";
+    string sWelcome = COLOR_SGREEN+"Welcome to Lands of Intrigue!";
+    sWelcome += "\n"+COLOR_SPERIWINKLE+"For information about the setting and current timeline please check Discord and your in-game Journal.";
+    sWelcome += "\n"+COLOR_SPERIWINKLE+"This is a Roleplay Server, so above all, we ask that you stay "+COLOR_SRED+"In Character"+COLOR_SPERIWINKLE+" at all times.";
+    sWelcome += "\n"+COLOR_SRED+"Please report all Module and Server specific Bugs in Discord and all NWN:EE specific bugs to Beamdog. ";
     sWelcome += "\n"+COLOR_SYELLOW+"We hope you enjoy your stay.";
 
     SendMessageToPC(oPC,sWelcome);

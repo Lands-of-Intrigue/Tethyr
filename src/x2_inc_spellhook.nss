@@ -53,7 +53,7 @@ int X2DeadmagicZone();
 // Wildmagic zone
 // This function will check for any wild magic effects and send calls to the
 // wild magic tables based on that.
-void X2WildMagicZone();
+int X2WildMagicZone();
 
 //Mythic XP Hookin for Wisdom and Intelligence.
 //Gives 1 Mythic XP in a stat based on arcane

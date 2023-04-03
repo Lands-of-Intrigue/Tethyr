@@ -42,11 +42,11 @@ const string COLOR_END  = "</c>";
 void main()
 {
     object oPC = GetEnteringObject();
-    SendMessageToPC(oPC, GREEN+"New Player Information!");
-    SendMessageToPC(oPC, CYAN+"This room is where Customization Feats will be applied to your character. You have been granted Level 3. Begin by leveling up to Level 3. All of your first three classes must be the same. Afterwards, there are no stipulations. 3.5 Edition multiclassing rules apply. ");
-    SendMessageToPC(oPC, LIGHTGREEN+"Pull the lever to your left to select Customization Feats such as Class Standing, Background, Ethnicity, Deity, Language and Proficiencies.");
-    SendMessageToPC(oPC, CYAN+"You must have completed Customization Feat Selection and leveled to Level 3 before you may leave this room.");
-    SendMessageToPC(oPC, RED+"Note: If you appear to be a dwarf and are not a dwarf - relogin now to fix your appearance.");
+    SendMessageToPC(oPC, YELLOW+"Welcome to Lands of Intrigue!");
+    SendMessageToPC(oPC, YELLOW+"This room is where Customization Feats will be applied to your character. You have been granted enough XP to reach Level 3. Please make sure you fully levelup before doing anything else in this room. All of your first three classes must be the same. Afterwards, there are no restrictions. 3.5 Edition multiclassing rules apply. ");
+    SendMessageToPC(oPC, YELLOW+"Pull one of the levers to your left or right to select Customization Feats such as Class Standing, Background, Ethnicity, Deity, Language and Proficiencies.  Please note that some of these choices such as Class Standing and Background do affect certain dialogue options and mechanical opportunities in-game. ");
+    SendMessageToPC(oPC, RED+"Warning: You must have completed Customization Feat Selection and leveled up to Level 3 before you leave this room.");
+    SendMessageToPC(oPC, RED+"Note: If you appear to be a dwarf and are not a dwarf please re-log and it will be fixed.");
     SendMessageToPC(oPC, RED+"Note: Languages can be selected. If you do not have any options that appear for you, you have reached the limit of languages you can select.");
 
     NWNX_Player_ForcePlaceableExamineWindow(oPC,GetNearestObjectByTag("te_welcome",oPC,1));

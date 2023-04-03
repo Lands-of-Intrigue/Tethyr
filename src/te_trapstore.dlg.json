@@ -21,6 +21,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -50,6 +54,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 2
@@ -65,6 +73,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 1
@@ -79,6 +91,10 @@
               "Active": {
                 "type": "resref",
                 "value": "bdm_cnv_stl_test"
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -106,7 +122,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Welcome to the Ranger's Rest, weary traveler. I have many wares that I sell to the rangers and hunters of the county. Are you interested?"
+            "0": "\"Welcome to the Ranger's Rest, weary traveler. I have many wares that I sell to the rangers and hunters of the county. Are you interested?\""
           }
         }
       }
@@ -125,6 +141,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -166,6 +186,10 @@
       },
       {
         "__struct_id": 1,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -207,6 +231,10 @@
       },
       {
         "__struct_id": 2,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -242,7 +270,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Yes!]"
+            "0": "[Yes!."
           }
         }
       }
@@ -256,6 +284,10 @@
         "Active": {
           "type": "resref",
           "value": ""
+        },
+        "ConditionParams": {
+          "type": "list",
+          "value": []
         },
         "Index": {
           "type": "dword",
