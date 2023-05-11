@@ -185,8 +185,7 @@ void main()
         if (GetHasFeat(BACKGROUND_AFFLUENCE,oPC) == TRUE)
         {
             RewardGP(FloatToInt(2000*fStandingMod), oPC, FALSE);
-            CreateItemOnObject("te_item_0019", oPC, 1);
-            CreateItemOnObject("te_item_2011", oPC, 1);
+
 
         }
         else if (GetHasFeat(BACKGROUND_BRAWLER,oPC) == TRUE)
@@ -348,7 +347,7 @@ void main()
         else if (GetHasFeat(BACKGROUND_ENLIGHTENED_STUDENT, oPC) == TRUE)
         {
             RewardGP(FloatToInt(450*fStandingMod), oPC, FALSE);
-            CreateItemOnObject("te_item_01013", oPC, 1);
+            CreateItemOnObject("ringofknowledge", oPC, 1);
             CreateItemOnObject("te_item_8457", oPC, 1);
             CreateItemOnObject("te_book002", oPC, 1);
             CreateItemOnObject("te_item_8456", oPC, 1);

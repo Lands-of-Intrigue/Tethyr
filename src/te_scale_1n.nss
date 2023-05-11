@@ -4,9 +4,10 @@ void main()
     object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
 
     float fScale = GetLocalFloat(oItem,"fScale");
+
     if (fScale == 0.0f) {fScale = 1.0f;}
 
-    if(fScale <= -0.96f)
+    if(fScale <= 0.96f)
     {
         SendMessageToPC(oPC,"You may not decrease your size beyond this point.");
     }

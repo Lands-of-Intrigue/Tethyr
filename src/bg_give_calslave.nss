@@ -14,5 +14,5 @@ void main()
     int iFeat = 1464;
     NWNX_Creature_AddFeatByLevel(oPC,iFeat,1);
     SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"BG_Select",3);
-ActionStartConversation(oPC,"bg_deity",TRUE);
+    ActionStartConversation(oPC,"bg_deity",TRUE);
 }

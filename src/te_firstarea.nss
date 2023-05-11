@@ -37,10 +37,7 @@ void main()
         if (GetItemPossessedBy(oUser, "PC_Data_Object") == OBJECT_INVALID)
         {
             CreateItemOnObject("PC_Data_Object",oUser, 1);
-            AddJournalQuestEntry("quest_welcome",1,oUser);
-            AddJournalQuestEntry("quest_amn",1,oUser);
-            AddJournalQuestEntry("quest_calimshan",1,oUser);
-            AddJournalQuestEntry("quest_tethyr",1,oUser);
+
         }
 
         //Setup all initial integers, strings, and locations.

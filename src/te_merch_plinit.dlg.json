@@ -21,6 +21,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -50,6 +54,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 4
@@ -64,6 +72,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -91,12 +103,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Greetings, traveler."
+            "0": "\"Greetings, traveler.\""
           }
         }
       },
       {
         "__struct_id": 1,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -126,6 +142,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 1
@@ -140,6 +160,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -171,12 +195,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "What would you like to know?"
+            "0": "\"What would you like to know?\""
           }
         }
       },
       {
         "__struct_id": 2,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -206,6 +234,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 3
@@ -220,6 +252,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -247,7 +283,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "Brost is a rural village, and would be considered unimportant if it weren't for two things. First, the ogre armies to the north threaten both Tethyr and Amn's hold on the Swordbelt, while Amnian armies are attacking and killing the people of Brost. Second, it lies along the Tethir Road, one of the most important trade routes to the west - dwarfed only by the Trade-Way running north and south."
+            "0": "\"Our story takes place primarily within the Duchy of Noromath, the majority of which is encompassed within the North-North Western portion of the forest known as the Wealdath.  The Duchy has been without proper Ducal leadership for some years and thus serves as a hotspot for some of the larger scale political turmoil facing the Kingdom of Tethyr as a whole.  While the Queen and her Royal Council debate the matter of her succession and the rising tensions with Amn, the Barons of Noromath squabble over who is best suited to assume the role of Duke.\n\nTo the West the threat of the monstrous Sothilisian Empire ever lingers and even grows from day to day, as roving bands of Ogres, Trolls, and Goblins have been spotted within the Duchy's borders.  This increase in sightings of hostile monsters has lead to a rapid increase in logging efforts in order to build fortifications, and thus heightened tensions with the Elmanesse.\n\nLastly, tension with Amn is rapidly reaching a boiling point, as disagreements over trade tariffs continue to grow more heated.\""
           }
         }
       }
@@ -255,7 +291,7 @@
   },
   "NumWords": {
     "type": "dword",
-    "value": 102
+    "value": 213
   },
   "PreventZoomIn": {
     "type": "byte",
@@ -266,6 +302,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -290,6 +330,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -317,12 +361,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Ask about the Lands of Intrigue]"
+            "0": "[Ask about the Lands of Intrigue.]"
           }
         }
       },
       {
         "__struct_id": 1,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -347,6 +395,10 @@
               "Active": {
                 "type": "resref",
                 "value": ""
+              },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
               },
               "Index": {
                 "type": "dword",
@@ -374,12 +426,16 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Ask about Brost]"
+            "0": "[Ask about the Duchy of Noromath]"
           }
         }
       },
       {
         "__struct_id": 2,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -421,6 +477,10 @@
       },
       {
         "__struct_id": 3,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -462,6 +522,10 @@
       },
       {
         "__struct_id": 4,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -497,7 +561,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Ask to see their items]"
+            "0": "[Ask to see their items.]"
           }
         }
       }
@@ -511,6 +575,10 @@
         "Active": {
           "type": "resref",
           "value": ""
+        },
+        "ConditionParams": {
+          "type": "list",
+          "value": []
         },
         "Index": {
           "type": "dword",

@@ -57,6 +57,11 @@ void main()
     NWNX_Player_SetQuickBarSlot(oPC, 7,NWNX_Player_QBS_UseFeat(23));
     NWNX_Player_SetQuickBarSlot(oPC, 8,NWNX_Player_QBS_UseFeat(9));
 
+    AddJournalQuestEntry("quest_welcome",1,oPC);
+    AddJournalQuestEntry("quest_amn",1,oPC);
+    AddJournalQuestEntry("quest_calimshan",1,oPC);
+    AddJournalQuestEntry("quest_tethyr",1,oPC);
+
     if(!GetIsDM(oPC) && GetIsPC(oPC) == TRUE)
     {
         if(GetRacialType(oPC) == RACIAL_TYPE_HUMAN)     {SetCreatureAppearanceType(oPC,6);}

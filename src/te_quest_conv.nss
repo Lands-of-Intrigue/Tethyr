@@ -7,4 +7,7 @@ void main()
     string sVar2 = GetLocalString(OBJECT_SELF,"QTag");
 
     SetLocalInt(oItem,sVar2,nVar1);
+
+    // Give "brostcountyregis" to the PC.
+    CreateItemOnObject("brostcountyregis", oPC);
 }
