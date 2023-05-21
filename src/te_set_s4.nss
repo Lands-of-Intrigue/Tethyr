@@ -1,3 +1,5 @@
+// siobhan: looks like a hack to manage db stuff - remove if safe to do so!
+
 void main()
 {
     object oPC           = GetPCSpeaker();

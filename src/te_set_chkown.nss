@@ -93,6 +93,13 @@ int  StartingConditional()
     SetCustomToken(4410,"Bailiff Token: "+GetLocalString(oBailiff,"Settlement"));
     SetCustomToken(4411,"Baron Token: "+GetLocalString(oBailiff,"Settlement"));
 
+    // siobhan debug
+    SendMessageToPC(oPC,"Debug: hello this is siobhan");
+    SendMessageToPC(oPC,"Owner: "+sOwner);
+    SendMessageToPC(oPC,"BOwner: "+sSetOwner);
+    SendMessageToPC(oPC,"sID: "+sID);
+    SendMessageToPC(oPC,"sSubOwner: "+sSubOwner);
+
     if( GetLocalString(oBailiff,"Settlement") == sOwner  || //I am the Bailiff for this location.
             GetLocalString(oBaron,"Settlement") == sSetOwner ||
             sID == sSubOwner                                 || //I am the Sub-Owner for this location.
