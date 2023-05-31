@@ -3916,7 +3916,7 @@
               },
               "Cost": {
                 "type": "dword",
-                "value": 151
+                "value": 381
               },
               "Cursed": {
                 "type": "byte",
@@ -3925,7 +3925,7 @@
               "DescIdentified": {
                 "type": "cexolocstring",
                 "value": {
-                  "0": "This fine cloak has a silver clasp."
+                  "0": "This fine cloak has equal measure of fanciness and practicality, common amongst Knights."
                 }
               },
               "Description": {
@@ -3936,7 +3936,7 @@
               },
               "Identified": {
                 "type": "byte",
-                "value": 0
+                "value": 1
               },
               "Leather1Color": {
                 "type": "byte",
@@ -4000,6 +4000,37 @@
                     "Subtype": {
                       "type": "word",
                       "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 25
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 4
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 52
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 3
                     }
                   }
                 ]
@@ -23925,7 +23956,7 @@
               },
               "Identified": {
                 "type": "byte",
-                "value": 0
+                "value": 1
               },
               "LocalizedName": {
                 "type": "cexolocstring",
@@ -23960,6 +23991,68 @@
                     },
                     "CostTable": {
                       "type": "byte",
+                      "value": 28
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 31
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 85
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 29
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 11
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 86
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
                       "value": 2
                     },
                     "CostValue": {
@@ -23980,7 +24073,7 @@
                     },
                     "Subtype": {
                       "type": "word",
-                      "value": 1
+                      "value": 3
                     }
                   }
                 ]

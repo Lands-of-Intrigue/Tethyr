@@ -6597,7 +6597,7 @@
               },
               "Cost": {
                 "type": "dword",
-                "value": 151
+                "value": 381
               },
               "Cursed": {
                 "type": "byte",
@@ -6606,7 +6606,7 @@
               "DescIdentified": {
                 "type": "cexolocstring",
                 "value": {
-                  "0": "This fine cloak has a silver clasp."
+                  "0": "This fine cloak has equal measure of fanciness and practicality, common amongst Knights."
                 }
               },
               "Description": {
@@ -6681,6 +6681,37 @@
                     "Subtype": {
                       "type": "word",
                       "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 25
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 4
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 52
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 3
                     }
                   }
                 ]
