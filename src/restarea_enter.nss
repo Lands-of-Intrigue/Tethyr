@@ -13,7 +13,7 @@
     REST_UNRESTRICTED   - will establish unrestricted rest for the player (this takes precedence over all other settings)
     REST_RESTRICTED     - will establish restricted rest for the player if area or module is set to unrestricted
 
-each of these allow the PC to ignore the particular rest test while inside the trigger
+    each of these allow the PC to ignore the particular rest test while inside the trigger
     REST_IGNORE_TIME
     REST_IGNORE_WARMTH
     REST_IGNORE_BED

@@ -8,6 +8,5 @@ void main()
 
     SetLocalInt(oItem,sVar2,nVar1);
 
-    // Give "brostcountyregis" to the PC.
-    CreateItemOnObject("brostcountyregis", oPC);
+
 }
