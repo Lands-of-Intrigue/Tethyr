@@ -140,12 +140,16 @@ void SetNextRestPeriod(object oPC)
 {
   if(GetLocalInt(oPC, "RESTING_BED"))
   {
-    SetDateString(oPC, "REST_BED", 0, 0, 0, 2, 0, 0);
+    // resting in a bed is set to be very quick for playtest quality of life
+    SetDateString(oPC, "REST_BED", 0, 0, 0, 0, 0, 1);
+
     SetDateString(oPC, "REST_ROUGH", 0, 0, 0, 2, 0, 0);
     return;
   }
 
-  SetDateString(oPC, "REST_BED", 0, 0, 0, 2, 0, 0);
+  // set to be very quick for playtest quality of life
+  SetDateString(oPC, "REST_BED", 0, 0, 0, 0, 0, 1);
+  
   SetDateString(oPC, "REST_ROUGH", 0, 0, 0, 4, 0, 0);
   return;
 

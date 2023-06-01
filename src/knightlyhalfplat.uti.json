@@ -102,7 +102,7 @@
   },
   "Cost": {
     "type": "dword",
-    "value": 600
+    "value": 942
   },
   "Cursed": {
     "type": "byte",
@@ -110,7 +110,9 @@
   },
   "DescIdentified": {
     "type": "cexolocstring",
-    "value": {}
+    "value": {
+      "0": "This exquisite suit of plate is just regal enough to catch the eye without straying too far into the realm of Noble pomp."
+    }
   },
   "Description": {
     "type": "cexolocstring",
@@ -185,6 +187,37 @@
         "Subtype": {
           "type": "word",
           "value": 0
+        }
+      },
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
+          "value": 2
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 1
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 41
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 2
         }
       }
     ]

@@ -27,7 +27,7 @@
   "DescIdentified": {
     "type": "cexolocstring",
     "value": {
-      "0": "This ring has been passed down through a particular house and has endured all manner of intrigues over the decades."
+      "0": "This ring has been passed down through a particular House and has endured all manner of intrigues over the decades.  \n\nRings like this are usually worn by the children of the Head of a Noble House."
     }
   },
   "Description": {
@@ -61,6 +61,99 @@
   "PropertiesList": {
     "type": "list",
     "value": [
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
+          "value": 28
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 51
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 85
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 0
+        }
+      },
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
+          "value": 28
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 8
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 85
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 0
+        }
+      },
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
+          "value": 29
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 11
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 86
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 0
+        }
+      },
       {
         "__struct_id": 0,
         "ChanceAppear": {
@@ -120,7 +213,7 @@
         },
         "Subtype": {
           "type": "word",
-          "value": 17
+          "value": 12
         }
       }
     ]

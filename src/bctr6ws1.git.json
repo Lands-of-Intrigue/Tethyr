@@ -8685,7 +8685,7 @@
               "__struct_id": 32,
               "AddCost": {
                 "type": "dword",
-                "value": 0
+                "value": 332
               },
               "BaseItem": {
                 "type": "int",
@@ -8697,7 +8697,7 @@
               },
               "Cost": {
                 "type": "dword",
-                "value": 46
+                "value": 350
               },
               "Cursed": {
                 "type": "byte",
@@ -8706,7 +8706,7 @@
               "DescIdentified": {
                 "type": "cexolocstring",
                 "value": {
-                  "0": "This censer is used to burn rosemary, sage, or other sacred herbs for use in religious ceremonies, where it helps the holder center their mind.\n\nOnce per day, the user may consecrate a single weapon as per the bless weapon spell."
+                  "0": "This censer is used to burn rosemary, sage, or other sacred herbs for use in religious ceremonies, where it helps the holder center their mind.\n\n"
                 }
               },
               "Description": {
@@ -8764,7 +8764,7 @@
                     },
                     "Subtype": {
                       "type": "word",
-                      "value": 472
+                      "value": 11
                     }
                   },
                   {
@@ -8775,11 +8775,11 @@
                     },
                     "CostTable": {
                       "type": "byte",
-                      "value": 25
+                      "value": 0
                     },
                     "CostValue": {
                       "type": "word",
-                      "value": 2
+                      "value": 0
                     },
                     "Param1": {
                       "type": "byte",
@@ -8791,11 +8791,42 @@
                     },
                     "PropertyName": {
                       "type": "word",
-                      "value": 52
+                      "value": 63
                     },
                     "Subtype": {
                       "type": "word",
-                      "value": 3
+                      "value": 2
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 0
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 63
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 6
                     }
                   }
                 ]
@@ -10197,7 +10228,7 @@
               },
               "Cost": {
                 "type": "dword",
-                "value": 151
+                "value": 381
               },
               "Cursed": {
                 "type": "byte",
@@ -10206,7 +10237,7 @@
               "DescIdentified": {
                 "type": "cexolocstring",
                 "value": {
-                  "0": "This fine cloak has a silver clasp."
+                  "0": "This fine cloak has equal measure of fanciness and practicality, common amongst Knights."
                 }
               },
               "Description": {
@@ -10217,7 +10248,7 @@
               },
               "Identified": {
                 "type": "byte",
-                "value": 0
+                "value": 1
               },
               "Leather1Color": {
                 "type": "byte",
@@ -10281,6 +10312,37 @@
                     "Subtype": {
                       "type": "word",
                       "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 25
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 4
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 52
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 3
                     }
                   }
                 ]

@@ -18,7 +18,7 @@
   },
   "Cost": {
     "type": "dword",
-    "value": 1947
+    "value": 1103
   },
   "Cursed": {
     "type": "byte",
@@ -38,7 +38,7 @@
   },
   "Identified": {
     "type": "byte",
-    "value": 1
+    "value": 0
   },
   "LocalizedName": {
     "type": "cexolocstring",
@@ -100,11 +100,11 @@
         },
         "CostTable": {
           "type": "byte",
-          "value": 2
+          "value": 28
         },
         "CostValue": {
           "type": "word",
-          "value": 1
+          "value": 16
         },
         "Param1": {
           "type": "byte",
@@ -116,11 +116,73 @@
         },
         "PropertyName": {
           "type": "word",
-          "value": 41
+          "value": 85
         },
         "Subtype": {
           "type": "word",
-          "value": 1
+          "value": 0
+        }
+      },
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
+          "value": 29
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 11
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 86
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 0
+        }
+      },
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
+          "value": 25
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 2
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 52
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 0
         }
       }
     ]
