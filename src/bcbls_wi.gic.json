@@ -3457,6 +3457,13 @@
           "type": "cexostring",
           "value": "THE MAGUS' REST SYSTEM\r\n\r\nThis trigger can be used to turn rest restrictions on or off.\r\nOr to establish an area as sheltered and thus suitable for rest - which you can check for in the function ResterRequirements() in the rest_include script.\r\n\r\nAdjust local variables on the trigger to chang settings\r\nREST_UNRESTRICTED = 1\r\n   will establish unrestricted rest for the player (this takes precedence over all other settings)\r\nREST_RESTRICTED = 1\r\n   will establish restricted rest for the player if area or module is set to unrestricted\r\n\r\nAllow the PC to ignore a particular rest test while inside the trigger:\r\nREST_IGNORE_TIME\r\nREST_IGNORE_WARMTH\r\nREST_IGNORE_BED\r\nREST_IGNORE_FOOD\r\n\r\nYou may also define the text given to the PC when they enter or exit the trigger\r\nThese are local strings on the trigger\r\nREST_MESSAGE_ENTER\r\nREST_MESSAGE_EXIT\r\n\r\nif the strings are empty no message will be given to the PC."
         }
+      },
+      {
+        "__struct_id": 1,
+        "Comment": {
+          "type": "cexostring",
+          "value": "THE MAGUS' REST SYSTEM\r\n\r\nThis trigger can be used to turn rest restrictions on or off.\r\nOr to establish an area as sheltered and thus suitable for rest - which you can check for in the function ResterRequirements() in the rest_include script.\r\n\r\nAdjust local variables on the trigger to chang settings\r\nREST_UNRESTRICTED = 1\r\n   will establish unrestricted rest for the player (this takes precedence over all other settings)\r\nREST_RESTRICTED = 1\r\n   will establish restricted rest for the player if area or module is set to unrestricted\r\n\r\nAllow the PC to ignore a particular rest test while inside the trigger:\r\nREST_IGNORE_TIME\r\nREST_IGNORE_WARMTH\r\nREST_IGNORE_BED\r\nREST_IGNORE_FOOD\r\n\r\nYou may also define the text given to the PC when they enter or exit the trigger\r\nThese are local strings on the trigger\r\nREST_MESSAGE_ENTER\r\nREST_MESSAGE_EXIT\r\n\r\nif the strings are empty no message will be given to the PC."
+        }
       }
     ]
   },

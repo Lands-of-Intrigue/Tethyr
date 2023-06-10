@@ -32,7 +32,7 @@ const string TAG_FOOD       = "food";
 const string TAG_MEAT       = "meat";
 
 // INCLUDES --------------------------------------------------------------------
-#include "te_functions"
+
 
 // FUNCTION DECLARATIONS -------------------------------------------------------
 
@@ -65,7 +65,7 @@ int GetIsHungry(object oPC=OBJECT_SELF)
 {
     int bHungry = FALSE;
 
-    if( GetLocalInt(oPC, NEXT_MEAL_TIME)<GetTimeCumulative() )
+    if(GetLocalInt(oPC, NEXT_MEAL_TIME)<GetTimeCumulative())
         bHungry = TRUE;
 
     return bHungry;

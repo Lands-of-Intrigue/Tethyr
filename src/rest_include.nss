@@ -39,7 +39,7 @@
 // the following includes may contain functions or constants which you have defined elsewhere
 // if that is the case feel free to use your own includes and delete these provided
 #include "x3_inc_skin"
-#include "te_functions"
+#include "food_include"
 //#include "nwnx_funcs_inc"
 
 // includes for add on systems. add or remove these as needed
@@ -54,15 +54,15 @@
 // REST REQUIREMENTS - MAX NUMBER OF TESTS
 // number of tests to perform when resting. see ResterRequirements(int nTest)
 // rest rules are tested in order from 1 to the value of LAST_REST_TEST
-const int LAST_REST_TEST            = 3;
+const int LAST_REST_TEST            = 4;
 
 // SPELL LIMITS
 // the flag REST_LIMIT_SPELLS when applied in ResterRequirements() triggers the limit of spells recovered by the pc
 // you can apply limits to the level of spells that a PC recovers during rest by reducing their ability scores
 // turn off particular spell limits permanently by adjusting one or more of the following values to 0
-const int REST_SPELL_LIMIT_INT      = 10;
-const int REST_SPELL_LIMIT_WIS      = 10;
-const int REST_SPELL_LIMIT_CHA      = 10;
+const int REST_SPELL_LIMIT_INT      = 0;
+const int REST_SPELL_LIMIT_WIS      = 0;
+const int REST_SPELL_LIMIT_CHA      = 0;
 // also see REST_NO_SPELL_LIMIT_ in rest_globals as a means to temporarily turn off spell limits for a PC
 // SPELL ABILITY DAMAGE MINIMUMS and MAXIMUMS
 const int REST_MAX_DAMAGE_INT       = 10;
@@ -81,6 +81,19 @@ const int REST_MIN_DAMAGE_CHA       = 1;
 const int REST_ACTION_MAKE_CAMPFIRE = 1;
 const int REST_ACTION_LIGHT_CAMPFIRE= 2;
 
+
+// TIME
+// adjust to your module's time settings
+// 30 assumes the typical module setting of 2 minutes per game hour
+const int IGMINUTES_PER_RLMINUTE    = 225;
+
+
+// USER ADDED VALUES (OR EXAMPLES OF SUCH)
+
+// Test 1 of RestRequirements() determines whether enough time has passed since the last rest by this PC
+// See GetIsTimeToRest() this value is used in ResterFinishesRest() to establish when the PC can rest again
+// 1+ = minutes required between rests OR  0 = no required time between rests
+int GAME_MINUTES_BETWEEN_RESTS   = IGMINUTES_PER_RLMINUTE * 3; // the number is REAL MINUTES.
 // local set on rester to track when they may next rest. Changing the value makes no difference as it is merely a label for a local variable.
 const string NEXT_REST_TIME     = "REST_NEXT";
 
@@ -101,6 +114,10 @@ const string TAG_BEDROLL        = "bedroll";    // see GetHasBed()
 
 // ================= NOT CONFIGURABLE ==================
 
+// COLORS
+const string RED        = "<cþ  >";
+const string PINK       = "<cÒdd>";
+const string YELLOW     = "<cþ× >";
 
 // RESTRICTING REST
 // set these local integers on the module and areas to explicitly declare whether resting is restricted
@@ -340,7 +357,7 @@ int ResterRequirements(int nTest)
         }
     }
     // require FOOD
-    /*else if(nTest==3 && !(nShelter&REST_IGNORE_FOOD) )
+    else if(nTest==3 && !(nShelter&REST_IGNORE_FOOD) )
     {
         /* MAGUS FOOD SYSTEM
         // this is more robust way to do food
@@ -355,7 +372,7 @@ int ResterRequirements(int nTest)
             }
         }
         */
-        /*object oFood    = GetItemPossessedBy(OBJECT_SELF,"food");
+        object oFood    = GetItemPossessedBy(OBJECT_SELF,"food");
         if(GetIsObjectValid(oFood))
         {
             ResterAddConsumable(oFood); // add oFood to the list of items to consume when resting
@@ -372,10 +389,9 @@ int ResterRequirements(int nTest)
             nResult |= REST_UNCOMFORTABLE;  // uncomfortable rest (fatigue)
             nResult |= REST_LIMIT_HP;       // limit hp recovered
          }
-
-    }   */
+    }
     // require BED
-    else if(nTest==3 && !(nShelter&REST_IGNORE_BED) )
+    else if(nTest==4 && !(nShelter&REST_IGNORE_BED) )
     {
         if(GetNeedsBedToRestComfortably()&&!GetHasBed())
         {
@@ -386,10 +402,9 @@ int ResterRequirements(int nTest)
 
             // rest will proceed but be uncomfortable
             nResult |= REST_UNCOMFORTABLE;  // uncomfortable rest (fatigue)
-            nResult |= REST_LIMIT_HP;
+            nResult |= REST_LIMIT_SPELLS;   // limit spells recovered
         }
     }
-
 
     return nResult;
 }
@@ -523,7 +538,7 @@ int ResterDamageLimitsHPRecovery()
     // some calculations to help with your own determinations
     int nMaxHealed          = GetMaxHitPoints()-GetLocalInt(OBJECT_SELF, REST_HP);  // determine how much they are healing by resting
 
-    float fPercentageHealed = 1.0/(2+ResterGetFatigue()); // calculate the most you want the player to heal
+    float fPercentageHealed = 1.0/(1+ResterGetFatigue()); // calculate the most you want the player to heal
     float fPercentageDamage = 1.0 - fPercentageHealed; // calculate the percentage of damage as an inverse of healing limit
 
     int nDamage             = FloatToInt( nMaxHealed * fPercentageDamage );

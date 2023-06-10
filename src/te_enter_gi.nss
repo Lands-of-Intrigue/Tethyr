@@ -202,7 +202,6 @@ void main()
             RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_holycenser", oPC, 1);
             CreateItemOnObject("bandages", oPC, 5);
-            CreateItemOnObject("te_9005", oPC, 5);
             CreateItemOnObject("te_book022", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_DUELIST,oPC) == TRUE)
@@ -297,6 +296,8 @@ void main()
         {
             RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_thiefglove", oPC, 1);
+            CreateItemOnObject("te_thieftools", oPC, 1);
+
 
         }
         else if (GetHasFeat(BACKGROUND_SOLDIER,oPC) == TRUE)
@@ -328,7 +329,7 @@ void main()
             CreateItemOnObject("te_item_0007", oPC, 3);
             CreateItemOnObject("te_item_0009", oPC, 3);
             CreateItemOnObject("te_item_0010", oPC, 3);
-            CreateItemOnObject("travelersneckl", oPC, 1);
+            CreateItemOnObject("bg_merchantneck", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_CHURCH_ACOLYTE, oPC) == TRUE)
         {
@@ -367,11 +368,9 @@ void main()
         else if (GetHasFeat(BACKGROUND_KNIGHT_SQUIRE, oPC) == TRUE)
         {
             RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
-            CreateItemOnObject("knightlycloak", oPC, 1);
-            CreateItemOnObject("knightlyhalfplate", oPC, 1);
-            CreateItemOnObject("te_item_5022", oPC, 1);
             CreateItemOnObject("te_item_8456", oPC, 1);
-            CreateItemOnObject("te_item_5026", oPC, 1);
+            CreateItemOnObject("bg_squirebelt", oPC, 1);
+            CreateItemOnObject("bg_squirehelm", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_TALFIRIAN, oPC) == TRUE)
         {
@@ -419,6 +418,7 @@ void main()
         {
             RewardGP(FloatToInt(100*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_lesselfcloak", oPC, 1);
+            CreateItemOnObject("bg_eldrethbow", oPC, 1);
         }
         else if (GetHasFeat(1461, oPC) == TRUE)
         {
@@ -431,10 +431,13 @@ void main()
         else if (GetHasFeat(1463, oPC) == TRUE)
         {
             RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
+
         }
         else if (GetHasFeat(1464, oPC) == TRUE)
         {
             RewardGP(FloatToInt(0*fStandingMod), oPC, FALSE);
+            CreateItemOnObject("bg_brokenshackle", oPC, 1);
+            CreateItemOnObject("bg_worncloak", oPC, 1);
         }
         else if (GetHasFeat(1465, oPC) == TRUE)
         {

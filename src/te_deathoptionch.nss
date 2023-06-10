@@ -11,7 +11,10 @@ int StartingConditional()
     int iHD = GetHitDice(oPC);
     object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
 
-    if (iHD >=10)
+    int nDeathTimes = GetLocalInt(oItem,"nRespawn");
+
+
+    if (iHD >=11 || nDeathTimes > 10)
     {   return FALSE;}
     else
     {   return TRUE;}

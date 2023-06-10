@@ -29,7 +29,7 @@ each of these allow the PC to ignore the particular rest test while inside the t
 
 void main()
 {
-    object oEntered = GetExitingObject();
+    object oEntered = GetEnteringObject();
 
     if(GetLocalInt(OBJECT_SELF, REST_UNRESTRICTED))
         DeleteLocalInt(oEntered, REST_UNRESTRICTED);
