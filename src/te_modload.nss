@@ -667,7 +667,7 @@ void main()
 
     //NWNX_WebHook_SendWebHookHTTPS("discordapp.com",WEBHOOK_EVENT_CHANNEL,"Module start-up complete.");
     NWNX_WebHook_SendWebHookHTTPS("discordapp.com",WEBHOOK_PUBLIC_CHANNEL,"<@&965706089167474749> The Module is now finished loading and the server is back online!");
-    NWNX_Administration_ClearPlayerPassword();
+
 
     NWNX_Events_SubscribeEvent("NWNX_ON_WEBHOOK_FAILED","event_webhook");
     NWNX_Events_SubscribeEvent("NWNX_ON_LEVEL_UP_AFTER","event_level");

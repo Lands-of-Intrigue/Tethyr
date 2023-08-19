@@ -18,7 +18,7 @@
   },
   "Cost": {
     "type": "dword",
-    "value": 8222
+    "value": 12284
   },
   "Cursed": {
     "type": "byte",
@@ -27,7 +27,7 @@
   "DescIdentified": {
     "type": "cexolocstring",
     "value": {
-      "0": "The Sikaena was a wicked, cruel weapon meant for killing people who weren't wearing armor. It was a thing from the days when assassinations were much more common in Calimshan. This particular weapon seemed to be profoundly enchanted, from the era of the Shoon, most likely."
+      "0": "The exact origins of this deadly dagger are unknown, though the script that adorns the blade itself is clearly Netherese in origin.\n\nThose who chose to wield this wicked dagger felt their very souls grow heavy, as if at any moment they were one step away from death.  When held, the wielder often felt something probing or scratching at the back of their mind.  \n\nThis blade feels... hungry."
     }
   },
   "Description": {
@@ -43,7 +43,7 @@
   "LocalizedName": {
     "type": "cexolocstring",
     "value": {
-      "0": "Sikaena of Amahl"
+      "0": "Ancient Netherese Dagger"
     }
   },
   "ModelPart1": {
@@ -60,7 +60,7 @@
   },
   "PaletteID": {
     "type": "byte",
-    "value": 188
+    "value": 184
   },
   "Plot": {
     "type": "byte",
@@ -69,6 +69,99 @@
   "PropertiesList": {
     "type": "list",
     "value": [
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
+          "value": 4
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 1
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 16
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 11
+        }
+      },
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
+          "value": 21
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 2
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 27
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 2
+        }
+      },
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
+          "value": 20
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 2
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 50
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 2
+        }
+      },
       {
         "__struct_id": 0,
         "ChanceAppear": {
@@ -108,11 +201,11 @@
         },
         "CostTable": {
           "type": "byte",
-          "value": 0
+          "value": 2
         },
         "CostValue": {
           "type": "word",
-          "value": 0
+          "value": 2
         },
         "Param1": {
           "type": "byte",
@@ -124,7 +217,7 @@
         },
         "PropertyName": {
           "type": "word",
-          "value": 43
+          "value": 67
         },
         "Subtype": {
           "type": "word",
@@ -139,11 +232,11 @@
         },
         "CostTable": {
           "type": "byte",
-          "value": 28
+          "value": 0
         },
         "CostValue": {
           "type": "word",
-          "value": 15
+          "value": 0
         },
         "Param1": {
           "type": "byte",
@@ -155,11 +248,11 @@
         },
         "PropertyName": {
           "type": "word",
-          "value": 85
+          "value": 63
         },
         "Subtype": {
           "type": "word",
-          "value": 0
+          "value": 30
         }
       },
       {
@@ -170,11 +263,11 @@
         },
         "CostTable": {
           "type": "byte",
-          "value": 29
+          "value": 0
         },
         "CostValue": {
           "type": "word",
-          "value": 11
+          "value": 0
         },
         "Param1": {
           "type": "byte",
@@ -186,11 +279,42 @@
         },
         "PropertyName": {
           "type": "word",
-          "value": 86
+          "value": 63
         },
         "Subtype": {
           "type": "word",
+          "value": 8
+        }
+      },
+      {
+        "__struct_id": 0,
+        "ChanceAppear": {
+          "type": "byte",
+          "value": 100
+        },
+        "CostTable": {
+          "type": "byte",
           "value": 0
+        },
+        "CostValue": {
+          "type": "word",
+          "value": 0
+        },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
+        "Param1Value": {
+          "type": "byte",
+          "value": 0
+        },
+        "PropertyName": {
+          "type": "word",
+          "value": 83
+        },
+        "Subtype": {
+          "type": "word",
+          "value": 9
         }
       }
     ]
@@ -205,7 +329,7 @@
   },
   "Tag": {
     "type": "cexostring",
-    "value": "te_item_8332"
+    "value": "te_ancientnethdag"
   },
   "TemplateResRef": {
     "type": "resref",
@@ -290,5 +414,17 @@
         }
       }
     ]
+  },
+  "xModelPart1": {
+    "type": "word",
+    "value": 17
+  },
+  "xModelPart2": {
+    "type": "word",
+    "value": 17
+  },
+  "xModelPart3": {
+    "type": "word",
+    "value": 17
   }
 }

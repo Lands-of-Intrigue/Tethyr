@@ -452,6 +452,55 @@
                 "type": "byte",
                 "value": 4
               },
+              "LIST": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "NAME": {
+                      "type": "cexostring",
+                      "value": "a high-security room"
+                    },
+                    "RESREF": {
+                      "type": "resref",
+                      "value": "door_metal"
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "NAME": {
+                      "type": "cexostring",
+                      "value": "a luxury room"
+                    },
+                    "RESREF": {
+                      "type": "resref",
+                      "value": "door_fancy"
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "NAME": {
+                      "type": "cexostring",
+                      "value": "a regular room"
+                    },
+                    "RESREF": {
+                      "type": "resref",
+                      "value": "door_normal"
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "NAME": {
+                      "type": "cexostring",
+                      "value": "The Queen's Suite"
+                    },
+                    "RESREF": {
+                      "type": "resref",
+                      "value": "door_fancy001"
+                    }
+                  }
+                ]
+              },
               "STRREF": {
                 "type": "dword",
                 "value": 6692

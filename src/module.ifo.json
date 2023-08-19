@@ -2965,6 +2965,10 @@
     "type": "byte",
     "value": 6
   },
+  "Mod_DefaultBic": {
+    "type": "resref",
+    "value": ""
+  },
   "Mod_Description": {
     "type": "cexolocstring",
     "value": {
@@ -3229,22 +3233,26 @@
       }
     ]
   },
+  "Mod_ID": {
+    "type": "void",
+    "value64": "HtadIWWFrOm5R+8Saf8OhA=="
+  },
   "Mod_IsSaveGame": {
     "type": "byte",
     "value": 0
   },
   "Mod_MinGameVer": {
     "type": "cexostring",
-    "value": "1.86"
+    "value": "1.87"
   },
   "Mod_MinPerHour": {
     "type": "byte",
-    "value": 30
+    "value": 15
   },
   "Mod_Name": {
     "type": "cexolocstring",
     "value": {
-      "0": "Spellplague: The Rebirth"
+      "0": "Lands of Intrigue - Tethyr"
     }
   },
   "Mod_OnAcquirItem": {
@@ -3279,6 +3287,10 @@
     "type": "resref",
     "value": ""
   },
+  "Mod_OnNuiEvent": {
+    "type": "resref",
+    "value": ""
+  },
   "Mod_OnPlrChat": {
     "type": "resref",
     "value": "dmfi_onplychat"
@@ -3295,6 +3307,10 @@
     "type": "resref",
     "value": "te_equip"
   },
+  "Mod_OnPlrGuiEvt": {
+    "type": "resref",
+    "value": ""
+  },
   "Mod_OnPlrLvlUp": {
     "type": "resref",
     "value": "te_onlevelup"
@@ -3302,6 +3318,14 @@
   "Mod_OnPlrRest": {
     "type": "resref",
     "value": "te_on_rest"
+  },
+  "Mod_OnPlrTarget": {
+    "type": "resref",
+    "value": ""
+  },
+  "Mod_OnPlrTileAct": {
+    "type": "resref",
+    "value": ""
   },
   "Mod_OnPlrUnEqItm": {
     "type": "resref",
@@ -3318,6 +3342,10 @@
   "Mod_OnUsrDefined": {
     "type": "resref",
     "value": ""
+  },
+  "Mod_PartyControl": {
+    "type": "int",
+    "value": 0
   },
   "Mod_StartDay": {
     "type": "byte",

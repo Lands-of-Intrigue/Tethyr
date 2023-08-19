@@ -30,7 +30,6 @@ const string WEBHOOK_BELL           = "api/webhooks/960306598281109575/TBYFbEEf_
 /// @brief Send messages to external entities through web hooks.
 /// @{
 /// @file nwnx_webhook.nss
-
 #include "nwnx"
 
 const string NWNX_WebHook = "NWNX_WebHook"; ///< @private
@@ -58,11 +57,11 @@ void NWNX_WebHook_ResendWebHookHTTPS(string host, string path, string sMessage, 
 void NWNX_WebHook_SendWebHookHTTPS(string host, string path, string message, string username = "", int mrkdwn = 1)
 {
     string sFunc = "SendWebHookHTTPS";
-    NWNX_PushArgumentInt(NWNX_WebHook, sFunc, mrkdwn);
-    NWNX_PushArgumentString(NWNX_WebHook, sFunc, username);
-    NWNX_PushArgumentString(NWNX_WebHook, sFunc, message);
-    NWNX_PushArgumentString(NWNX_WebHook, sFunc, path);
-    NWNX_PushArgumentString(NWNX_WebHook, sFunc, host);
+    NWNX_PushArgumentInt(mrkdwn);
+    NWNX_PushArgumentString(username);
+    NWNX_PushArgumentString(message);
+    NWNX_PushArgumentString(path);
+    NWNX_PushArgumentString(host);
     NWNX_CallFunction(NWNX_WebHook, sFunc);
 }
 

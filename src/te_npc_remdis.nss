@@ -10,9 +10,9 @@ void main()
         return;
     }
 
-    if(GetGold(oPC) > 1000)
+    if(GetGold(oPC) > 500)
     {
-        TakeGoldFromCreature(1000,oPC,TRUE);
+        TakeGoldFromCreature(500,oPC,TRUE);
         ActionCastSpellAtObject(SPELL_REMOVE_DISEASE, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, FALSE);
 
     }

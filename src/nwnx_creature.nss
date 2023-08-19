@@ -3,6 +3,8 @@
 /// @{
 /// @file nwnx_creature.nss
 #include "nwnx"
+
+// TODO Siobhan to fix this tethyr hack to overload the nwnx import with custom code
 #include "te_functions"
 
 const string NWNX_Creature = "NWNX_Creature"; ///< @private
@@ -35,32 +37,6 @@ const int NWNX_CREATURE_MOVEMENT_TYPE_SIDESTEP        = 3;
 const int NWNX_CREATURE_MOVEMENT_TYPE_WALK_BACKWARDS  = 4;
 /// @}
 
-/// @name Cleric Domains
-/// @anchor cleric_domains
-///
-/// The clerical domains.
-/// @{
-const int NWNX_CREATURE_CLERIC_DOMAIN_AIR         = 0;
-const int NWNX_CREATURE_CLERIC_DOMAIN_ANIMAL      = 1;
-const int NWNX_CREATURE_CLERIC_DOMAIN_DEATH       = 3;
-const int NWNX_CREATURE_CLERIC_DOMAIN_DESTRUCTION = 4;
-const int NWNX_CREATURE_CLERIC_DOMAIN_EARTH       = 5;
-const int NWNX_CREATURE_CLERIC_DOMAIN_EVIL        = 6;
-const int NWNX_CREATURE_CLERIC_DOMAIN_FIRE        = 7;
-const int NWNX_CREATURE_CLERIC_DOMAIN_GOOD        = 8;
-const int NWNX_CREATURE_CLERIC_DOMAIN_HEALING     = 9;
-const int NWNX_CREATURE_CLERIC_DOMAIN_KNOWLEDGE   = 10;
-const int NWNX_CREATURE_CLERIC_DOMAIN_MAGIC       = 13;
-const int NWNX_CREATURE_CLERIC_DOMAIN_PLANT       = 14;
-const int NWNX_CREATURE_CLERIC_DOMAIN_PROTECTION  = 15;
-const int NWNX_CREATURE_CLERIC_DOMAIN_STRENGTH    = 16;
-const int NWNX_CREATURE_CLERIC_DOMAIN_SUN         = 17;
-const int NWNX_CREATURE_CLERIC_DOMAIN_TRAVEL      = 18;
-const int NWNX_CREATURE_CLERIC_DOMAIN_TRICKERY    = 19;
-const int NWNX_CREATURE_CLERIC_DOMAIN_WAR         = 20;
-const int NWNX_CREATURE_CLERIC_DOMAIN_WATER       = 21;
-/// @}
-
 /// @name Bonus Types
 /// @anchor bonus_types
 ///
@@ -74,6 +50,22 @@ const int NWNX_CREATURE_BONUS_TYPE_SKILL         = 5;
 const int NWNX_CREATURE_BONUS_TYPE_TOUCH_ATTACK  = 6;
 /// @}
 
+/// @name Ranged Projectile VFX
+/// @anchor ranged_projectile_vfx
+///
+/// Used with NWNX_Creature_OverrideRangedProjectileVFX() these are the projectile vfx types.
+/// @{
+const int NWNX_CREATURE_PROJECTILE_VFX_NONE         = 0; ///< No VFX
+const int NWNX_CREATURE_PROJECTILE_VFX_ACID         = 1;
+const int NWNX_CREATURE_PROJECTILE_VFX_COLD         = 2;
+const int NWNX_CREATURE_PROJECTILE_VFX_ELECTRICAL   = 3;
+const int NWNX_CREATURE_PROJECTILE_VFX_FIRE         = 4;
+const int NWNX_CREATURE_PROJECTILE_VFX_SONIC        = 5;
+const int NWNX_CREATURE_PROJECTILE_VFX_RANDOM       = 6; ///< Random Elemental VFX
+/// @}
+
+const int NWNX_CREATURE_ABILITY_NONE = 6;
+
 /// @struct NWNX_Creature_SpecialAbility
 /// @brief A creature special ability.
 struct NWNX_Creature_SpecialAbility
@@ -81,16 +73,6 @@ struct NWNX_Creature_SpecialAbility
     int id; ///< The spell id
     int ready; ///< Whether it can be used
     int level; ///< The level of the ability
-};
-
-/// @struct NWNX_Creature_MemorisedSpell
-/// @brief A memorised spell structure.
-struct NWNX_Creature_MemorisedSpell
-{
-    int id; ///< Spell ID
-    int ready; ///< Whether the spell can be cast
-    int meta; ///< Metamagic type, if any
-    int domain; ///< Clerical domain, if any
 };
 
 /// @brief Gives the creature a feat.
@@ -111,6 +93,14 @@ void NWNX_Creature_AddFeatByLevel(object creature, int feat, int level);
 /// @param feat The feat id.
 void NWNX_Creature_RemoveFeat(object creature, int feat);
 
+/// @brief Removes the creature a feat assigned at a level
+/// @param creature The creature object.
+/// @param feat The feat id.
+/// @param level The level they gained the feat.
+/// @remark Removes the feat from the stat list at the provided level. Does not remove the feat from the creature, use
+/// NWNX_Creature_RemoveFeat for this.
+void NWNX_Creature_RemoveFeatByLevel(object creature, int feat, int level);
+
 /// @brief Determines if the creature knows a feat.
 /// @note This differs from native @nwn{GetHasFeat} which returns FALSE if the feat has no more uses per day.
 /// @param creature The creature object.
@@ -130,6 +120,12 @@ int NWNX_Creature_GetFeatCountByLevel(object creature, int level);
 /// @param index The index. Index bounds: 0 <= index < NWNX_Creature_GetFeatCountByLevel().
 /// @return The feat id at the index.
 int NWNX_Creature_GetFeatByLevel(object creature, int level, int index);
+
+/// @brief Returns the creature level where the specified feat was learned.
+/// @param creature The creature object.
+/// @param feat The feat id.
+/// @return The character level that the specified feat was granted, otherwise 0 if the creature does not have this feat.
+int NWNX_Creature_GetFeatGrantLevel(object creature, int feat);
 
 /// @brief Get the total number of feats known by creature.
 /// @param creature The creature object.
@@ -191,13 +187,6 @@ void NWNX_Creature_SetBaseAC(object creature, int ac);
 /// @return The base AC.
 int NWNX_Creature_GetBaseAC(object creature);
 
-/// @brief Sets the ability score of the creature to the value.
-/// @param creature The creature object.
-/// @param ability The ability constant.
-/// @param value The value to set.
-/// @deprecated Use NWNX_Creature_SetRawAbilityScore(). This will be removed in future NWNX releases.
-void NWNX_Creature_SetAbilityScore(object creature, int ability, int value);
-
 /// @brief Sets the ability score of the creature to the provided value.
 /// @note Does not apply racial bonuses/penalties.
 /// @param creature The creature object.
@@ -226,29 +215,6 @@ void NWNX_Creature_ModifyRawAbilityScore(object creature, int ability, int modif
 /// @return The raw ability score.
 int NWNX_Creature_GetPrePolymorphAbilityScore(object creature, int ability);
 
-/// @brief Gets the count of memorised spells for a creature's class at a level.
-/// @param creature The creature object.
-/// @param class The class id from classes.2da. (Not class index 0-2)
-/// @param level The spell level.
-/// @return The memorised spell count.
-int NWNX_Creature_GetMemorisedSpellCountByLevel(object creature, int class, int level);
-
-/// @brief Gets the memorised spell at a class level's index.
-/// @param creature The creature object.
-/// @param class The class id from classes.2da. (Not class index 0-2)
-/// @param level The spell level.
-/// @param index The index. Index bounds: 0 <= index < NWNX_Creature_GetMemorisedSpellCountByLevel().
-/// @return An NWNX_Creature_MemorisedSpell() struct.
-struct NWNX_Creature_MemorisedSpell NWNX_Creature_GetMemorisedSpell(object creature, int class, int level, int index);
-
-/// @brief Sets the memorised spell at a class level's index.
-/// @param creature The creature object.
-/// @param class The class id from classes.2da. (Not class index 0-2)
-/// @param level The spell level.
-/// @param index The index. Index bounds: 0 <= index < NWNX_Creature_GetMemorisedSpellCountByLevel().
-/// @param spell An NWNX_Creature_MemorisedSpell() struct.
-void NWNX_Creature_SetMemorisedSpell(object creature, int class, int level, int index, struct NWNX_Creature_MemorisedSpell spell);
-
 /// @brief Gets the remaining spell slots (innate casting) at a class level's index.
 /// @param creature The creature object.
 /// @param class The class id from classes.2da. (Not class index 0-2)
@@ -270,22 +236,7 @@ void NWNX_Creature_SetRemainingSpellSlots(object creature, int class, int level,
 /// @return The maximum spell slot count.
 int NWNX_Creature_GetMaxSpellSlots(object creature, int class, int level);
 
-/// @brief Gets the known spell count (innate casting) at a class level.
-/// @param creature The creature object.
-/// @param class The class id from classes.2da. (Not class index 0-2)
-/// @param level The spell level.
-/// @return The known spell count.
-int NWNX_Creature_GetKnownSpellCount(object creature, int class, int level);
-
-/// @brief Gets the known spell at a class level's index.
-/// @param creature The creature object.
-/// @param class The class id from classes.2da. (Not class index 0-2)
-/// @param level The spell level.
-/// @param index The index. Index bounds: 0 <= index < NWNX_Creature_GetKnownSpellCount().
-/// @return The spell id.
-int NWNX_Creature_GetKnownSpell(object creature, int class, int level, int index);
-
-/// @brief Remove a spell from creature's spellbook for class.
+/// @brief Add a spell to a creature's spellbook for class.
 /// @param creature The creature object.
 /// @param class The class id from classes.2da. (Not class index 0-2)
 /// @param level The spell level.
@@ -298,29 +249,6 @@ void NWNX_Creature_AddKnownSpell(object creature, int class, int level, int spel
 /// @param level The spell level.
 /// @param spellId The spell to remove.
 void NWNX_Creature_RemoveKnownSpell(object creature, int class, int level, int spellId);
-
-/// @brief Clear a specific spell from the creature's spellbook for class
-/// @param creature The creature object.
-/// @param class The class id from classes.2da. (Not class index 0-2)
-/// @param spellId The spell to clear.
-void NWNX_Creature_ClearMemorisedKnownSpells(object creature, int class, int spellId);
-
-/// @brief Clear the memorised spell of the creature for the class, level and index.
-/// @param creature The creature object.
-/// @param class The class id from classes.2da. (Not class index 0-2)
-/// @param level The spell level.
-/// @param index The index. Index bounds: 0 <= index < NWNX_Creature_GetMemorisedSpellCountByLevel().
-void NWNX_Creature_ClearMemorisedSpell(object creature, int class, int level, int index);
-
-/// @brief Gets whether or not creature has a specialist school of wizardry.
-/// @param creature The creature object.
-/// @return TRUE if the wizard specializes.
-int NWNX_Creature_GetWizardSpecialization(object creature);
-
-/// @brief Sets creature's wizard specialist school.
-/// @param creature The creature object.
-/// @param school The wizard school constant.
-void NWNX_Creature_SetWizardSpecialization(object creature, int school);
 
 /// @brief Gets the maximum hit points for creature for level.
 /// @param creature The creature object.
@@ -351,6 +279,18 @@ float NWNX_Creature_GetMovementRateFactor(object creature);
 /// @param rate The rate to set.
 void NWNX_Creature_SetMovementRateFactor(object creature, float rate);
 
+/// @brief Returns the creature's maximum movement rate cap.
+/// @remark Default movement rate cap is 1.5.
+/// @param creature The creature object.
+/// @return The maximum movement rate cap.
+float NWNX_Creature_GetMovementRateFactorCap(object creature);
+
+/// @brief Sets the creature's maximum movement rate cap.
+/// @note Default movement rate cap is 1.5.
+/// @param creature The creature object.
+/// @param cap The cap to set.
+void NWNX_Creature_SetMovementRateFactorCap(object creature, float cap);
+
 /// @brief Returns the creature's current movement type
 /// @param creature The creature object.
 /// @return An NWNX_CREATURE_MOVEMENT_TYPE_* constant.
@@ -373,39 +313,35 @@ void NWNX_Creature_SetAlignmentGoodEvil(object creature, int value);
 /// @param value The value to set.
 void NWNX_Creature_SetAlignmentLawChaos(object creature, int value);
 
-/// @brief Gets one of creature's cleric domains.
-/// @param creature The creature object.
-/// @param index The first or second domain.
-int NWNX_Creature_GetClericDomain(object creature, int index);
-
-/// @brief Sets one of creature's cleric domains.
-/// @param creature The creature object.
-/// @param index The first or second domain.
-/// @param domain The domain constant to set.
-void NWNX_Creature_SetClericDomain(object creature, int index, int domain);
-
-/// @brief Get the soundset index for creature.
-/// @param creature The creature object.
-/// @return The soundset used by the creature.
-int NWNX_Creature_GetSoundset(object creature);
-
-/// @brief Set the soundset index for creature.
-/// @param creature The creature object.
-/// @param soundset The soundset index.
-void NWNX_Creature_SetSoundset(object creature, int soundset);
-
 /// @brief Set the base ranks in a skill for creature
 /// @param creature The creature object.
 /// @param skill The skill id.
 /// @param rank The value to set as the skill rank.
 void NWNX_Creature_SetSkillRank(object creature, int skill, int rank);
 
+/// @brief Get the ranks in a skill for creature assigned at a level.
+/// @param creature The creature object.
+/// @param skill The skill id.
+/// @param level The level they gained skill ranks.
+/// @return The rank in a skill assigned at a level (-1 on error).
+int NWNX_Creature_GetSkillRankByLevel(object creature, int skill, int level);
+
+/// @brief Set the ranks in a skill for creature assigned at a level.
+/// @note It only affect the leveling array, to know what to do on level-down. To effectivly change the skill rank on the current level, NWNX_Creature_SetSkillRank is also needed.
+/// @param creature The creature object.
+/// @param skill The skill id.
+/// @param level The level they gained skill ranks.
+/// @param rank The value to set as the skill rank.
+void NWNX_Creature_SetSkillRankByLevel(object creature, int skill, int rank, int level);
+
 /// @brief Set the class ID in a particular position for a creature.
 /// @param creature The creature object.
 /// @param position Should be 0, 1, or 2 depending on how many classes the creature
 /// has and which is to be modified.
 /// @param classID A valid ID number in classes.2da and between 0 and 255.
-void NWNX_Creature_SetClassByPosition(object creature, int position, int classID);
+/// @param bUpdateLevels determines whether the method will replace all occurrences
+/// of the old class in CNWLevelStats with the new classID.
+void NWNX_Creature_SetClassByPosition(object creature, int position, int classID, int bUpdateLevels = TRUE);
 
 /// @brief Set the level at the given position for a creature.
 /// @note A creature should already have a class in that position.
@@ -433,11 +369,6 @@ void NWNX_Creature_SetBaseAttackBonus(object creature, int bab);
 /// @return The attacks per round.
 int NWNX_Creature_GetAttacksPerRound(object creature, int bBaseAPR = FALSE);
 
-/// @brief Sets the creature gender.
-/// @param creature The creature object.
-/// @param gender The GENDER_ constant.
-void NWNX_Creature_SetGender(object creature, int gender);
-
 /// @brief Restore all creature feat uses.
 /// @param creature The creature object.
 void NWNX_Creature_RestoreFeats(object creature);
@@ -445,11 +376,6 @@ void NWNX_Creature_RestoreFeats(object creature);
 /// @brief Restore all creature special ability uses.
 /// @param creature The creature object.
 void NWNX_Creature_RestoreSpecialAbilities(object creature);
-
-/// @brief Restore all creature spells per day for given level.
-/// @param creature The creature object.
-/// @param level The level to restore. If -1, all spells are restored.
-void NWNX_Creature_RestoreSpells(object creature, int level = -1);
 
 /// @brief Restore uses for all items carried by the creature.
 /// @param creature The creature object.
@@ -469,6 +395,18 @@ int NWNX_Creature_GetSkillPointsRemaining(object creature);
 /// @param creature The creature object.
 /// @param skillpoints The value to set.
 void NWNX_Creature_SetSkillPointsRemaining(object creature, int skillpoints);
+
+/// @brief Gets the creature's remaining unspent skill points for level.
+/// @param creature The creature object.
+/// @param level The level.
+/// @return The remaining unspent skill points for level.
+int NWNX_Creature_GetSkillPointsRemainingByLevel(object creature, int level);
+
+/// @brief Sets the creature's remaining unspent skill points for level.
+/// @param creature The creature object.
+/// @param level The level.
+/// @param value The value to set for level.
+void NWNX_Creature_SetSkillPointsRemainingByLevel(object creature, int level, int value);
 
 /// @brief Sets the creature's racial type
 /// @param creature The creature object.
@@ -502,8 +440,9 @@ void NWNX_Creature_SetBaseSavingThrow(object creature, int which, int value);
 /// @param creature The creature object.
 /// @param class The class id.
 /// @param count The amount of levels of class to add.
+/// @param package The class package to use for leveling up (PACKAGE_INVALID = starting package)
 /// @note This will not work on player characters.
-void NWNX_Creature_LevelUp(object creature, int class, int count=1);
+void NWNX_Creature_LevelUp(object creature, int class, int count = 1, int package = PACKAGE_INVALID);
 
 /// @brief Remove last levels from a creature.
 /// @param creature The creature object.
@@ -569,9 +508,7 @@ void NWNX_Creature_SetFeatRemainingUses(object creature, int feat, int uses);
 /// @param abilityScore An ABILITY_* constant.
 /// @param isOffhand Whether the attack is an offhand attack.
 /// @return The bonus value.
-int NWNX_Creature_GetTotalEffectBonus(object creature, int bonusType=NWNX_CREATURE_BONUS_TYPE_ATTACK,
-        object target=OBJECT_INVALID, int isElemental=0, int isForceMax=0, int savetype=-1,
-        int saveSpecificType=-1, int skill=-1, int abilityScore=-1, int isOffhand=FALSE);
+int NWNX_Creature_GetTotalEffectBonus(object creature, int bonusType=NWNX_CREATURE_BONUS_TYPE_ATTACK, object target=OBJECT_INVALID, int isElemental=0, int isForceMax=0, int savetype=-1, int saveSpecificType=-1, int skill=-1, int abilityScore=-1, int isOffhand=FALSE);
 
 /// @brief Set the original first or last name of creature
 /// @param creature The creature object.
@@ -622,13 +559,464 @@ int NWNX_Creature_GetDisarmable(object creature);
 /// @param disarmable Set to TRUE if the creature can be disarmed.
 void NWNX_Creature_SetDisarmable(object creature, int disarmable);
 
+/// @brief Sets one of creature's domains.
+/// @param creature The creature object.
+/// @param class The class id from classes.2da. (Not class index 0-2)
+/// @param index The first or second domain.
+/// @param domain The domain constant to set.
+void NWNX_Creature_SetDomain(object creature, int class, int index, int domain);
+
+/// @brief Sets creature's specialist school.
+/// @param creature The creature object.
+/// @param class The class id from classes.2da. (Not class index 0-2)
+/// @param school The school constant.
+void NWNX_Creature_SetSpecialization(object creature, int class, int school);
+
+/// @brief Sets oCreatures faction to be the faction with id nFactionId.
+/// @param oCreature The creature.
+/// @param nFactionId The faction id we want the creature to join.
+void NWNX_Creature_SetFaction(object oCreature, int nFactionId);
+
+/// @brief Gets the faction id from oCreature
+/// @param oCreature the creature we wish to query against
+/// @return faction id as an integer, -1 when used against invalid creature or invalid object.
+int NWNX_Creature_GetFaction(object oCreature);
+
+/// @brief Get whether a creature is flat-footed.
+/// @param oCreature The creature object.
+/// @return TRUE if the creature is flat-footed.
+int NWNX_Creature_GetFlatFooted(object oCreature);
+
+/// @brief Serialize oCreature's quickbar to a base64 string
+/// @param oCreature The creature.
+/// @return A base64 string representation of oCreature's quickbar.
+string NWNX_Creature_SerializeQuickbar(object oCreature);
+
+/// @brief Deserialize sSerializedQuickbar for oCreature
+/// @param oCreature The creature.
+/// @param sSerializedQuickbar A base64 string of a quickbar
+/// @return TRUE on success
+int NWNX_Creature_DeserializeQuickbar(object oCreature, string sSerializedQuickbar);
+
+/// @brief Sets a caster level modifier for oCreature
+/// @param oCreature the target creature
+/// @param nClass the class that this modifier will apply to
+/// @param nModifier the modifier to apply
+/// @param bPersist whether the modifier should be persisted to the .bic file if applicable
+void NWNX_Creature_SetCasterLevelModifier(object oCreature, int nClass, int nModifier, int bPersist = FALSE);
+
+/// @brief Gets the current caster level modifier for oCreature
+/// @param oCreature the target creature
+/// @param nClass the creature caster class
+/// @return the current caster level modifier for the creature
+int NWNX_Creature_GetCasterLevelModifier(object oCreature, int nClass);
+
+/// @brief Sets a caster level override for oCreature
+/// @param oCreature the target creature
+/// @param nClass the class that this modifier will apply to
+/// @param nCasterLevel the caster level override to apply
+/// @param bPersist whether the override should be persisted to the .bic file if applicable
+void NWNX_Creature_SetCasterLevelOverride(object oCreature, int nClass, int nCasterLevel, int bPersist = FALSE);
+
+/// @brief Gets the current caster level override for oCreature
+/// @param oCreature the target creature
+/// @param nClass the creature caster class
+/// @return the current caster level override for the creature or -1 if not set
+int NWNX_Creature_GetCasterLevelOverride(object oCreature, int nClass);
+
+/// @brief Move a creature to limbo.
+/// @param oCreature The creature object.
+void NWNX_Creature_JumpToLimbo(object oCreature);
+
+/// @brief Sets the critical hit multiplier modifier for the Creature
+/// @param oCreature The target creature
+/// @param nModifier The modifier to apply
+/// @param nHand 0 for all attacks, 1 for Mainhand, 2 for Offhand
+/// @param bPersist Whether the modifier should persist to .bic file if applicable
+/// @param nBaseItem Applies the.modifier only when the attack used this baseitem. BASE_ITEM_GLOVES for Unarmed, '-1' for all
+/// @note Persistence is activated each server reset by the first use of either 'SetCriticalMultiplier*' functions. Recommended to trigger on a dummy target OnModuleLoad to enable persistence.
+void NWNX_Creature_SetCriticalMultiplierModifier(object oCreature, int nModifier, int nHand = 0, int bPersist = FALSE, int nBaseItem = -1);
+
+/// @brief Gets the critical hit multiplier modifier for the Creature
+/// @param oCreature The target creature
+/// @param nHand 0 for all attacks, 1 for Mainhand, 2 for Offhand
+/// @param nBaseItem The baseitem modifer to retrieve. BASE_ITEM_GLOVES for Unarmed, '-1' for all
+/// @return the current critical hit multiplier modifier for the creature
+int NWNX_Creature_GetCriticalMultiplierModifier(object oCreature, int nHand = 0, int nBaseItem = -1);
+
+/// @brief Sets the critical hit multiplier override for the Creature.
+/// @param oCreature The target creature
+/// @param nOverride The override value to apply. -1 to clear override.
+/// @param nHand 0 for all attacks, 1 for Mainhand, 2 for Offhand
+/// @param bPersist Whether the modifier should persist to .bic file if applicable
+/// @param nBaseItem Applies the.Override only when the attack used this baseitem. BASE_ITEM_GLOVES for Unarmed, '-1' for all
+/// @note Persistence is activated each server reset by the first use of either 'SetCriticalMultiplier*' functions. Recommended to trigger on a dummy target OnModuleLoad to enable persistence.
+void NWNX_Creature_SetCriticalMultiplierOverride(object oCreature, int nOverride, int nHand = 0, int bPersist = FALSE, int nBaseItem = -1);
+
+/// @brief Gets the critical hit multiplier override for the Creature
+/// @param oCreature The target creature
+/// @param nHand 0 for all attacks, 1 for Mainhand, 2 for Offhand
+/// @param nBaseItem The baseitem Override to retrieve. BASE_ITEM_GLOVES for Unarmed, '-1' for all
+/// @return the current critical hit multiplier override for the creature. No override == -1
+int NWNX_Creature_GetCriticalMultiplierOverride(object oCreature, int nHand = 0, int nBaseItem = -1);
+
+/// @brief Sets the critical hit range modifier for the creature.
+/// @param oCreature The target creature
+/// @param nModifier The modifier to apply. Positive modifiers reduce critical chance. (I.e. From 18-20, a +1 results in crit range of 19-20)
+/// @param nHand 0 for all attacks, 1 for Mainhand, 2 for Offhand
+/// @param bPersist Whether the modifier should persist to .bic file if applicable
+/// @param nBaseItem Applies the.modifier only when the attack used this baseitem. BASE_ITEM_GLOVES for Unarmed, '-1' for all
+/// @note Persistence is activated each server reset by the first use of either 'SetCriticalRange*' functions. Recommended to trigger on a dummy target OnModuleLoad to enable persistence.
+void NWNX_Creature_SetCriticalRangeModifier(object oCreature, int nModifier, int nHand = 0, int bPersist = FALSE, int nBaseItem = -1);
+
+/// @brief Gets the critical hit range modifier for the creature.
+/// @param oCreature The target creature
+/// @param nHand 0 for all attacks, 1 for Mainhand, 2 for Offhand
+/// @param nBaseItem The baseitem modifer to retrieve. BASE_ITEM_GLOVES for Unarmed, '-1' for all
+/// @return the current critical hit range modifier for the creature
+int NWNX_Creature_GetCriticalRangeModifier(object oCreature, int nHand = 0, int nBaseItem = -1);
+
+/// @brief Sets the critical hit range Override for the creature.
+/// @param oCreature The target creature
+/// @param nOverride The new minimum roll to crit. i.e nOverride of 15 results in crit range of 15-20. -1 to clear override.
+/// @param nHand 0 for all attacks, 1 for Mainhand, 2 for Offhand
+/// @param bPersist Whether the modifier should persist to .bic file if applicable
+/// @param nBaseItem Applies the.Override only when the attack used this baseitem. BASE_ITEM_GLOVES for Unarmed, '-1' for all
+/// @note Persistence is activated each server reset by the first use of either 'SetCriticalRange*' functions. Recommended to trigger on a dummy target OnModuleLoad to enable persistence.
+void NWNX_Creature_SetCriticalRangeOverride(object oCreature, int nOverride, int nHand = 0, int bPersist = FALSE, int nBaseItem = -1);
+
+/// @brief Sets the critical hit range Override for the creature.
+/// @param oCreature The target creature
+/// @param nHand 0 for all attacks, 1 for Mainhand, 2 for Offhand
+/// @param nBaseItem The baseitem Override to retrieve. BASE_ITEM_GLOVES for Unarmed, '-1' for all
+/// @return the current critical hit range override for the creature. No override == -1
+int NWNX_Creature_GetCriticalRangeOverride(object oCreature, int nHand = 0, int nBaseItem = -1);
+
+/// @brief Add oAssociate as nAssociateType to oCreature
+/// @warning Only basic checks are done so care must be taken when using this function
+/// @param oCreature The creature to add oAssociate to
+/// @param oAssociate The associate, must be a NPC
+/// @param nAssociateType The associate type, one of ASSOCIATE_TYPE_*, except _NONE
+void NWNX_Creature_AddAssociate(object oCreature, object oAssociate, int nAssociateType);
+
+/// @brief Override the damage level of oCreature.
+/// @note Damage levels are the damage state under a creature's name, for example: 'Near Death'
+/// @param oCreature The target creature.
+/// @param nDamageLevel A damage level, see damagelevels.2da. Allowed values: 0-255 or -1 to remove the override.
+void NWNX_Creature_OverrideDamageLevel(object oCreature, int nDamageLevel);
+
+/// @brief Set the encounter source of oCreature.
+/// @param oCreature The target creature.
+/// @param oEncounter The source encounter
+void NWNX_Creature_SetEncounter(object oCreature, object oEncounter);
+
+/// @brief Get the encounter source of oCreature.
+/// @param oCreature The target creature.
+/// @return The encounter, OBJECT_INVALID if not part of an encounter or on error
+object NWNX_Creature_GetEncounter(object oCreature);
+
+/// @brief Get if oCreature is currently bartering.
+/// @param oCreature The target creature.
+/// @return TRUE if oCreature is bartering, FALSE if not or on error.
+int NWNX_Creature_GetIsBartering(object oCreature);
+
+/// @brief Sets caster level for the last item used. Use in a spellhook or spell event before to set caster level for any spells cast from the item.
+/// @param oCreature the creature who used the item.
+/// @param nCasterLvl the desired caster level.
+void NWNX_Creature_SetLastItemCasterLevel(object oCreature, int nCasterLvl);
+
+/// @brief Gets the caster level of the last item used.
+/// @param oCreature the creature who used the item.
+/// @return returns the creatures last used item's level.
+int NWNX_Creature_GetLastItemCasterLevel(object oCreature);
+
+/// @brief Gets the Armor classed of attacked against versus
+/// @param oAttacked The one being attacked
+/// @param oVersus The one doing the attacking
+/// @param nTouch TRUE for touch attacks
+/// @return -255 on Error, Flat footed AC if oVersus is invalid or the Attacked AC versus oVersus.
+int NWNX_Creature_GetArmorClassVersus(object oAttacked, object oVersus, int nTouch=FALSE);
+
+/// @brief Gets the current walk animation of oCreature.
+/// @param oCreature The target creature.
+/// @return -1 on Error, otherwise the walk animation number
+int NWNX_Creature_GetWalkAnimation(object oCreature);
+
+/// @brief Sets the current walk animation of oCreature.
+/// @param oCreature The target creature.
+/// @param nAnimation The walk animation number.
+void NWNX_Creature_SetWalkAnimation(object oCreature, int nAnimation);
+
+/// @brief Changes the attack modifier depending on the dice roll. Used to skip autofail on 1 and autosucceed on 20 as well.
+/// @param oCreature The attacking creature, use OBJECT_INVALID for all.
+/// @param nRoll The dice roll to modify.
+/// @param nModifier The modifier to the attack, use 0 to turn off autofail for 1/autosucceed for 20 with no attack modifier value.
+void NWNX_Creature_SetAttackRollOverride(object oCreature, int nRoll, int nModifier);
+
+/// @brief Works like the tweak but can be turned on and off for all creatures or single ones.
+/// @param oCreature The parrying creature, use OBJECT_INVALID for all.
+/// @param bParry TRUE to parry all attacks.
+/// @note Use this command on_module_load instead of the NWNX_TWEAKS_PARRY_ALL_ATTACKS tweak if using NWNX_Creature_SetAttackRollOverride()
+void NWNX_Creature_SetParryAllAttacks(object oCreature, int bParry);
+
+/// @brief Gets the NoPermanentDeath flag of oCreature.
+/// @param oCreature The target creature.
+/// @return TRUE/FALSE or -1 on error.
+int NWNX_Creature_GetNoPermanentDeath(object oCreature);
+
+/// @brief Sets the NoPermanentDeath flag of oCreature.
+/// @param oCreature The target creature.
+/// @param bNoPermanentDeath TRUE/FALSE.
+void NWNX_Creature_SetNoPermanentDeath(object oCreature, int bNoPermanentDeath);
+
+/// @brief Compute a safe location for oCreature.
+/// @param oCreature The target creature.
+/// @param vPosition The starting position.
+/// @param fRadius The search radius around vPosition.
+/// @param bWalkStraightLineRequired Whether the creature must be able to walk in a straight line to the position.
+/// @return A safe location as vector, will return vPosition if one wasn't found. Returns {0.0, 0.0, 0.0} on error.
+vector NWNX_Creature_ComputeSafeLocation(object oCreature, vector vPosition, float fRadius = 20.0f, int bWalkStraightLineRequired = TRUE);
+
+/// @brief Update oCreature's perception of oTargetCreature.
+/// @param oCreature The creature.
+/// @param oTargetCreature The target creature.
+void NWNX_Creature_DoPerceptionUpdateOnCreature(object oCreature, object oTargetCreature);
+
+/// @brief Get a creatures personal space (meters from center to non-creature objects).
+/// @param oCreature The creature.
+/// @return The creatures personal space.
+float NWNX_Creature_GetPersonalSpace(object oCreature);
+
+/// @brief Set a creatures personal space (meters from center to non-creature objects).
+/// @param oCreature The creature.
+/// @param fPerspace The creatures personal space.
+void NWNX_Creature_SetPersonalSpace(object oCreature, float fPerspace);
+
+/// @brief Get a creatures creature personal space (meters from center to other creatures).
+/// @param oCreature The creature.
+/// @return The creatures creature personal space.
+float NWNX_Creature_GetCreaturePersonalSpace(object oCreature);
+
+/// @brief Set a creatures creature personal space (meters from center to other creatures).
+/// @param oCreature The creature.
+/// @param fCrePerspace The creatures creature personal space.
+void NWNX_Creature_SetCreaturePersonalSpace(object oCreature, float fCrePerspace);
+
+/// @brief Get a creatures height.
+/// @param oCreature The creature.
+/// @return The creatures height.
+float NWNX_Creature_GetHeight(object oCreature);
+
+/// @brief Set a creatures height.
+/// @param oCreature The creature.
+/// @param fHeight The creatures height.
+void NWNX_Creature_SetHeight(object oCreature, float fHeight);
+
+/// @brief Get a creatures hit distance.
+/// @param oCreature The creature.
+/// @return The creatures hit distance.
+float NWNX_Creature_GetHitDistance(object oCreature);
+
+/// @brief Set a creatures hit distance.
+/// @param oCreature The creature.
+/// @param fHitDist The creatures hit distance.
+void NWNX_Creature_SetHitDistance(object oCreature, float fHitDist);
+
+/// @brief Get a creatures preferred attack distance.
+/// @param oCreature The creature.
+/// @return The creatures preferred attack distance.
+float NWNX_Creature_GetPreferredAttackDistance(object oCreature);
+
+/// @brief Set a creatures preferred attack distance.
+/// @param oCreature The creature.
+/// @param fPrefAtckDist The creatures preferred attack distance.
+void NWNX_Creature_SetPreferredAttackDistance(object oCreature, float fPrefAtckDist);
+
+/// @brief Get the skill penalty from wearing armor.
+/// @param oCreature The creature.
+int NWNX_Creature_GetArmorCheckPenalty(object oCreature);
+
+/// @brief Get the skill penalty from wearing a shield.
+/// @param oCreature The creature.
+int NWNX_Creature_GetShieldCheckPenalty(object oCreature);
+
+/// @brief Sets a chance for normal Effect Immunities to be bypassed
+/// @param oCreature The affected creature
+/// @param nImmunityType 'IMMUNITY_TYPE_*' to bypass. By default affects outgoing effects (oCreature -> another creature). Use a negative (-IMMUNITY_TYPE_*) to affect incoming effects instead (another creature -> oCreature) use 255/-255 to bypass ALL Immunities.
+/// @param nChance The chance (of 100%) to bypass the immunity check. A Positive chance results in NOT IMMUNE. A Negative chance results in IMMUNE.
+/// @param bPersist Whether the modifier should persist to .bic file (for PCs)
+/// @note Persistence is enabled after a server reset by the first use of this function. Recommended to trigger on a dummy target OnModuleLoad to enable persistence.
+/// @note Where an Outgoing and Incoming bypass both attempt opposing outcomes, both are ignored and the immunity status without bypass will apply.
+void NWNX_Creature_SetBypassEffectImmunity(object oCreature, int nImmunityType, int nChance = 100, int bPersist = FALSE);
+
+/// @brief Gets a chance for normal Effect Immunities to be bypassed
+/// @param oCreature The target creature
+/// @param nImmunityType 'IMMUNITY_TYPE_*' to retrieve the current chance for bypass: Positive gets outgoing effects (oCreature -> another creature). Negative (-IMMUNITY_TYPE_*) gets incoming effects (another creature -> oCreature).
+/// @return the current critical hit multiplier modifier for the creature
+int NWNX_Creature_GetBypassEffectImmunity(object oCreature, int nImmunityType);
+
+/// @brief Sets the killer of oCreature to oKiller.
+/// @param oCreature The target creature.
+/// @param oKiller The killer.
+void NWNX_Creature_SetLastKiller(object oCreature, object oKiller);
+
+/// @brief Instantly cast a spell at a target or location.
+/// @note oCreature must be in the same area as oTarget or locTarget.
+/// @note Does not care if oCreature can't cast spells or doesn't know the spell. Does not consume spell slots.
+/// @param oCreature The caster.
+/// @param oTarget The target, use OBJECT_INVALID to cast at a location.
+/// @param locTarget The location, only used when oTarget is OBJECT_INVALID.
+/// @param nSpellID The spell ID.
+/// @param nCasterLevel The caster level of the spell.
+/// @param fProjectileTime The time in seconds for the projectile to reach the target. 0.0f for no projectile.
+/// @param nProjectilePathType A PROJECTILE_PATH_TYPE_* constant.
+/// @param nProjectileSpellID An optional spell ID which to use the projectile vfx of. -1 to use nSpellID's projectile vfx.
+/// @param oItem The spell cast item retrieved by GetSpellCastItem().
+/// @param sImpactScript The spell impact script. Set to "****"" to not run any impact script. If left blank, will execute nSpellID's impact script.
+void NWNX_Creature_DoItemCastSpell(object oCreature, object oTarget, location locTarget, int nSpellID, int nCasterLevel, float fProjectileTime, int nProjectilePathType = PROJECTILE_PATH_TYPE_DEFAULT, int nProjectileSpellID = -1, object oItem = OBJECT_INVALID, string sImpactScript = "");
+
+/// @brief Have oCreature instantly equip oItem to nInventorySlot.
+/// @param oCreature The creature.
+/// @param oItem The item, must be possessed by oCreature.
+/// @param nInventorySlot An INVENTORY_SLOT_* constant.
+/// @return TRUE on success, FALSE on failure.
+int NWNX_Creature_RunEquip(object oCreature, object oItem, int nInventorySlot);
+
+/// @brief Have oCreature instantly unequip oItem.
+/// @param oCreature The creature.
+/// @param oItem The item, must be possessed by oCreature.
+/// @return TRUE on success, FALSE on failure.
+int NWNX_Creature_RunUnequip(object oCreature, object oItem);
+
+/// @brief Override the elemental projectile visual effect of ranged/throwing weapons.
+/// @param oCreature The creature.
+/// @param nProjectileVFX A @ref ranged_projectile_vfx "NWNX_CREATURE_PROJECTILE_VFX_*" constant or -1 to remove the override.
+/// @param bPersist Whether the vfx should persist to the .bic file (for PCs).
+/// @note Persistence is enabled after a server reset by the first use of this function. Recommended to trigger on a dummy target OnModuleLoad to enable persistence.
+void NWNX_Creature_OverrideRangedProjectileVFX(object oCreature, int nProjectileVFX, int bPersist = FALSE);
+
+/// @brief Sets a custom Initiative modifier
+/// @param oCreature The affected creature
+/// @param nMod The amount to adjust their initiative (+/-).
+/// @param bPersist Whether the modifier should persist to .bic file (for PCs)
+/// @note Persistence is enabled after a server reset by the first use of this function. Recommended to trigger on a dummy target OnModuleLoad to enable persistence.
+/// @warning This modifier takes precedence over an NWNX_Race Initiative modifier; they're not additive
+void NWNX_Creature_SetInitiativeModifier(object oCreature, int nMod, int bPersist = FALSE);
+
+/// @brief Gets the custom Initiative modifier.
+/// @param oCreature The target creature
+/// @return the current custom initiative modifier for the creature
+int NWNX_Creature_GetInitiativeModifier(object oCreature);
+
+/// @brief Gets the Body Bag of a creature
+/// @param oCreature The target creature
+/// @return The creatures assigned Body Bag
+object NWNX_Creature_GetBodyBag(object oCreature);
+
+/// @brief Add a cast spell action to oCreature's action queue.
+/// @param oCreature The creature casting the spell.
+/// @param oTarget The target, to cast at a location use the area as target.
+/// @param vTargetLocation The target location.
+/// @param nSpellID The spell ID.
+/// @param nMultiClass The character class position to cast the spell as. 0 = First Class, 1 = Second Class, 3 = Third Class. To cast a cheat spell use 255 and to cast a special ability use 254.
+/// @param nMetaMagic A METAMAGIC_* constant, except METAMAGIC_ANY.
+/// @param nDomainLevel The domain level if casting a domain spell.
+/// @param nProjectilePathType A PROJECTILE_PATH_TYPE_* constant.
+/// @param bInstant TRUE to instantly cast the spell.
+/// @param bClearActions TRUE to clear all actions.
+/// @param bAddToFront TRUE to add the cast spell action to the front of the action queue.
+/// @return TRUE if the action was successfully added to oCreature's action queue.
+int NWNX_Creature_AddCastSpellActions(object oCreature, object oTarget, vector vTargetLocation, int nSpellID, int nMultiClass, int nMetaMagic = METAMAGIC_NONE, int nDomainLevel = 0, int nProjectilePathType = PROJECTILE_PATH_TYPE_DEFAULT, int bInstant = FALSE, int bClearActions = FALSE, int bAddToFront = FALSE);
+
+/// @brief Get whether oCreature is flanking oTargetCreature.
+/// @param oCreature The creature object.
+/// @param oTargetCreature The target creature object.
+/// @return TRUE if oCreature is flanking oTargetCreature.
+int NWNX_Creature_GetIsFlanking(object oCreature, object oTargetCreature);
+
+/// @brief Decrements the remaining spell slots (innate casting) at a class level.
+/// @param oCreature The creature object.
+/// @param nClass The class id from classes.2da. (Not class index 0-2)
+/// @param nSpellLevel The spell level.
+void NWNX_Creature_DecrementRemainingSpellSlots(object oCreature, int nClass, int nSpellLevel);
+
+/// @brief Increments the remaining spell slots (innate casting) at a class level.
+/// @param oCreature The creature object.
+/// @param nClass The class id from classes.2da. (Not class index 0-2)
+/// @param nSpellLevel The spell level.
+void NWNX_Creature_IncrementRemainingSpellSlots(object oCreature, int nClass, int nSpellLevel);
+
+/// @brief Gets the maximum number of bonus attacks a creature can have from EffectModifyAttacks().
+/// @param oCreature The creature.
+/// @return The maximum number of bonus attacks or 0 on error.
+int NWNX_Creature_GetMaximumBonusAttacks(object oCreature);
+
+/// @brief Sets the maximum number of bonus attacks a creature can have from EffectModifyAttacks().
+/// @note This function also removes the limit of 5 bonus attacks from EffectModifyAttacks().
+/// @param oCreature The creature.
+/// @param nMaxBonusAttacks The maximum number of bonus attacks. Values < 0 will set the limit back to the default of 5.
+/// @param bPersist Whether the modifier should persist to .bic file (for PCs).
+/// @note Persistence is enabled after a server reset by the first use of this function. Recommended to trigger on a dummy target OnModuleLoad to enable persistence.
+void NWNX_Creature_SetMaximumBonusAttacks(object oCreature, int nMaxBonusAttacks, int bPersist = FALSE);
+
+/// @brief Inserts a cleave or great cleave attack into oCreature's current attack round against the nearest enemy within melee reach.
+/// @param oCreature The creature object.
+/// @note oCreature must have the cleave or great cleave feats, must be in combat, and must have available attacks remaining in their combat round to use for cleave attack.
+void NWNX_Creature_DoCleaveAttack(object oCreature);
+
+/// @brief Gets the current object oCreature's orientation is locked to.
+/// @param oCreature The creature object.
+/// @return The object oCreature's orientation is locked to, or OBJECT_INVALID if oCreature's orientation is not locked.
+object NWNX_Creature_GetLockOrientationToObject(object oCreature);
+
+/// @brief Locks oCreature's orientation to always face oTarget.
+/// @param oCreature The creature object.
+/// @param oTarget The target to lock oCreature's orientation to. Use OBJECT_INVALID to remove the orientation lock.
+void NWNX_Creature_SetLockOrientationToObject(object oCreature, object oTarget);
+
+/// @brief Causes oCreature to broadcast an Attack of Opportunity against themself.
+/// @param oCreature The creature object.
+/// @param oSingleCreature A single creature to broadcast the Attack of Opporunity to. Use OBJECT_INVALID to broadcast to all nearby enemies.
+/// @param bMovement Whether the Attack of Opportunity was caused by movement.
+void NWNX_Creature_BroadcastAttackOfOpportunity(object oCreature, object oSingleCreature = OBJECT_INVALID, int bMovement = FALSE);
+
+/// @brief Returns the maximum price oStore will buy items from oCreature for.
+/// @param oCreature The creature object.
+/// @param oStore The store object.
+/// @return The max buy price override. -1 = No maximum buy price, -2 = No override set.
+int NWNX_Creature_GetMaxSellToStorePriceOverride(object oCreature, object oStore);
+
+/// @brief Overrides the maximum price oStore will buy items from oCreature for.
+/// @param oCreature The creature object.
+/// @param oStore The store object.
+/// @param nMaxSellToPrice The maximum buy price override. -1 = No maximum buy price, -2 = Remove the override.
+void NWNX_Creature_SetMaxSellToStorePriceOverride(object oCreature, object oStore, int nMaxSellToPrice);
+
+/// @brief Returns the creature's ability increase for nLevel.
+/// @param oCreature The creature object.
+/// @param nLevel The level.
+/// @return An ABILITY_* constant, NWNX_CREATURE_ABILITY_NONE or -1 on error
+int NWNX_Creature_GetAbilityIncreaseByLevel(object oCreature, int nLevel);
+
+/// @brief Sets the creature's ability increase for nLevel.
+/// @param oCreature The creature object.
+/// @param nLevel The level.
+/// @param nAbility ABILITY_* constant or NWNX_CREATURE_ABILITY_NONE
+void NWNX_Creature_SetAbilityIncreaseByLevel(object oCreature, int nLevel, int nAbility);
+
+/// @brief Returns the creature's maximum attack range to a target
+/// @param oCreature The creature object.
+/// @param oTarget The target to get the maximum attack range to
+/// @return The maximum attack range for oCreature to oTarget
+float NWNX_Creature_GetMaxAttackRange(object oCreature, object oTarget);
+
 /// @}
 
 void NWNX_Creature_AddFeat(object creature, int feat)
 {
     string sFunc = "AddFeat";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, feat);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -637,9 +1025,9 @@ void NWNX_Creature_AddFeatByLevel(object creature, int feat, int level)
 {
     string sFunc = "AddFeatByLevel";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, feat);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -647,8 +1035,19 @@ void NWNX_Creature_AddFeatByLevel(object creature, int feat, int level)
 void NWNX_Creature_RemoveFeat(object creature, int feat)
 {
     string sFunc = "RemoveFeat";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, feat);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_RemoveFeatByLevel(object creature, int feat, int level)
+{
+    string sFunc = "RemoveFeatByLevel";
+
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -657,66 +1056,76 @@ int NWNX_Creature_GetKnowsFeat(object creature, int feat)
 {
     string sFunc = "GetKnowsFeat";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, feat);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Creature_GetFeatCountByLevel(object creature, int level)
 {
     string sFunc = "GetFeatCountByLevel";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Creature_GetFeatByLevel(object creature, int level, int index)
 {
     string sFunc = "GetFeatByLevel";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(index);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Creature_GetFeatCount(object creature)
 {
     string sFunc = "GetFeatCount";
 
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+int NWNX_Creature_GetFeatGrantLevel(object creature, int feat)
+{
+    string sFunc = "GetFeatGrantLevel";
+
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Creature_GetFeatByIndex(object creature, int index)
 {
     string sFunc = "GetFeatByIndex";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(index);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Creature_GetMeetsFeatRequirements(object creature, int feat)
 {
     string sFunc = "GetMeetsFeatRequirements";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, feat);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 struct NWNX_Creature_SpecialAbility NWNX_Creature_GetSpecialAbility(object creature, int index)
@@ -725,14 +1134,14 @@ struct NWNX_Creature_SpecialAbility NWNX_Creature_GetSpecialAbility(object creat
 
     struct NWNX_Creature_SpecialAbility ability;
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(index);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 
-    ability.level  = NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-    ability.ready  = NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-    ability.id     = NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    ability.level  = NWNX_GetReturnValueInt();
+    ability.ready  = NWNX_GetReturnValueInt();
+    ability.id     = NWNX_GetReturnValueInt();
 
     return ability;
 }
@@ -741,20 +1150,20 @@ int NWNX_Creature_GetSpecialAbilityCount(object creature)
 {
     string sFunc = "GetSpecialAbilityCount";
 
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
     NWNX_CallFunction(NWNX_Creature, sFunc);
 
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_AddSpecialAbility(object creature, struct NWNX_Creature_SpecialAbility ability)
 {
     string sFunc = "AddSpecialAbility";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability.id);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability.ready);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability.level);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(ability.id);
+    NWNX_PushArgumentInt(ability.ready);
+    NWNX_PushArgumentInt(ability.level);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -763,8 +1172,8 @@ void NWNX_Creature_RemoveSpecialAbility(object creature, int index)
 {
     string sFunc = "RemoveSpecialAbility";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(index);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -773,11 +1182,11 @@ void NWNX_Creature_SetSpecialAbility(object creature, int index, struct NWNX_Cre
 {
     string sFunc = "SetSpecialAbility";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability.id);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability.ready);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability.level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(ability.id);
+    NWNX_PushArgumentInt(ability.ready);
+    NWNX_PushArgumentInt(ability.level);
+    NWNX_PushArgumentInt(index);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -786,19 +1195,19 @@ int NWNX_Creature_GetClassByLevel(object creature, int level)
 {
     string sFunc = "GetClassByLevel";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_SetBaseAC(object creature, int ac)
 {
     string sFunc = "SetBaseAC";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ac);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(ac);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -807,25 +1216,19 @@ int NWNX_Creature_GetBaseAC(object creature)
 {
     string sFunc = "GetBaseAC";
 
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-}
-
-void NWNX_Creature_SetAbilityScore(object creature, int ability, int value)
-{
-    WriteTimestampedLogEntry("NWNX_Creature: SetAbilityScore() is deprecated. Use native NWNX_Creature_SetRawAbilityScore() instead");
-    NWNX_Creature_SetRawAbilityScore(creature, ability, value);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_SetRawAbilityScore(object creature, int ability, int value)
 {
     string sFunc = "SetRawAbilityScore";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, value);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(value);
+    NWNX_PushArgumentInt(ability);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -834,20 +1237,20 @@ int NWNX_Creature_GetRawAbilityScore(object creature, int ability)
 {
     string sFunc = "GetRawAbilityScore";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(ability);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_ModifyRawAbilityScore(object creature, int ability, int modifier)
 {
     string sFunc = "ModifyRawAbilityScore";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, modifier);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(modifier);
+    NWNX_PushArgumentInt(ability);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -856,118 +1259,45 @@ int NWNX_Creature_GetPrePolymorphAbilityScore(object creature, int ability)
 {
     string sFunc = "GetPrePolymorphAbilityScore";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, ability);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(ability);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-}
-
-struct NWNX_Creature_MemorisedSpell NWNX_Creature_GetMemorisedSpell(object creature, int class, int level, int index)
-{
-    string sFunc = "GetMemorisedSpell";
-    struct NWNX_Creature_MemorisedSpell spell;
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-
-    spell.domain = NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-    spell.meta   = NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-    spell.ready  = NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-    spell.id     = NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-    return spell;
-}
-
-int NWNX_Creature_GetMemorisedSpellCountByLevel(object creature, int class, int level)
-{
-    string sFunc = "GetMemorisedSpellCountByLevel";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-}
-
-void NWNX_Creature_SetMemorisedSpell(object creature, int class, int level, int index, struct NWNX_Creature_MemorisedSpell spell)
-{
-    string sFunc = "SetMemorisedSpell";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, spell.id);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, spell.ready);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, spell.meta);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, spell.domain);
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Creature_GetRemainingSpellSlots(object creature, int class, int level)
 {
     string sFunc = "GetRemainingSpellSlots";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(class);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_SetRemainingSpellSlots(object creature, int class, int level, int slots)
 {
     string sFunc = "SetRemainingSpellSlots";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, slots);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(slots);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(class);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-}
-
-int NWNX_Creature_GetKnownSpell(object creature, int class, int level, int index)
-{
-    string sFunc = "GetKnownSpell";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-}
-
-int NWNX_Creature_GetKnownSpellCount(object creature, int class, int level)
-{
-    string sFunc = "GetKnownSpellCount";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
 }
 
 void NWNX_Creature_RemoveKnownSpell(object creature, int class, int level, int spellId)
 {
     string sFunc = "RemoveKnownSpell";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, spellId);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(spellId);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(class);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -976,33 +1306,10 @@ void NWNX_Creature_AddKnownSpell(object creature, int class, int level, int spel
 {
     string sFunc = "AddKnownSpell";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, spellId);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-}
-
-void NWNX_Creature_ClearMemorisedKnownSpells(object creature, int class, int spellId)
-{
-    string sFunc = "ClearMemorisedKnownSpells";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, spellId);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-}
-
-void NWNX_Creature_ClearMemorisedSpell(object creature, int class, int level, int index)
-{
-    string sFunc = "ClearMemorisedSpell";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(spellId);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(class);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1011,12 +1318,12 @@ int NWNX_Creature_GetMaxSpellSlots(object creature, int class, int level)
 {
     string sFunc = "GetMaxSpellSlots";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(class);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 
@@ -1024,20 +1331,20 @@ int NWNX_Creature_GetMaxHitPointsByLevel(object creature, int level)
 {
     string sFunc = "GetMaxHitPointsByLevel";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_SetMaxHitPointsByLevel(object creature, int level, int value)
 {
     string sFunc = "SetMaxHitPointsByLevel";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, value);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(value);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1046,8 +1353,8 @@ void NWNX_Creature_SetMovementRate(object creature, int rate)
 {
     string sFunc = "SetMovementRate";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, rate);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(rate);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1055,18 +1362,37 @@ void NWNX_Creature_SetMovementRate(object creature, int rate)
 float NWNX_Creature_GetMovementRateFactor(object creature)
 {
     string sFunc = "GetMovementRateFactor";
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueFloat(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueFloat();
 }
 
 void NWNX_Creature_SetMovementRateFactor(object creature, float factor)
 {
     string sFunc = "SetMovementRateFactor";
 
-    NWNX_PushArgumentFloat(NWNX_Creature, sFunc, factor);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentFloat(factor);
+    NWNX_PushArgumentObject(creature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+float NWNX_Creature_GetMovementRateFactorCap(object creature)
+{
+    string sFunc = "GetMovementRateFactorCap";
+    NWNX_PushArgumentObject(creature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueFloat();
+}
+
+void NWNX_Creature_SetMovementRateFactorCap(object creature, float cap)
+{
+    string sFunc = "SetMovementRateFactorCap";
+
+    NWNX_PushArgumentFloat(cap);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1075,8 +1401,8 @@ void NWNX_Creature_SetAlignmentGoodEvil(object creature, int value)
 {
     string sFunc = "SetAlignmentGoodEvil";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, value);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(value);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1085,70 +1411,8 @@ void NWNX_Creature_SetAlignmentLawChaos(object creature, int value)
 {
     string sFunc = "SetAlignmentLawChaos";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, value);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-}
-
-int NWNX_Creature_GetClericDomain(object creature, int index)
-{
-    string sFunc = "GetClericDomain";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-}
-
-void NWNX_Creature_SetClericDomain(object creature, int index, int domain)
-{
-    string sFunc = "SetClericDomain";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, domain);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, index);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-}
-
-int NWNX_Creature_GetWizardSpecialization(object creature)
-{
-    string sFunc = "GetWizardSpecialization";
-
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-}
-
-void NWNX_Creature_SetWizardSpecialization(object creature, int school)
-{
-    string sFunc = "SetWizardSpecialization";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, school);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-}
-
-int NWNX_Creature_GetSoundset(object creature)
-{
-    string sFunc = "GetSoundset";
-
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-}
-
-void NWNX_Creature_SetSoundset(object creature, int soundset)
-{
-    string sFunc = "SetSoundset";
-
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, soundset);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(value);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1156,19 +1420,44 @@ void NWNX_Creature_SetSoundset(object creature, int soundset)
 void NWNX_Creature_SetSkillRank(object creature, int skill, int rank)
 {
     string sFunc = "SetSkillRank";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, rank);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, skill);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(rank);
+    NWNX_PushArgumentInt(skill);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
 
-void NWNX_Creature_SetClassByPosition(object creature, int position, int classID)
+int NWNX_Creature_GetSkillRankByLevel(object creature, int skill, int level)
+{
+    string sFunc = "GetSkillRankByLevel";
+
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(skill);
+    NWNX_PushArgumentObject(creature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetSkillRankByLevel(object creature, int skill, int rank, int level)
+{
+    string sFunc = "SetSkillRankByLevel";
+
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(rank);
+    NWNX_PushArgumentInt(skill);
+    NWNX_PushArgumentObject(creature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_SetClassByPosition(object creature, int position, int classID, int bUpdateLevels = TRUE)
 {
     string sFunc = "SetClassByPosition";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, classID);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, position);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(bUpdateLevels);
+    NWNX_PushArgumentInt(classID);
+    NWNX_PushArgumentInt(position);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1176,9 +1465,9 @@ void NWNX_Creature_SetClassByPosition(object creature, int position, int classID
 void NWNX_Creature_SetLevelByPosition(object creature, int position, int level)
 {
     string sFunc = "SetLevelByPosition";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, position);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentInt(position);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1186,8 +1475,8 @@ void NWNX_Creature_SetLevelByPosition(object creature, int position, int level)
 void NWNX_Creature_SetBaseAttackBonus(object creature, int bab)
 {
     string sFunc = "SetBaseAttackBonus";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, bab);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(bab);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1195,26 +1484,17 @@ void NWNX_Creature_SetBaseAttackBonus(object creature, int bab)
 int NWNX_Creature_GetAttacksPerRound(object creature, int bBaseAPR = FALSE)
 {
     string sFunc = "GetAttacksPerRound";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, bBaseAPR);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(bBaseAPR);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
-}
-
-void NWNX_Creature_SetGender(object creature, int gender)
-{
-    string sFunc = "SetGender";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, gender);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_RestoreFeats(object creature)
 {
     string sFunc = "RestoreFeats";
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1222,16 +1502,7 @@ void NWNX_Creature_RestoreFeats(object creature)
 void NWNX_Creature_RestoreSpecialAbilities(object creature)
 {
     string sFunc = "RestoreSpecialAbilities";
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
-
-    NWNX_CallFunction(NWNX_Creature, sFunc);
-}
-
-void NWNX_Creature_RestoreSpells(object creature, int level = -1)
-{
-    string sFunc = "RestoreSpells";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, level);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1239,7 +1510,7 @@ void NWNX_Creature_RestoreSpells(object creature, int level = -1)
 void NWNX_Creature_RestoreItems(object creature)
 {
     string sFunc = "RestoreItems";
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1247,8 +1518,8 @@ void NWNX_Creature_RestoreItems(object creature)
 void NWNX_Creature_SetSize(object creature, int size)
 {
     string sFunc = "SetSize";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, size);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(size);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1256,18 +1527,40 @@ void NWNX_Creature_SetSize(object creature, int size)
 int NWNX_Creature_GetSkillPointsRemaining(object creature)
 {
     string sFunc = "GetSkillPointsRemaining";
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 
 void NWNX_Creature_SetSkillPointsRemaining(object creature, int skillpoints)
 {
     string sFunc = "SetSkillPointsRemaining";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, skillpoints);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(skillpoints);
+    NWNX_PushArgumentObject(creature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetSkillPointsRemainingByLevel(object creature, int level)
+{
+    string sFunc = "GetSkillPointsRemainingByLevel";
+
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentObject(creature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetSkillPointsRemainingByLevel(object creature, int level, int value)
+{
+    string sFunc = "SetSkillPointsRemainingByLevel";
+
+    NWNX_PushArgumentInt(value);
+    NWNX_PushArgumentInt(level);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1275,8 +1568,8 @@ void NWNX_Creature_SetSkillPointsRemaining(object creature, int skillpoints)
 void NWNX_Creature_SetRacialType(object creature, int racialtype)
 {
     string sFunc = "SetRacialType";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, racialtype);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(racialtype);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1284,17 +1577,17 @@ void NWNX_Creature_SetRacialType(object creature, int racialtype)
 int NWNX_Creature_GetMovementType(object creature)
 {
     string sFunc = "GetMovementType";
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_SetWalkRateCap(object creature, float fWalkRate = 2000.0f)
 {
     string sFunc = "SetWalkRateCap";
-    NWNX_PushArgumentFloat(NWNX_Creature, sFunc, fWalkRate);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentFloat(fWalkRate);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1302,8 +1595,8 @@ void NWNX_Creature_SetWalkRateCap(object creature, float fWalkRate = 2000.0f)
 void NWNX_Creature_SetGold(object creature, int gold)
 {
     string sFunc = "SetGold";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, gold);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(gold);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1311,8 +1604,8 @@ void NWNX_Creature_SetGold(object creature, int gold)
 void NWNX_Creature_SetCorpseDecayTime(object creature, int nDecayTime)
 {
     string sFunc = "SetCorpseDecayTime";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, nDecayTime);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(nDecayTime);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1321,29 +1614,30 @@ void NWNX_Creature_SetCorpseDecayTime(object creature, int nDecayTime)
 int NWNX_Creature_GetBaseSavingThrow(object creature, int which)
 {
     string sFunc = "GetBaseSavingThrow";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, which);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(which);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_SetBaseSavingThrow(object creature, int which, int value)
 {
     string sFunc = "SetBaseSavingThrow";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, value);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, which);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(value);
+    NWNX_PushArgumentInt(which);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
 
-void NWNX_Creature_LevelUp(object creature, int class, int count=1)
+void NWNX_Creature_LevelUp(object creature, int class, int count = 1, int package = PACKAGE_INVALID)
 {
     string sFunc = "LevelUp";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, count);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, class);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(package);
+    NWNX_PushArgumentInt(count);
+    NWNX_PushArgumentInt(class);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1351,8 +1645,8 @@ void NWNX_Creature_LevelUp(object creature, int class, int count=1)
 void NWNX_Creature_LevelDown(object creature, int count=1)
 {
     string sFunc = "LevelDown";
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, count);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(count);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1360,8 +1654,8 @@ void NWNX_Creature_LevelDown(object creature, int count=1)
 void NWNX_Creature_SetChallengeRating(object creature, float fCR)
 {
     string sFunc = "SetChallengeRating";
-    NWNX_PushArgumentFloat(NWNX_Creature, sFunc, fCR);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentFloat(fCR);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1384,87 +1678,86 @@ int NWNX_Creature_GetAttackBonus(object creature, int isMelee = -1, int isTouchA
         }
     }
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, includeBaseAttackBonus);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, isOffhand);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, isTouchAttack);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, isMelee);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(includeBaseAttackBonus);
+    NWNX_PushArgumentInt(isOffhand);
+    NWNX_PushArgumentInt(isTouchAttack);
+    NWNX_PushArgumentInt(isMelee);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Creature_GetHighestLevelOfFeat(object creature, int feat)
 {
     string sFunc = "GetHighestLevelOfFeat";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, feat);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Creature_GetFeatRemainingUses(object creature, int feat)
 {
     string sFunc = "GetFeatRemainingUses";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, feat);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Creature_GetFeatTotalUses(object creature, int feat)
 {
     string sFunc = "GetFeatTotalUses";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, feat);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_SetFeatRemainingUses(object creature, int feat, int uses)
 {
     string sFunc = "SetFeatRemainingUses";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, uses);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, feat);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(uses);
+    NWNX_PushArgumentInt(feat);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
 
-int NWNX_Creature_GetTotalEffectBonus(object creature, int bonusType=NWNX_CREATURE_BONUS_TYPE_ATTACK, object target=OBJECT_INVALID, int isElemental=0,
-    int isForceMax=0, int savetype=-1, int saveSpecificType=-1, int skill=-1, int abilityScore=-1, int isOffhand=FALSE)
+int NWNX_Creature_GetTotalEffectBonus(object creature, int bonusType=NWNX_CREATURE_BONUS_TYPE_ATTACK, object target=OBJECT_INVALID, int isElemental=0, int isForceMax=0, int savetype=-1, int saveSpecificType=-1, int skill=-1, int abilityScore=-1, int isOffhand=FALSE)
 {
     string sFunc = "GetTotalEffectBonus";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, isOffhand);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, abilityScore);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, skill);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, saveSpecificType);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, savetype);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, isForceMax);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, isElemental);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, target);
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, bonusType);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(isOffhand);
+    NWNX_PushArgumentInt(abilityScore);
+    NWNX_PushArgumentInt(skill);
+    NWNX_PushArgumentInt(saveSpecificType);
+    NWNX_PushArgumentInt(savetype);
+    NWNX_PushArgumentInt(isForceMax);
+    NWNX_PushArgumentInt(isElemental);
+    NWNX_PushArgumentObject(target);
+    NWNX_PushArgumentInt(bonusType);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_SetOriginalName(object creature, string name, int isLastName)
 {
     string sFunc = "SetOriginalName";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, isLastName);
-    NWNX_PushArgumentString(NWNX_Creature, sFunc, name);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(isLastName);
+    NWNX_PushArgumentString(name);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1473,19 +1766,19 @@ string NWNX_Creature_GetOriginalName(object creature, int isLastName)
 {
     string sFunc = "GetOriginalName";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, isLastName);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(isLastName);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueString(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueString();
 }
 
 void NWNX_Creature_SetSpellResistance(object creature, int sr)
 {
     string sFunc = "SetSpellResistance";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, sr);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(sr);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1494,8 +1787,8 @@ void NWNX_Creature_SetAnimalCompanionCreatureType(object creature, int type)
 {
     string sFunc = "SetAnimalCompanionCreatureType";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, type);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(type);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1504,8 +1797,8 @@ void NWNX_Creature_SetFamiliarCreatureType(object creature, int type)
 {
     string sFunc = "SetFamiliarCreatureType";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, type);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(type);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1514,8 +1807,8 @@ void NWNX_Creature_SetAnimalCompanionName(object creature, string name)
 {
     string sFunc = "SetAnimalCompanionName";
 
-    NWNX_PushArgumentString(NWNX_Creature, sFunc, name);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentString(name);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1524,8 +1817,8 @@ void NWNX_Creature_SetFamiliarName(object creature, string name)
 {
     string sFunc = "SetFamiliarName";
 
-    NWNX_PushArgumentString(NWNX_Creature, sFunc, name);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentString(name);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
 }
@@ -1534,18 +1827,790 @@ int NWNX_Creature_GetDisarmable(object creature)
 {
     string sFunc = "GetDisarmable";
 
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
-    return NWNX_GetReturnValueInt(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Creature_SetDisarmable(object creature, int disarmable)
 {
     string sFunc = "SetDisarmable";
 
-    NWNX_PushArgumentInt(NWNX_Creature, sFunc, disarmable);
-    NWNX_PushArgumentObject(NWNX_Creature, sFunc, creature);
+    NWNX_PushArgumentInt(disarmable);
+    NWNX_PushArgumentObject(creature);
 
     NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_SetDomain(object creature, int class, int index, int domain)
+{
+    string sFunc = "SetDomain";
+
+    NWNX_PushArgumentInt(domain);
+    NWNX_PushArgumentInt(index);
+    NWNX_PushArgumentInt(class);
+    NWNX_PushArgumentObject(creature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_SetSpecialization(object creature, int class, int school)
+{
+    string sFunc = "SetSpecialization";
+
+    NWNX_PushArgumentInt(school);
+    NWNX_PushArgumentInt(class);
+    NWNX_PushArgumentObject(creature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_SetFaction(object oCreature, int nFactionId)
+{
+    string sFunc = "SetFaction";
+    NWNX_PushArgumentInt(nFactionId);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetFaction(object oCreature)
+{
+    string sFunc = "GetFaction";
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+int NWNX_Creature_GetFlatFooted(object oCreature)
+{
+    string sFunc = "GetFlatFooted";
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+string NWNX_Creature_SerializeQuickbar(object oCreature)
+{
+    string sFunc = "SerializeQuickbar";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueString();
+}
+
+int NWNX_Creature_DeserializeQuickbar(object oCreature, string sSerializedQuickbar)
+{
+    string sFunc = "DeserializeQuickbar";
+
+    NWNX_PushArgumentString(sSerializedQuickbar);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetCasterLevelModifier(object oCreature, int nClass, int nModifier, int bPersist = FALSE)
+{
+    string sFunc = "SetCasterLevelModifier";
+
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nModifier);
+    NWNX_PushArgumentInt(nClass);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetCasterLevelModifier(object oCreature, int nClass)
+{
+    string sFunc = "GetCasterLevelModifier";
+
+    NWNX_PushArgumentInt(nClass);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetCasterLevelOverride(object oCreature, int nClass, int nCasterLevel, int bPersist = FALSE)
+{
+    string sFunc = "SetCasterLevelOverride";
+
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nCasterLevel);
+    NWNX_PushArgumentInt(nClass);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetCasterLevelOverride(object oCreature, int nClass)
+{
+    string sFunc = "GetCasterLevelOverride";
+
+    NWNX_PushArgumentInt(nClass);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_JumpToLimbo(object oCreature)
+{
+    string sFunc = "JumpToLimbo";
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_SetCriticalMultiplierModifier(object oCreature, int nModifier, int nHand = 0, int bPersist = FALSE, int nBaseItem = -1)
+{
+    string sFunc = "SetCriticalMultiplierModifier";
+
+    NWNX_PushArgumentInt(nBaseItem);
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nHand);
+    NWNX_PushArgumentInt(nModifier);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetCriticalMultiplierModifier(object oCreature, int nHand = 0, int nBaseItem = -1)
+{
+    string sFunc = "GetCriticalMultiplierModifier";
+
+    NWNX_PushArgumentInt(nBaseItem);
+    NWNX_PushArgumentInt(nHand);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetCriticalMultiplierOverride(object oCreature, int nOverride, int nHand = 0, int bPersist = FALSE, int nBaseItem = -1)
+{
+    string sFunc = "SetCriticalMultiplierOverride";
+
+    NWNX_PushArgumentInt(nBaseItem);
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nHand);
+    NWNX_PushArgumentInt(nOverride);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetCriticalMultiplierOverride(object oCreature, int nHand = 0, int nBaseItem = -1)
+{
+    string sFunc = "GetCriticalMultiplierOverride";
+
+    NWNX_PushArgumentInt(nBaseItem);
+    NWNX_PushArgumentInt(nHand);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetCriticalRangeModifier(object oCreature, int nModifier, int nHand = 0, int bPersist = FALSE, int nBaseItem = -1)
+{
+    string sFunc = "SetCriticalRangeModifier";
+
+    NWNX_PushArgumentInt(nBaseItem);
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nHand);
+    NWNX_PushArgumentInt(nModifier);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetCriticalRangeModifier(object oCreature, int nHand = 0, int nBaseItem = -1)
+{
+    string sFunc = "GetCriticalRangeModifier";
+
+    NWNX_PushArgumentInt(nBaseItem);
+    NWNX_PushArgumentInt(nHand);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetCriticalRangeOverride(object oCreature, int nOverride, int nHand = 0, int bPersist = FALSE, int nBaseItem = -1)
+{
+    string sFunc = "SetCriticalRangeOverride";
+
+    NWNX_PushArgumentInt(nBaseItem);
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nHand);
+    NWNX_PushArgumentInt(nOverride);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetCriticalRangeOverride(object oCreature, int nHand = 0, int nBaseItem = -1)
+{
+    string sFunc = "GetCriticalRangeOverride";
+
+    NWNX_PushArgumentInt(nBaseItem);
+    NWNX_PushArgumentInt(nHand);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_AddAssociate(object oCreature, object oAssociate, int nAssociateType)
+{
+    string sFunc = "AddAssociate";
+
+    NWNX_PushArgumentInt(nAssociateType);
+    NWNX_PushArgumentObject(oAssociate);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_OverrideDamageLevel(object oCreature, int nDamageLevel)
+{
+    string sFunc = "OverrideDamageLevel";
+
+    NWNX_PushArgumentInt(nDamageLevel);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_SetEncounter(object oCreature, object oEncounter)
+{
+    string sFunc = "SetEncounter";
+
+    NWNX_PushArgumentObject(oEncounter);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+object NWNX_Creature_GetEncounter(object oCreature)
+{
+    string sFunc = "GetEncounter";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueObject();
+}
+
+int NWNX_Creature_GetIsBartering(object oCreature)
+{
+    string sFunc = "GetIsBartering";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetLastItemCasterLevel(object oCreature, int nCasterLvl)
+{
+    string sFunc = "SetLastItemCasterLevel";
+    NWNX_PushArgumentInt(nCasterLvl);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+
+int NWNX_Creature_GetLastItemCasterLevel(object oCreature)
+{
+    string sFunc = "GetLastItemCasterLevel";
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueInt();
+}
+
+int NWNX_Creature_GetArmorClassVersus(object oAttacked, object oVersus, int nTouch=FALSE)
+{
+    string sFunc = "GetArmorClassVersus";
+    NWNX_PushArgumentInt(nTouch);
+    NWNX_PushArgumentObject(oVersus);
+    NWNX_PushArgumentObject(oAttacked);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueInt();
+}
+
+int NWNX_Creature_GetWalkAnimation(object oCreature)
+{
+    string sFunc = "GetWalkAnimation";
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetWalkAnimation(object oCreature, int nAnimation)
+{
+    string sFunc = "SetWalkAnimation";
+    NWNX_PushArgumentInt(nAnimation);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_SetAttackRollOverride(object oCreature, int nRoll, int nModifier)
+{
+    string sFunc = "SetAttackRollOverride";
+    NWNX_PushArgumentInt(nModifier);
+    NWNX_PushArgumentInt(nRoll);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_SetParryAllAttacks(object oCreature, int bParry)
+{
+    string sFunc = "SetParryAllAttacks";
+    NWNX_PushArgumentInt(bParry);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetNoPermanentDeath(object oCreature)
+{
+    string sFunc = "GetNoPermanentDeath";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetNoPermanentDeath(object oCreature, int bNoPermanentDeath)
+{
+    string sFunc = "SetNoPermanentDeath";
+
+    NWNX_PushArgumentInt(bNoPermanentDeath);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+vector NWNX_Creature_ComputeSafeLocation(object oCreature, vector vPosition, float fRadius = 20.0f, int bWalkStraightLineRequired = TRUE)
+{
+    string sFunc = "ComputeSafeLocation";
+
+    NWNX_PushArgumentInt(bWalkStraightLineRequired);
+    NWNX_PushArgumentFloat(fRadius);
+    NWNX_PushArgumentFloat(vPosition.x);
+    NWNX_PushArgumentFloat(vPosition.y);
+    NWNX_PushArgumentFloat(vPosition.z);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    vector v;
+    v.z = NWNX_GetReturnValueFloat();
+    v.y = NWNX_GetReturnValueFloat();
+    v.x = NWNX_GetReturnValueFloat();
+
+    return v;
+}
+
+void NWNX_Creature_DoPerceptionUpdateOnCreature(object oCreature, object oTargetCreature)
+{
+    string sFunc = "DoPerceptionUpdateOnCreature";
+
+    NWNX_PushArgumentObject(oTargetCreature);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+float NWNX_Creature_GetPersonalSpace(object oCreature)
+{
+    string sFunc = "GetPersonalSpace";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueFloat();
+}
+
+void NWNX_Creature_SetPersonalSpace(object oCreature, float fPerspace)
+{
+    string sFunc = "SetPersonalSpace";
+
+    NWNX_PushArgumentFloat(fPerspace);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+float NWNX_Creature_GetCreaturePersonalSpace(object oCreature)
+{
+    string sFunc = "GetCreaturePersonalSpace";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueFloat();
+}
+
+void NWNX_Creature_SetCreaturePersonalSpace(object oCreature, float fCrePerspace)
+{
+    string sFunc = "SetCreaturePersonalSpace";
+
+    NWNX_PushArgumentFloat(fCrePerspace);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+float NWNX_Creature_GetHeight(object oCreature)
+{
+    string sFunc = "GetHeight";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueFloat();
+}
+
+void NWNX_Creature_SetHeight(object oCreature, float fHeight)
+{
+    string sFunc = "SetHeight";
+
+    NWNX_PushArgumentFloat(fHeight);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+float NWNX_Creature_GetHitDistance(object oCreature)
+{
+    string sFunc = "GetHitDistance";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueFloat();
+}
+
+void NWNX_Creature_SetHitDistance(object oCreature, float fHitDist)
+{
+    string sFunc = "SetHitDistance";
+
+    NWNX_PushArgumentFloat(fHitDist);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+float NWNX_Creature_GetPreferredAttackDistance(object oCreature)
+{
+    string sFunc = "GetPreferredAttackDistance";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueFloat();
+}
+
+void NWNX_Creature_SetPreferredAttackDistance(object oCreature, float fPrefAtckDist)
+{
+    string sFunc = "SetPreferredAttackDistance";
+
+    NWNX_PushArgumentFloat(fPrefAtckDist);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetArmorCheckPenalty(object oCreature)
+{
+    string sFunc = "GetArmorCheckPenalty";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+int NWNX_Creature_GetShieldCheckPenalty(object oCreature)
+{
+    string sFunc = "GetShieldCheckPenalty";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetBypassEffectImmunity(object oCreature, int nImmunityType, int nChance = 100, int bPersist = FALSE)
+{
+    string sFunc = "SetBypassEffectImmunity";
+
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nChance);
+    NWNX_PushArgumentInt(nImmunityType);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetBypassEffectImmunity(object oCreature, int nImmunityType)
+{
+    string sFunc = "GetBypassEffectImmunity";
+
+    NWNX_PushArgumentInt(nImmunityType);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetLastKiller(object oCreature, object oKiller)
+{
+    string sFunc = "SetLastKiller";
+
+    NWNX_PushArgumentObject(oKiller);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_DoItemCastSpell(object oCreature, object oTarget, location locTarget, int nSpellID, int nCasterLevel, float fProjectileTime, int nProjectilePathType = PROJECTILE_PATH_TYPE_DEFAULT, int nProjectileSpellID = -1, object oItem = OBJECT_INVALID, string sImpactScript = "")
+{
+    string sFunc = "DoItemCastSpell";
+
+    object oArea = GetAreaFromLocation(locTarget);
+    vector vPosition = GetPositionFromLocation(locTarget);
+
+    NWNX_PushArgumentString(sImpactScript);
+    NWNX_PushArgumentObject(oItem);
+    NWNX_PushArgumentInt(nProjectileSpellID);
+    NWNX_PushArgumentInt(nProjectilePathType);
+    NWNX_PushArgumentFloat(fProjectileTime);
+    NWNX_PushArgumentInt(nCasterLevel);
+    NWNX_PushArgumentInt(nSpellID);
+    NWNX_PushArgumentFloat(vPosition.z);
+    NWNX_PushArgumentFloat(vPosition.y);
+    NWNX_PushArgumentFloat(vPosition.x);
+    NWNX_PushArgumentObject(oArea);
+    NWNX_PushArgumentObject(oTarget);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_RunEquip(object oCreature, object oItem, int nInventorySlot)
+{
+    string sFunc = "RunEquip";
+
+    NWNX_PushArgumentInt(nInventorySlot);
+    NWNX_PushArgumentObject(oItem);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueInt();
+}
+
+int NWNX_Creature_RunUnequip(object oCreature, object oItem)
+{
+    string sFunc = "RunUnequip";
+
+    NWNX_PushArgumentObject(oItem);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_OverrideRangedProjectileVFX(object oCreature, int nProjectileVFX, int bPersist = FALSE)
+{
+    string sFunc = "OverrideRangedProjectileVFX";
+
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nProjectileVFX);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_SetInitiativeModifier(object oCreature, int nMod, int bPersist = FALSE)
+{
+    string sFunc = "SetInitiativeModifier";
+
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nMod);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetInitiativeModifier(object oCreature)
+{
+    string sFunc = "GetInitiativeModifier";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+object NWNX_Creature_GetBodyBag(object oCreature)
+{
+    string sFunc = "GetBodyBag";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueObject();
+}
+
+int NWNX_Creature_AddCastSpellActions(object oCreature, object oTarget, vector vTargetLocation, int nSpellID, int nMultiClass, int nMetaMagic = METAMAGIC_NONE, int nDomainLevel = 0, int nProjectilePathType = PROJECTILE_PATH_TYPE_DEFAULT, int bInstant = FALSE, int bClearActions = FALSE, int bAddToFront = FALSE)
+{
+    string sFunc = "AddCastSpellActions";
+
+    NWNX_PushArgumentInt(bAddToFront);
+    NWNX_PushArgumentInt(bClearActions);
+    NWNX_PushArgumentInt(bInstant);
+    NWNX_PushArgumentInt(nProjectilePathType);
+    NWNX_PushArgumentInt(nDomainLevel);
+    NWNX_PushArgumentInt(nMetaMagic);
+    NWNX_PushArgumentInt(nMultiClass);
+    NWNX_PushArgumentInt(nSpellID);
+    NWNX_PushArgumentFloat(vTargetLocation.z);
+    NWNX_PushArgumentFloat(vTargetLocation.y);
+    NWNX_PushArgumentFloat(vTargetLocation.x);
+    NWNX_PushArgumentObject(oTarget);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+int NWNX_Creature_GetIsFlanking(object oCreature, object oTargetCreature)
+{
+    string sFunc = "GetIsFlanking";
+
+    NWNX_PushArgumentObject(oTargetCreature);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_DecrementRemainingSpellSlots(object oCreature, int nClass, int nSpellLevel)
+{
+    string sFunc = "DecrementRemainingSpellSlots";
+
+    NWNX_PushArgumentInt(nSpellLevel);
+    NWNX_PushArgumentInt(nClass);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_IncrementRemainingSpellSlots(object oCreature, int nClass, int nSpellLevel)
+{
+    string sFunc = "IncrementRemainingSpellSlots";
+
+    NWNX_PushArgumentInt(nSpellLevel);
+    NWNX_PushArgumentInt(nClass);
+    NWNX_PushArgumentObject(oCreature);
+
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetMaximumBonusAttacks(object oCreature)
+{
+    string sFunc = "GetMaximumBonusAttacks";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetMaximumBonusAttacks(object oCreature, int nMaxBonusAttacks, int bPersist = FALSE)
+{
+    string sFunc = "SetMaximumBonusAttacks";
+
+    NWNX_PushArgumentInt(bPersist);
+    NWNX_PushArgumentInt(nMaxBonusAttacks);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_DoCleaveAttack(object oCreature)
+{
+    string sFunc = "DoCleaveAttack";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+object NWNX_Creature_GetLockOrientationToObject(object oCreature)
+{
+    string sFunc = "GetLockOrientationToObject";
+
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueObject();
+}
+
+void NWNX_Creature_SetLockOrientationToObject(object oCreature, object oTarget)
+{
+    string sFunc = "SetLockOrientationToObject";
+
+    NWNX_PushArgumentObject(oTarget);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+void NWNX_Creature_BroadcastAttackOfOpportunity(object oCreature, object oSingleCreature = OBJECT_INVALID, int bMovement = FALSE)
+{
+    string sFunc = "BroadcastAttackOfOpportunity";
+
+    NWNX_PushArgumentInt(bMovement);
+    NWNX_PushArgumentObject(oSingleCreature);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetMaxSellToStorePriceOverride(object oCreature, object oStore)
+{
+    string sFunc = "GetMaxSellToStorePriceOverride";
+
+    NWNX_PushArgumentObject(oStore);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetMaxSellToStorePriceOverride(object oCreature, object oStore, int nMaxSellToPrice)
+{
+    string sFunc = "SetMaxSellToStorePriceOverride";
+
+    NWNX_PushArgumentInt(nMaxSellToPrice);
+    NWNX_PushArgumentObject(oStore);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+int NWNX_Creature_GetAbilityIncreaseByLevel(object oCreature, int nLevel)
+{
+    string sFunc = "GetAbilityIncreaseByLevel";
+
+    NWNX_PushArgumentInt(nLevel);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Creature_SetAbilityIncreaseByLevel(object oCreature, int nLevel, int nAbility)
+{
+    string sFunc = "SetAbilityIncreaseByLevel";
+
+    NWNX_PushArgumentInt(nAbility);
+    NWNX_PushArgumentInt(nLevel);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+}
+
+float NWNX_Creature_GetMaxAttackRange(object oCreature, object oTarget)
+{
+    string sFunc = "GetMaxAttackRange";
+
+    NWNX_PushArgumentObject(oTarget);
+    NWNX_PushArgumentObject(oCreature);
+    NWNX_CallFunction(NWNX_Creature, sFunc);
+
+    return NWNX_GetReturnValueFloat();
 }

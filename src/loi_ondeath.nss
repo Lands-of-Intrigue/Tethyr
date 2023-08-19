@@ -189,7 +189,7 @@ void main()
                 TeleportObjectToLocation(oPC, lTarget);
                 //Set Player Data Object iPCDead 1
                 SetPCDeadStatus(oPC, 1);
-                if (GetHitDice(oPC) >= 10)
+                if (GetHitDice(oPC) >= 15)
                 {
                     if (GetLocalInt(oItem,"DeathTracker") == 5)
                     {
@@ -232,3 +232,4 @@ void main()
         }
     }
 }
+

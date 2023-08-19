@@ -144,6 +144,8 @@ void main()
             SetIdentified(oCreate,TRUE);
             oCreate = CreateItemOnObject("bedroll",oPC,1);
             SetIdentified(oCreate,TRUE);
+            oCreate = CreateItemOnObject("dmfi_pc_dicebag",oPC,1);
+            SetIdentified(oCreate,TRUE);
 
             if(GetHasFeat(BACKGROUND_UPPER,oPC) == TRUE)
             {
@@ -508,31 +510,28 @@ void main()
         if (GetHasFeat(BACKGROUND_COPPER_ELF,oPC) == TRUE)
         {
             //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
-            CreateItemOnObject("te_item_2012", oPC, 1);
-            CreateItemOnObject("te_item_01013", oPC, 1);
-            CreateItemOnObject("te_item_8480", oPC, 1);
-            CreateItemOnObject("te_item_8481", oPC, 1);
+            CreateItemOnObject("bg_lesselfcloak", oPC, 1);
+            CreateItemOnObject("bg_lesselfboots", oPC, 1);
+
+
         }
         else if (GetHasFeat(BACKGROUND_GREEN_ELF,oPC) == TRUE)
         {
             //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
-            CreateItemOnObject("te_item_2012", oPC, 1);
-            CreateItemOnObject("te_item_01013", oPC, 1);
-            CreateItemOnObject("te_item_8480", oPC, 1);
-            CreateItemOnObject("te_item_8481", oPC, 1);
+            CreateItemOnObject("bg_lesselfcloak", oPC, 1);
+            CreateItemOnObject("bg_lesselfboots", oPC, 1);
+
+
         }
         else if (GetHasFeat(BACKGROUND_DARK_ELF,oPC) == TRUE)
         {
             //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
-            CreateItemOnObject("te_item_2003", oPC, 1);
-            CreateItemOnObject("te_item_0006", oPC, 1);
-            CreateItemOnObject("te_item_7006", oPC, 1);
+            CreateItemOnObject("bg_lessdrowcloak", oPC, 1);
+            CreateItemOnObject("bg_lessdrowboots", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_SILVER_ELF,oPC) == TRUE)
         {
             //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
-            CreateItemOnObject("te_item_2012", oPC, 1);
-            CreateItemOnObject("te_item_01013", oPC, 1);
             CreateItemOnObject("te_item_8480", oPC, 1);
             CreateItemOnObject("te_item_8481", oPC, 1);
         }

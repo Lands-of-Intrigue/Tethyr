@@ -52,10 +52,6 @@
     "type": "short",
     "value": 2
   },
-  "DecayTime": {
-    "type": "dword",
-    "value": 0
-  },
   "Deity": {
     "type": "cexostring",
     "value": ""
@@ -137,10 +133,6 @@
     "type": "byte",
     "value": 1
   },
-  "IsImmortal": {
-    "type": "byte",
-    "value": 0
-  },
   "IsPC": {
     "type": "byte",
     "value": 0
@@ -152,10 +144,6 @@
   "LawfulChaotic": {
     "type": "byte",
     "value": 50
-  },
-  "Lootable": {
-    "type": "byte",
-    "value": 0
   },
   "MaxHitPoints": {
     "type": "short",
@@ -171,7 +159,7 @@
   },
   "PaletteID": {
     "type": "byte",
-    "value": 46
+    "value": 4
   },
   "PerceptionRange": {
     "type": "byte",
@@ -391,62 +379,6 @@
           "type": "byte",
           "value": 0
         }
-      },
-      {
-        "__struct_id": 0,
-        "Rank": {
-          "type": "byte",
-          "value": 0
-        }
-      },
-      {
-        "__struct_id": 0,
-        "Rank": {
-          "type": "byte",
-          "value": 0
-        }
-      },
-      {
-        "__struct_id": 0,
-        "Rank": {
-          "type": "byte",
-          "value": 0
-        }
-      },
-      {
-        "__struct_id": 0,
-        "Rank": {
-          "type": "byte",
-          "value": 0
-        }
-      },
-      {
-        "__struct_id": 0,
-        "Rank": {
-          "type": "byte",
-          "value": 0
-        }
-      },
-      {
-        "__struct_id": 0,
-        "Rank": {
-          "type": "byte",
-          "value": 0
-        }
-      },
-      {
-        "__struct_id": 0,
-        "Rank": {
-          "type": "byte",
-          "value": 0
-        }
-      },
-      {
-        "__struct_id": 0,
-        "Rank": {
-          "type": "byte",
-          "value": 0
-        }
       }
     ]
   },
@@ -457,10 +389,6 @@
   "SpecAbilityList": {
     "type": "list",
     "value": []
-  },
-  "StartingPackage": {
-    "type": "byte",
-    "value": 0
   },
   "Str": {
     "type": "byte",
@@ -474,8 +402,8 @@
     "type": "cexostring",
     "value": "Inkeeper_XX"
   },
-  "Tail_New": {
-    "type": "dword",
+  "Tail": {
+    "type": "byte",
     "value": 0
   },
   "TemplateList": {
@@ -494,8 +422,8 @@
     "type": "short",
     "value": 0
   },
-  "Wings_New": {
-    "type": "dword",
+  "Wings": {
+    "type": "byte",
     "value": 0
   },
   "Wis": {

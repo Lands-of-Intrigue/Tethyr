@@ -10,9 +10,9 @@ void main()
         return;
     }
 
-    if(GetGold(oPC) > 1500)
+    if(GetGold(oPC) > 1000)
     {
-        TakeGoldFromCreature(1500,oPC,TRUE);
+        TakeGoldFromCreature(1000,oPC,TRUE);
         ActionCastSpellAtObject(SPELL_RESTORATION, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, FALSE);
 
     }

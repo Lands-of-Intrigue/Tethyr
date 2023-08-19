@@ -1456,7 +1456,7 @@ void main()
             {
                  if(sCommandArg2 == "help" || sCommandArg2 == "HELP" || sCommandArg2 == "Help")
                 {
-                    string sDisHelp = "Disguise on KoN currently supports the following commands: \n";
+                    string sDisHelp = "Disguise on Lands of Intrigue - Tethyr currently supports the following commands: \n";
                     sDisHelp += "- on/off - Turns your disguise on or off. If this setting is off, you are not disguised. Syntax: -disguise on \n";
                     sDisHelp += "- class <off/low/mid/up> - Sets your disguise to be of a certain class standing. Syntax: -disguise class up \n";
                     sDisHelp += "- str <0/1/2/3/4> - Sets your disguise for your apparent strength. THIS CANNOT EXCEED YOUR CAPABILITY. Syntax: -diguise str 1 \n";

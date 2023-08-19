@@ -6,7 +6,7 @@
 #include "nwnx_util"
 #include "inc_sqlite_time"
 
-/*const string NWNX_Time = "NWNX_Time"; ///< @private
+const string NWNX_Time = "NWNX_Time"; ///< @private
 
 /// @brief Returns the current date.
 /// @deprecated Use SQLite functions (see inc_sqlite_time). This will be removed in future NWNX releases.
@@ -34,7 +34,7 @@ struct NWNX_Time_HighResTimestamp
 struct NWNX_Time_HighResTimestamp NWNX_Time_GetHighResTimeStamp();
 
 /// @}
-*/
+
 string NWNX_Time_GetSystemDate()
 {
     WriteTimestampedLogEntry("WARNING:  NWNX_Time is deprecated.  You should migrate to SQLite based functions (see inc_sqlite_time).");
@@ -53,3 +53,12 @@ int NWNX_Time_GetTimeStamp()
     return SQLite_GetTimeStamp();
 }
 
+struct NWNX_Time_HighResTimestamp NWNX_Time_GetHighResTimeStamp()
+{
+    WriteTimestampedLogEntry("WARNING:  NWNX_Time is deprecated.  NWNX_Time_GetHighResTimeStamp is moving to NWNX_Util.");
+    struct NWNX_Util_HighResTimestamp u = NWNX_Util_GetHighResTimeStamp();
+    struct NWNX_Time_HighResTimestamp t;
+    t.seconds = u.seconds;
+    t.microseconds = u.microseconds;
+    return t;
+}

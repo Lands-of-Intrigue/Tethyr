@@ -9,7 +9,7 @@ int StartingConditional()
 {
 
     // Make sure the player has the required feats
-    if(!GetHasFeat(1392, GetPCSpeaker()))
+    if(!GetHasFeat(1391, GetPCSpeaker()))
         return FALSE;
 
     return TRUE;

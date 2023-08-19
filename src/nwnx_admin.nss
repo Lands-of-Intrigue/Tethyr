@@ -10,16 +10,16 @@ const string NWNX_Administration = "NWNX_Administration"; ///< @private
 /// @anchor admin_opts
 ///
 /// @{
-const int NWNX_ADMINISTRATION_OPTION_ALL_KILLABLE               = 0;  // TRUE/FALSE
-const int NWNX_ADMINISTRATION_OPTION_NON_PARTY_KILLABLE         = 1;  // TRUE/FALSE
-const int NWNX_ADMINISTRATION_OPTION_REQUIRE_RESURRECTION       = 2;  // TRUE/FALSE
-const int NWNX_ADMINISTRATION_OPTION_LOSE_STOLEN_ITEMS          = 3;  // TRUE/FALSE
-const int NWNX_ADMINISTRATION_OPTION_LOSE_ITEMS                 = 4;  // TRUE/FALSE
-const int NWNX_ADMINISTRATION_OPTION_LOSE_EXP                   = 5;  // TRUE/FALSE
-const int NWNX_ADMINISTRATION_OPTION_LOSE_GOLD                  = 6;  // TRUE/FALSE
-const int NWNX_ADMINISTRATION_OPTION_LOSE_GOLD_NUM              = 7;
-const int NWNX_ADMINISTRATION_OPTION_LOSE_EXP_NUM               = 8;
-const int NWNX_ADMINISTRATION_OPTION_LOSE_ITEMS_NUM             = 9;
+const int NWNX_ADMINISTRATION_OPTION_ALL_KILLABLE               = 0;  // DOES NOT DO ANYTHING
+const int NWNX_ADMINISTRATION_OPTION_NON_PARTY_KILLABLE         = 1;  // DOES NOT DO ANYTHING
+const int NWNX_ADMINISTRATION_OPTION_REQUIRE_RESURRECTION       = 2;  // DOES NOT DO ANYTHING
+const int NWNX_ADMINISTRATION_OPTION_LOSE_STOLEN_ITEMS          = 3;  // DOES NOT DO ANYTHING
+const int NWNX_ADMINISTRATION_OPTION_LOSE_ITEMS                 = 4;  // DOES NOT DO ANYTHING
+const int NWNX_ADMINISTRATION_OPTION_LOSE_EXP                   = 5;  // DOES NOT DO ANYTHING
+const int NWNX_ADMINISTRATION_OPTION_LOSE_GOLD                  = 6;  // DOES NOT DO ANYTHING
+const int NWNX_ADMINISTRATION_OPTION_LOSE_GOLD_NUM              = 7;  // DOES NOT DO ANYTHING
+const int NWNX_ADMINISTRATION_OPTION_LOSE_EXP_NUM               = 8;  // DOES NOT DO ANYTHING
+const int NWNX_ADMINISTRATION_OPTION_LOSE_ITEMS_NUM             = 9;  // DOES NOT DO ANYTHING
 const int NWNX_ADMINISTRATION_OPTION_PVP_SETTING                = 10; // 0 = No PVP, 1 = Party PVP, 2 = Full PVP
 const int NWNX_ADMINISTRATION_OPTION_PAUSE_AND_PLAY             = 11; // TRUE/FALSE
 const int NWNX_ADMINISTRATION_OPTION_ONE_PARTY_ONLY             = 12; // TRUE/FALSE
@@ -37,6 +37,8 @@ const int NWNX_ADMINISTRATION_OPTION_USE_MAX_HITPOINTS          = 23; // TRUE/FA
 const int NWNX_ADMINISTRATION_OPTION_RESTORE_SPELLS_USES        = 24; // TRUE/FALSE
 const int NWNX_ADMINISTRATION_OPTION_RESET_ENCOUNTER_SPAWN_POOL = 25; // TRUE/FALSE
 const int NWNX_ADMINISTRATION_OPTION_HIDE_HITPOINTS_GAINED      = 26; // TRUE/FALSE
+const int NWNX_ADMINISTRATION_OPTION_PLAYER_PARTY_CONTROL       = 27; // TRUE/FALSE
+const int NWNX_ADMINISTRATION_OPTION_SHOW_PLAYER_JOIN_MESSAGES  = 28; // TRUE/FALSE
 /// @}
 
 /// @name Administration Debug Types
@@ -77,7 +79,8 @@ void NWNX_Administration_ShutdownServer();
 ///
 /// @param oPC The player to delete.
 /// @param bPreserveBackup If true, it will leave the file on server, only appending ".deleted0" to the bic filename.
-void NWNX_Administration_DeletePlayerCharacter(object oPC, int bPreserveBackup = TRUE);
+/// @param sKickMessage An optional kick message, if left blank it will default to "Delete Character" as reason.
+void NWNX_Administration_DeletePlayerCharacter(object oPC, int bPreserveBackup = TRUE, string sKickMessage = "");
 
 /// @brief Bans the provided IP.
 /// @param ip The IP Address to ban.
@@ -116,6 +119,9 @@ void NWNX_Administration_SetModuleName(string name);
 /// @param name The name to give the server.
 void NWNX_Administration_SetServerName(string name);
 
+/// @brief Returns the server's name as shown to the serverlist.
+string NWNX_Administration_GetServerName();
+
 /// @brief Get an @ref admin_opts "Administration Option" value.
 /// @param option An @ref admin_opts "Administration Option".
 /// @return The current setting for the supplied option from @ref admin_opts "Administration Options".
@@ -152,6 +158,23 @@ void NWNX_Administration_SetDebugValue(int type, int state);
 /// @warning DANGER, DRAGONS. Bad things may or may not happen.
 void NWNX_Administration_ReloadRules();
 
+/// @brief Get the servers minimum level.
+/// @return The minimum level for the server.
+int NWNX_Administration_GetMinLevel();
+
+/// @brief Set the servers minimum level.
+/// @param nLevel The minimum level for the server.
+void NWNX_Administration_SetMinLevel(int nLevel);
+
+/// @brief Get the servers maximum level.
+/// @return The maximum level for the server.
+int NWNX_Administration_GetMaxLevel();
+
+/// @brief Set the servers maximum level.
+/// @note Attention when using this and the MaxLevel plugin. They both change the same value.
+/// @param nLevel The maximum level for the server.
+void NWNX_Administration_SetMaxLevel(int nLevel);
+
 /// @}
 
 string NWNX_Administration_GetPlayerPassword()
@@ -159,14 +182,14 @@ string NWNX_Administration_GetPlayerPassword()
     string sFunc = "GetPlayerPassword";
 
     NWNX_CallFunction(NWNX_Administration, sFunc);
-    return NWNX_GetReturnValueString(NWNX_Administration, sFunc);
+    return NWNX_GetReturnValueString();
 }
 
 void NWNX_Administration_SetPlayerPassword(string password)
 {
     string sFunc = "SetPlayerPassword";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, password);
+    NWNX_PushArgumentString(password);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 
@@ -182,14 +205,14 @@ string NWNX_Administration_GetDMPassword()
     string sFunc = "GetDMPassword";
 
     NWNX_CallFunction(NWNX_Administration, sFunc);
-    return NWNX_GetReturnValueString(NWNX_Administration, sFunc);
+    return NWNX_GetReturnValueString();
 }
 
 void NWNX_Administration_SetDMPassword(string password)
 {
     string sFunc = "SetDMPassword";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, password);
+    NWNX_PushArgumentString(password);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 
@@ -200,12 +223,13 @@ void NWNX_Administration_ShutdownServer()
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 
-void NWNX_Administration_DeletePlayerCharacter(object oPC, int bPreserveBackup)
+void NWNX_Administration_DeletePlayerCharacter(object oPC, int bPreserveBackup = TRUE, string sKickMessage = "")
 {
     string sFunc = "DeletePlayerCharacter";
 
-    NWNX_PushArgumentInt(NWNX_Administration, sFunc, bPreserveBackup);
-    NWNX_PushArgumentObject(NWNX_Administration, sFunc, oPC);
+    NWNX_PushArgumentString(sKickMessage);
+    NWNX_PushArgumentInt(bPreserveBackup);
+    NWNX_PushArgumentObject(oPC);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 
@@ -213,42 +237,42 @@ void NWNX_Administration_AddBannedIP(string ip)
 {
     string sFunc = "AddBannedIP";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, ip);
+    NWNX_PushArgumentString(ip);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 void NWNX_Administration_RemoveBannedIP(string ip)
 {
     string sFunc = "RemoveBannedIP";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, ip);
+    NWNX_PushArgumentString(ip);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 void NWNX_Administration_AddBannedCDKey(string key)
 {
     string sFunc = "AddBannedCDKey";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, key);
+    NWNX_PushArgumentString(key);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 void NWNX_Administration_RemoveBannedCDKey(string key)
 {
     string sFunc = "RemoveBannedCDKey";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, key);
+    NWNX_PushArgumentString(key);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 void NWNX_Administration_AddBannedPlayerName(string playerName)
 {
     string sFunc = "AddBannedPlayerName";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, playerName);
+    NWNX_PushArgumentString(playerName);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 void NWNX_Administration_RemoveBannedPlayerName(string playerName)
 {
     string sFunc = "RemoveBannedPlayerName";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, playerName);
+    NWNX_PushArgumentString(playerName);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 string NWNX_Administration_GetBannedList()
@@ -256,14 +280,14 @@ string NWNX_Administration_GetBannedList()
     string sFunc = "GetBannedList";
 
     NWNX_CallFunction(NWNX_Administration, sFunc);
-    return NWNX_GetReturnValueString(NWNX_Administration, sFunc);
+    return NWNX_GetReturnValueString();
 }
 
 void NWNX_Administration_SetModuleName(string name)
 {
     string sFunc = "SetModuleName";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, name);
+    NWNX_PushArgumentString(name);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 
@@ -271,26 +295,33 @@ void NWNX_Administration_SetServerName(string name)
 {
     string sFunc = "SetServerName";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, name);
+    NWNX_PushArgumentString(name);
     NWNX_CallFunction(NWNX_Administration, sFunc);
+}
+
+string NWNX_Administration_GetServerName()
+{
+    string sFunc = "GetServerName";
+    NWNX_CallFunction(NWNX_Administration, sFunc);
+    return NWNX_GetReturnValueString();
 }
 
 int NWNX_Administration_GetPlayOption(int option)
 {
     string sFunc = "GetPlayOption";
 
-    NWNX_PushArgumentInt(NWNX_Administration, sFunc, option);
+    NWNX_PushArgumentInt(option);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 
-    return NWNX_GetReturnValueInt(NWNX_Administration, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Administration_SetPlayOption(int option, int value)
 {
     string sFunc = "SetPlayOption";
 
-    NWNX_PushArgumentInt(NWNX_Administration, sFunc, value);
-    NWNX_PushArgumentInt(NWNX_Administration, sFunc, option);
+    NWNX_PushArgumentInt(value);
+    NWNX_PushArgumentInt(option);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 
@@ -298,29 +329,29 @@ int NWNX_Administration_DeleteTURD(string playerName, string characterName)
 {
     string sFunc = "DeleteTURD";
 
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, characterName);
-    NWNX_PushArgumentString(NWNX_Administration, sFunc, playerName);
+    NWNX_PushArgumentString(characterName);
+    NWNX_PushArgumentString(playerName);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 
-    return NWNX_GetReturnValueInt(NWNX_Administration, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 int NWNX_Administration_GetDebugValue(int type)
 {
     string sFunc = "GetDebugValue";
 
-    NWNX_PushArgumentInt(NWNX_Administration, sFunc, type);
+    NWNX_PushArgumentInt(type);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 
-    return NWNX_GetReturnValueInt(NWNX_Administration, sFunc);
+    return NWNX_GetReturnValueInt();
 }
 
 void NWNX_Administration_SetDebugValue(int type, int state)
 {
     string sFunc = "SetDebugValue";
 
-    NWNX_PushArgumentInt(NWNX_Administration, sFunc, state);
-    NWNX_PushArgumentInt(NWNX_Administration, sFunc, type);
+    NWNX_PushArgumentInt(state);
+    NWNX_PushArgumentInt(type);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
 
@@ -328,5 +359,33 @@ void NWNX_Administration_ReloadRules()
 {
     string sFunc = "ReloadRules";
 
+    NWNX_CallFunction(NWNX_Administration, sFunc);
+}
+
+int NWNX_Administration_GetMinLevel()
+{
+    string sFunc = "GetMinLevel";
+    NWNX_CallFunction(NWNX_Administration, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Administration_SetMinLevel(int nLevel)
+{
+    string sFunc = "SetMinLevel";
+    NWNX_PushArgumentInt(nLevel);
+    NWNX_CallFunction(NWNX_Administration, sFunc);
+}
+
+int NWNX_Administration_GetMaxLevel()
+{
+    string sFunc = "GetMaxLevel";
+    NWNX_CallFunction(NWNX_Administration, sFunc);
+    return NWNX_GetReturnValueInt();
+}
+
+void NWNX_Administration_SetMaxLevel(int nLevel)
+{
+    string sFunc = "SetMaxLevel";
+    NWNX_PushArgumentInt(nLevel);
     NWNX_CallFunction(NWNX_Administration, sFunc);
 }
