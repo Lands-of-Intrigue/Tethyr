@@ -6,6 +6,10 @@ import time
 import multiprocessing
 from os.path import join
 
+# usage is:
+#     python module_packer.py path/to/module.mod src
+
+
 TEMP_DIR = 'temporary'
 
 def main():
@@ -28,15 +32,15 @@ def main():
     elif command == 'unpack':
         unpack(module, targetDir, tempDir)
     else:
-        print('Unrecognized command. Use pack or unpack.')
-
+        print('ERROR - unrecognized command. Use pack or unpack.')
     # clean up
-    shutil.rmtree(tempDir)
+    # shutil.rmtree(tempDir)
     print(f'{command} complete')
+
 
 def unpack(modulePath, targetDir, tempDir):
     if not os.path.isfile(modulePath):
-        print(f'Invalid path to module {modulePath}')
+        print(f'ERROR - invalid path to module {modulePath}')
         return
     absModule = os.path.abspath(modulePath)
 
@@ -53,9 +57,7 @@ def unpack(modulePath, targetDir, tempDir):
         ext = os.path.splitext(f)[1]
         if ext == '.nss':
             scriptFiles.append(f)
-        elif ext == '.ncs':
-            continue
-        else:
+        elif ext != '.ncs':            
             gffFiles.append(f)
 
     # Greedily try to use all of the cores except for one
@@ -68,27 +70,68 @@ def unpack(modulePath, targetDir, tempDir):
     convertToc = time.perf_counter()
     print(f'Converted gff files in {convertToc - convertTic:0.1f}s')
 
-    print('Moving script files')
-    moveTic = time.perf_counter()
-    mover = Mover(tempDir, targetDir)
-    p.map(mover.move, scriptFiles)
-    moveToc = time.perf_counter()
-    print(f'Moved script files {moveToc - moveTic:0.1f}s')
+    print('Copying script files')
+    copyTic = time.perf_counter()
+    copier = Copier(tempDir, targetDir)
+    p.map(copier.copy, scriptFiles)
+    copyToc = time.perf_counter()
+    print(f'Copied script files {copyToc - copyTic:0.1f}s')
 
-def pack(modulePath, targetDir, tempDir):
-    print(f'Packing {targetDir}')
-    p = subprocess.Popen(['nwn_erf', '-e', 'MOD', '-f', modulePath, '-c', targetDir])
+
+def pack(modulePath, sourceDir, tempDir):
+    if os.path.isfile(modulePath) or os.path.isdir(modulePath):
+        print(f'ERROR - already exists {modulePath}')
+        return
+    absModule = os.path.abspath(modulePath)
+
+    gffFiles = []
+    scriptFiles = []
+    for f in os.listdir(sourceDir):
+        ext = os.path.splitext(f)[1]
+        if ext == '.nss':
+            scriptFiles.append(f)
+        elif ext != '':
+            gffFiles.append(f)
+
+    # Greedily try to use all of the cores except for one
+    p = multiprocessing.Pool(multiprocessing.cpu_count() - 1) 
+
+    print('Compiling scripts')
+    compileTic = time.perf_counter()
+    compiler = Compiler(sourceDir, tempDir)
+    p.map(compiler.compile, scriptFiles)
+    compileToc = time.perf_counter()
+    print(f'Compiled scripts in {compileToc - compileTic:0.1f}s')
+
+    print('Converting gff files')
+    convertTic = time.perf_counter()
+    converter = Converter(sourceDir, tempDir)
+    p.map(converter.to_gff, gffFiles)
+    convertToc = time.perf_counter()
+    print(f'Converted gff files in {convertToc - convertTic:0.1f}s')
+
+    print('Copying script files')
+    copyTic = time.perf_counter()
+    copier = Copier(sourceDir, tempDir)
+    p.map(copier.copy, scriptFiles)
+    copyToc = time.perf_counter()
+    print(f'Copied script files {copyToc - copyTic:0.1f}s')
+
+    print(f'Packing {absModule}')
+    packTic = time.perf_counter()
+    p = subprocess.Popen(['nwn_erf', '-e', 'MOD', '-f', modulePath, '-c', tempDir])
     p.wait()
-    print(f'Packed module to {modulePath}')
+    packToc = time.perf_counter()
+    print(f'Packed module to {absModule} in {packToc - packTic:0.1f}s')
 
 
-class Mover:
+class Copier:
     def __init__(self, fromDir, toDir):
         self.fromDir = fromDir
         self.toDir = toDir
 
-    def move(self, file):
-        os.replace(join(self.fromDir, file), join(self.toDir, file))
+    def copy(self, file):
+        shutil.copyfile(join(self.fromDir, file), join(self.toDir, file))
 
 
 class Converter:
@@ -99,6 +142,21 @@ class Converter:
     def from_gff(self, file):
         outputJson = file + '.json'
         p = subprocess.Popen(['nwn_gff', '-i', join(self.tempDir, file), '-o', join(self.srcDir, outputJson), '-p'])
+        p.wait()
+
+    def to_gff(self, file):
+        outputGff = os.path.splitext(file)[0]
+        p = subprocess.Popen(['nwn_gff', '-i', join(self.srcDir, file), '-o', join(self.tempDir, outputGff)])
+        p.wait()
+
+
+class Compiler:
+    def __init__(self, srcDir, tempDir):
+        self.srcDir = srcDir
+        self.tempDir = tempDir
+
+    def compile(self, file):
+        p = subprocess.Popen(['nwnsc', '-lq', '-b', self.tempDir, '-i', self.srcDir, join(self.srcDir, file)])
         p.wait()
 
 
