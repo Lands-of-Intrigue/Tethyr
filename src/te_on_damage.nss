@@ -969,9 +969,9 @@ void main()
         }
         else
         {
-            if(data.iNegative >= 15)
+            if(data.iNegative >= 30)
             {
-                int nNegSave1 = FortitudeSave(oTarget,5+data.iNegative,SAVING_THROW_TYPE_DEATH);
+                int nNegSave1 = FortitudeSave(oTarget,data.iNegative-10,SAVING_THROW_TYPE_DEATH);
                 if(nNegSave1 == 0)
                 {
                     if(GetIsPC(oTarget) == TRUE && GetLocalInt(GetItemPossessedBy(oTarget,"PC_Data_Object"),"ShoonAfflic") == 0 && GetPCAffliction(oTarget) != 2)

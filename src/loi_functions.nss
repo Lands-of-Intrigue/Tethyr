@@ -1036,7 +1036,7 @@ void EventRespawnSafePCBody(object oTarget, object oReviver=OBJECT_INVALID)
             iXPPen = iHD*250;
         }
 
-        if (GetHitDice(oTargetPC) <=3)
+        if (GetHitDice(oTargetPC) <=5)
         {
             iXPPen = 0;
         }
@@ -1086,7 +1086,7 @@ void EventRespawnSafeNoBody(object oPC)
             iXPPen = iHD*250;
         }
 
-        if (GetHitDice(oPC) <=3)
+        if (GetHitDice(oPC) <=5)
         {
             iXPPen = 0;
         }

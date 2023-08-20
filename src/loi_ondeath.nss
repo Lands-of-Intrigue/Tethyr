@@ -189,19 +189,19 @@ void main()
                 TeleportObjectToLocation(oPC, lTarget);
                 //Set Player Data Object iPCDead 1
                 SetPCDeadStatus(oPC, 1);
-                if (GetHitDice(oPC) >= 15)
-                {
-                    if (GetLocalInt(oItem,"DeathTracker") == 5)
-                    {
-                        SetLocalInt(oItem,"PermaDeath", TRUE);
-                    }
-                    else
-                    {
-                        SendMessageToPC(oPC, "You have died! After Level 10, Deaths have increased consequences. Your base Constitution Score has been decreased by one due to the strain on your mind and body. After this happens 5 times, you will be unable to be revived. Permanately Dead.");
-                        SetLocalInt(oItem,"DeathTracker", GetLocalInt(oItem,"DeathTracker") + 1);
-                        NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_CONSTITUTION, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_CONSTITUTION)-1);
-                    }
-                }
+                //if (GetHitDice(oPC) >= 15)
+                //{
+                    //if (GetLocalInt(oItem,"DeathTracker") == 5)
+                    //{
+                        //SetLocalInt(oItem,"PermaDeath", TRUE);
+                    //}
+                    //else
+                    //{
+                        //SendMessageToPC(oPC, "You have died! After Level 10, Deaths have increased consequences. Your base Constitution Score has been decreased by one due to the strain on your mind and body. After this happens 5 times, you will be unable to be revived. Permanately Dead.");
+                        //SetLocalInt(oItem,"DeathTracker", GetLocalInt(oItem,"DeathTracker") + 1);
+                        //NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_CONSTITUTION, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_CONSTITUTION)-1);
+                    //}
+                //}
             }
 
             struct NWNX_WebHook_Message sJoinMessage;

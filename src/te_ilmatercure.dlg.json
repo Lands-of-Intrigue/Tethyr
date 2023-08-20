@@ -103,7 +103,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "\"Hello, how can this humble servant aid you?\""
+            "0": "\"Hello, how can this servant of the Coinmaiden aid you this day?\""
           }
         }
       },
@@ -267,7 +267,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "\"Ah, yes, Ilmater will allow me to provide several prayers depending on what ails you...\""
+            "0": "\"Ah, yes, the Mistress of Coin will allow me to provide several prayers depending on what ails you...\""
           }
         }
       },
@@ -304,7 +304,7 @@
               "__struct_id": 0,
               "Active": {
                 "type": "resref",
-                "value": ""
+                "value": "te_goldchk_1500"
               },
               "ConditionParams": {
                 "type": "list",
@@ -336,7 +336,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "\"The restoration spell will remove the plague, though at a cost on those that cast it. If you cannot afford 1500 Aenar, you may imbibe holy water to stave off the disease until you can afford a proper cure.\""
+            "0": "\"The restoration spell will remove the plague, though the materials are quite costly. If you cannot afford 1500 Aenar, I recommend that you imbibe holy water to stave off the disease until you can afford a proper cure.\""
           }
         }
       },
@@ -512,7 +512,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "\"This will cost you 500 Aenar.\""
+            "0": "\"This will cost you 400 Aenar.\""
           }
         }
       },
@@ -784,7 +784,7 @@
   },
   "NumWords": {
     "type": "dword",
-    "value": 123
+    "value": 131
   },
   "PreventZoomIn": {
     "type": "byte",
@@ -899,7 +899,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[I need clerical aid!]"
+            "0": "[I need clerical aid.]"
           }
         }
       },
@@ -1024,7 +1024,7 @@
         },
         "Script": {
           "type": "resref",
-          "value": ""
+          "value": "te_removeplague"
         },
         "Sound": {
           "type": "resref",
@@ -1033,7 +1033,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Okay.]"
+            "0": "[I will pay.]"
           }
         }
       },

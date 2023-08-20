@@ -137,7 +137,7 @@ void main()
     }
     ////////////////////////////////////////////////////////////////////////
     if (iCL == 10)
-    `   SendMessageToPC(oPC, "You have reached level 10! After Level 10, Deaths have increased consequences. Your base Constitution Score will be decreased by one due to the strain on your mind and body should you die. After this happens 5 times, you will be unable to be revived. Permanately Dead.");
+    `   SendMessageToPC(oPC, "You have reached level 10! After Level 10, Deaths have increased consequences. You are no longer able to respawn freely and must be rescured and resurrected by a companion.");
     if (GetLevelByClass(58, oPC) == 10)
     {
         AssignCommand(oPC,ActionStartConversation(oPC,"sp_mbreaker10",TRUE,FALSE));

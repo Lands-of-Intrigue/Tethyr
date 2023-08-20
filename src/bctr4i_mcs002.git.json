@@ -2744,24 +2744,207 @@
             }
           ]
         },
-        "VisualTransform": {
-          "__struct_id": 6,
-          "type": "struct",
-          "value": {
-            "__struct_id": 6,
-            "ScaleX": {
-              "type": "float",
-              "value": 0.9024999737739563
-            },
-            "ScaleY": {
-              "type": "float",
-              "value": 0.9024999737739563
-            },
-            "ScaleZ": {
-              "type": "float",
-              "value": 0.9024999737739563
+        "VisTransformList": {
+          "type": "list",
+          "value": [
+            {
+              "__struct_id": 6,
+              "AnimationSpeed": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 1.0
+                  }
+                }
+              },
+              "RotateX": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 0.0
+                  }
+                }
+              },
+              "RotateY": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 0.0
+                  }
+                }
+              },
+              "RotateZ": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 0.0
+                  }
+                }
+              },
+              "ScaleX": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 0.9024999737739563
+                  }
+                }
+              },
+              "ScaleY": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 0.9024999737739563
+                  }
+                }
+              },
+              "ScaleZ": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 0.9024999737739563
+                  }
+                }
+              },
+              "Scope": {
+                "type": "int",
+                "value": 0
+              },
+              "TranslateX": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 0.0
+                  }
+                }
+              },
+              "TranslateY": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 0.0
+                  }
+                }
+              },
+              "TranslateZ": {
+                "__struct_id": 0,
+                "type": "struct",
+                "value": {
+                  "__struct_id": 0,
+                  "LerpType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "TimerType": {
+                    "type": "int",
+                    "value": 0
+                  },
+                  "ValueTo": {
+                    "type": "float",
+                    "value": 0.0
+                  }
+                }
+              }
             }
-          }
+          ]
         },
         "Will": {
           "type": "byte",
@@ -43115,6 +43298,10 @@
                       "type": "resref",
                       "value": "nw_it_msmlmisc21"
                     },
+                    "xModelPart1": {
+                      "type": "word",
+                      "value": 22
+                    },
                     "XOrientation": {
                       "type": "float",
                       "value": 0.0
@@ -43205,37 +43392,6 @@
                           },
                           "CostTable": {
                             "type": "byte",
-                            "value": 3
-                          },
-                          "CostValue": {
-                            "type": "word",
-                            "value": 6
-                          },
-                          "Param1": {
-                            "type": "byte",
-                            "value": 255
-                          },
-                          "Param1Value": {
-                            "type": "byte",
-                            "value": 0
-                          },
-                          "PropertyName": {
-                            "type": "word",
-                            "value": 15
-                          },
-                          "Subtype": {
-                            "type": "word",
-                            "value": 359
-                          }
-                        },
-                        {
-                          "__struct_id": 0,
-                          "ChanceAppear": {
-                            "type": "byte",
-                            "value": 100
-                          },
-                          "CostTable": {
-                            "type": "byte",
                             "value": 21
                           },
                           "CostValue": {
@@ -43284,6 +43440,10 @@
                     "TemplateResRef": {
                       "type": "resref",
                       "value": "te_garlici"
+                    },
+                    "xModelPart1": {
+                      "type": "word",
+                      "value": 67
                     },
                     "XOrientation": {
                       "type": "float",
@@ -43455,6 +43615,10 @@
                       "type": "resref",
                       "value": "te_item_9005"
                     },
+                    "xModelPart1": {
+                      "type": "word",
+                      "value": 3
+                    },
                     "XOrientation": {
                       "type": "float",
                       "value": 0.0
@@ -43591,6 +43755,10 @@
                     "TemplateResRef": {
                       "type": "resref",
                       "value": "te_bloodpurgei"
+                    },
+                    "xModelPart1": {
+                      "type": "word",
+                      "value": 39
                     },
                     "XOrientation": {
                       "type": "float",
@@ -43729,6 +43897,10 @@
                       "type": "resref",
                       "value": "te_bloodstaunchi"
                     },
+                    "xModelPart1": {
+                      "type": "word",
+                      "value": 27
+                    },
                     "XOrientation": {
                       "type": "float",
                       "value": 0.0
@@ -43829,6 +44001,10 @@
                     "TemplateResRef": {
                       "type": "resref",
                       "value": "nw_it_thnmisc001"
+                    },
+                    "xModelPart1": {
+                      "type": "word",
+                      "value": 4
                     },
                     "XOrientation": {
                       "type": "float",
@@ -43935,6 +44111,10 @@
                       "type": "resref",
                       "value": "it_comp_eaglefea"
                     },
+                    "xModelPart1": {
+                      "type": "word",
+                      "value": 42
+                    },
                     "XOrientation": {
                       "type": "float",
                       "value": 0.0
@@ -44039,6 +44219,10 @@
                     "TemplateResRef": {
                       "type": "resref",
                       "value": "te_book022"
+                    },
+                    "xModelPart1": {
+                      "type": "word",
+                      "value": 31
                     },
                     "XOrientation": {
                       "type": "float",

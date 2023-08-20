@@ -481,7 +481,7 @@ void main()
                 sHelpCommand += "-decloak : Allows you to remove only the invisibility effect you have cast on yourself. Syntax: -decloak \n";
                 sHelpCommand += "-delete : Allows you to delete a character from your vault. Syntax: -delete \n";
                 sHelpCommand += "-disguise : Allows you to disguise yourself using the various toggles on the examine system. (Class Standing, Strength, Dexterity, and Constitution) Syntax: -disguise \"Command\" Use -disguise help for full list.\n";
-                sHelpCommand += "-door : Allows you to manage and interact with a nearby settlement door/rentable room. To use properly, stand next the door you wish to modify before typing this command. Syntax: -door \n";
+                //sHelpCommand += "-door : Allows you to manage and interact with a nearby settlement door/rentable room. To use properly, stand next the door you wish to modify before typing this command. Syntax: -door \n";  EDITED BY SURREAL CAUSE BAD
                 sHelpCommand += "-emote : Allows you to emote doing a particular action. For a full list of available emotes, use \"-emote list\". Syntax: -emote \"Action\" Ex: -emote sit \n";
                 if(GetLevelByClass(47,oPC)>=1)
                 {
@@ -1359,25 +1359,25 @@ void main()
             {
                 SendMessageToPC(oPC,"You must have a valid time keeping device to use this command.");
             }
-            else if(sCurrCommandArg == "manage" || sCurrCommandArg == "door")
-            {
-                object oDoor = GetNearestObject(OBJECT_TYPE_DOOR,oPC,1);
-                if(GetDistanceBetween(oPC,oDoor) > 5.0f)
-                {
-                    SendMessageToPC(oPC,"You are too far away from an interactable door.");
-                }
-                else
-                {
-                    if(GetLocalString(oDoor,"sUnique") != "")
-                    {
-                        AssignCommand(oDoor,ActionStartConversation(oPC,"te_door",TRUE)); //Start conversation with options to rent/open lock/break down door.
-                    }
-                    else
-                    {
-                        SendMessageToPC(oPC,"There is no nearby door that is configured for the Keep Management System.");
-                    }
-                }
-            }
+            //else if(sCurrCommandArg == "manage" || sCurrCommandArg == "door")  EDITED BY SURREAL CAUSE BAD
+            //{
+                //object oDoor = GetNearestObject(OBJECT_TYPE_DOOR,oPC,1);
+                //if(GetDistanceBetween(oPC,oDoor) > 5.0f)
+                //{
+                    //SendMessageToPC(oPC,"You are too far away from an interactable door.");
+               //}
+                //else
+                //{
+                    //if(GetLocalString(oDoor,"sUnique") != "")
+                    //{
+                        //AssignCommand(oDoor,ActionStartConversation(oPC,"te_door",TRUE)); //Start conversation with options to rent/open lock/break down door.
+                    //}
+                    //else
+                    //{
+                        //SendMessageToPC(oPC,"There is no nearby door that is configured for the Keep Management System.");
+                    //}
+                //}
+            //}
             else if(sCurrCommandArg == "look")
             {
                 int nLastTrack = GetLocalInt(oPC,"nTrackLast");
