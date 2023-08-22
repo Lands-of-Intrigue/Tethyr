@@ -9,7 +9,7 @@ void main()
     object oPC = OBJECT_SELF;
     string sCurrentEvent = NWNX_Events_GetCurrentEvent();
 
-    object oTarget = NWNX_Object_StringToObject(NWNX_Events_GetEventData("OBJECT"));
+    object oTarget = StringToObject(NWNX_Events_GetEventData("OBJECT"));
     int iAmount = StringToInt(NWNX_Events_GetEventData("AMOUNT"));
 
     struct NWNX_WebHook_Message stMessage;

@@ -21,14 +21,6 @@
 
 #include "x2_inc_spellhook"
 
-void AddAcidicEffectToWeapon(object oTarget, float fDuration)
-{
-    //If the spell is cast again, any previous itemproperties matching are removed.
-   IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(,1), fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-   IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_COLD), fDuration,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING,FALSE,TRUE);
-   return;
-}
-
 void main()
 {
 
