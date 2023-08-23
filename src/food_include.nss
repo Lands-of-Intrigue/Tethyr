@@ -33,6 +33,7 @@ const string TAG_MEAT       = "meat";
 
 // INCLUDES --------------------------------------------------------------------
 
+#include "te_functions"
 
 // FUNCTION DECLARATIONS -------------------------------------------------------
 

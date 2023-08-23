@@ -85,7 +85,9 @@ const int REST_ACTION_LIGHT_CAMPFIRE= 2;
 // TIME
 // adjust to your module's time settings
 // 30 assumes the typical module setting of 2 minutes per game hour
-const int IGMINUTES_PER_RLMINUTE    = 225;
+
+// defined in te_functions
+//const int IGMINUTES_PER_RLMINUTE    = 225;
 
 
 // USER ADDED VALUES (OR EXAMPLES OF SUCH)
@@ -93,7 +95,10 @@ const int IGMINUTES_PER_RLMINUTE    = 225;
 // Test 1 of RestRequirements() determines whether enough time has passed since the last rest by this PC
 // See GetIsTimeToRest() this value is used in ResterFinishesRest() to establish when the PC can rest again
 // 1+ = minutes required between rests OR  0 = no required time between rests
-int GAME_MINUTES_BETWEEN_RESTS   = IGMINUTES_PER_RLMINUTE * 3; // the number is REAL MINUTES.
+
+// defined in te_functions
+//int GAME_MINUTES_BETWEEN_RESTS   = IGMINUTES_PER_RLMINUTE * 3; // the number is REAL MINUTES.
+
 // local set on rester to track when they may next rest. Changing the value makes no difference as it is merely a label for a local variable.
 const string NEXT_REST_TIME     = "REST_NEXT";
 
@@ -115,9 +120,11 @@ const string TAG_BEDROLL        = "bedroll";    // see GetHasBed()
 // ================= NOT CONFIGURABLE ==================
 
 // COLORS
-const string RED        = "<cþ  >";
-const string PINK       = "<cÒdd>";
-const string YELLOW     = "<cþ× >";
+
+// defined in te_functions
+//const string RED        = "<cþ  >";
+//const string PINK       = "<cÒdd>";
+//const string YELLOW     = "<cþ× >";
 
 // RESTRICTING REST
 // set these local integers on the module and areas to explicitly declare whether resting is restricted

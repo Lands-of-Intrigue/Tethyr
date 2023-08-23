@@ -6,21 +6,24 @@
 //                                                                  //
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
-object oDest = GetPCItemLastEquipped();
-object oPC = GetItemPossessor(oDest);
-object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
+
+#include "te_functions"
 
 void main()
 {
+    object oDest = GetPCItemLastEquipped();
+    object oPC = GetItemPossessor(oDest);
+    object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
     if (GetLocalInt(oDest, "WeaponCap")>=3 || GetLocalInt(oDest, "ArmorCap")>=3 || GetLocalInt(oDest, "AccessoryCap")>=3)
     {
-        if (GetLocalInt(oItem, "iPCAttunement") == OBJECT_INVALID)
+        if (GetLocalInt(oItem, "iPCAttunement") == 0)
         {
             SetLocalInt(oItem, "iPCAttunement", 1);
         }
         else
         {
-            if(GetLocalInt(oItem, "IPCAttunement")>=3 && TE_GetCasterLevel(oPC, CLASS_TYPE_ARTIFICER)<6)
+            int classTypeArtificer = 57;
+            if(GetLocalInt(oItem, "IPCAttunement")>=3 && TE_GetCasterLevel(oPC, classTypeArtificer)<6)
             {
     `
             }
