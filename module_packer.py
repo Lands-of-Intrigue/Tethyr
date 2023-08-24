@@ -4,37 +4,38 @@ import os
 import shutil
 import time
 import multiprocessing
+import yaml
 from os.path import join
 
 # usage is:
-#     python module_packer.py path/to/module.mod src
+#     python module_packer.py pack
+#     python module_packer.py unpack
 
-
-TEMP_DIR = 'temporary'
 
 def main():
     command = str(sys.argv[1])
-    module = str(sys.argv[2])
-    targetDir = str(sys.argv[3])
+
+    config = yaml.safe_load(open("packer_settings.yaml"))
+    targetDir = config['root']
 
     print(f'Command is to {str(sys.argv[1])}')
     if not os.path.isdir(targetDir):
         print(f'Invalid path to target dicretory {targetDir}')
         return
     
-    tempDir = join(targetDir, TEMP_DIR)
+    tempDir = config['temp']
     if os.path.isdir(tempDir):
         shutil.rmtree(tempDir)
     os.mkdir(tempDir)
 
     if command == 'pack':
-        pack(module, targetDir, tempDir)
+        pack(config['module']['to'], targetDir, tempDir)
     elif command == 'unpack':
-        unpack(module, targetDir, tempDir)
+        unpack(config['module']['from'], targetDir, tempDir)
     else:
         print('ERROR - unrecognized command. Use pack or unpack.')
     # clean up
-    # shutil.rmtree(tempDir)
+    shutil.rmtree(tempDir)
     print(f'{command} complete')
 
 
