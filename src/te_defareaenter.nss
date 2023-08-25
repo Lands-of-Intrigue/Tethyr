@@ -30,6 +30,11 @@ void main() {
     {
         return;
     }
+    //Hopefully fixes spawning in City of Judgement with Negative HP
+    if(GetTag(GetArea(oPC)) == "CityOfJudgement")
+    {
+        ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectHeal(GetMaxHitPoints(oPC)),oPC);
+    }
     //Remove all MageBreaker Effects
     effect eLoop=GetFirstEffect(oPC);
     while(GetIsEffectValid(eLoop))
