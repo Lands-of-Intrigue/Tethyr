@@ -47,7 +47,6 @@ void main()
     int iUndead = GetLocalInt(oTarget, "iUndead");
     int nHealed = GetMaxHitPoints(oRevived);
     effect eHeal = EffectHeal(nHealed + 10);
-    effect eRaise = EffectResurrection();
 
     if (GetIsNight() == TRUE)
     {

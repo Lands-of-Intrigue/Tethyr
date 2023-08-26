@@ -268,6 +268,9 @@ void EventRespawnSafePCBody(object oTarget, object oReviver=OBJECT_INVALID);
 
 //Respawn if no body found.
 void EventRespawnSafeNoBody(object oPC);
+
+//Calculate XP penalty for resurrection
+int PenaltyForResurrection(object oPC, int iPenPerHD=500);
 //:://////////////////////////////////////////////
 /*
 3. COMMAND FUNCTION
@@ -721,31 +724,11 @@ void EventRevivePCBody(object oTarget, object oReviver=OBJECT_INVALID)
         DestroyObject(oTarget);
         SetPCDeadStatus(oTargetPC, 0);
         SetLocalInt(GetItemPossessedBy(oTargetPC,"PC_Data_Object"),"ShoonAfflic",0);
-        int iHD = GetHitDice(oTargetPC);
+
         int iXP = GetXP(oTargetPC);
-        int iXPPen = iHD*500;
-
-        if ( GetHasFeat(1158,oTargetPC) == TRUE ||
-             GetHasFeat(1156,oTargetPC) == TRUE ||
-             GetHasFeat(1168,oTargetPC) == TRUE ||
-             GetHasFeat(1392,oTargetPC) == TRUE ||
-             GetHasFeat(1399,oTargetPC) == TRUE ||
-             GetHasFeat(1400,oTargetPC) == TRUE ||
-             GetHasFeat(1465,oTargetPC) == TRUE ||
-             GetHasFeat(1468,oTargetPC) == TRUE ||
-             GetHasFeat(1469,oTargetPC) == TRUE ||
-             GetHasFeat(1470,oTargetPC) == TRUE ||
-             GetHasFeat(1471,oTargetPC) == TRUE )
-        {
-            iXPPen = iHD*250;
-        }
-
-        if (GetHitDice(oTargetPC) <=5)
-        {
-            iXPPen = 0;
-        }
-
+        int iXPPen = PenaltyForResurrection(oTargetPC, 250);
         SetXP(oTargetPC, iXP - iXPPen);
+
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oTargetPC);
         TeleportObjectToLocation(oTargetPC, lTarget);
         if (GetAreaFromLocation(lTarget) == OBJECT_INVALID)
@@ -779,31 +762,11 @@ void EventResurrectPCBody(object oTarget, object oReviver=OBJECT_INVALID)
         DestroyObject(oTarget);
         SetLocalInt(GetItemPossessedBy(oTargetPC,"PC_Data_Object"),"ShoonAfflic",0);
         SetPCDeadStatus(oTargetPC, 0);
-        int iHD = GetHitDice(oTargetPC);
+
         int iXP = GetXP(oTargetPC);
-        int iXPPen = iHD*1000;
-
-        if ( GetHasFeat(1158,oTargetPC) == TRUE ||
-             GetHasFeat(1156,oTargetPC) == TRUE ||
-             GetHasFeat(1168,oTargetPC) == TRUE ||
-             GetHasFeat(1392,oTargetPC) == TRUE ||
-             GetHasFeat(1399,oTargetPC) == TRUE ||
-             GetHasFeat(1400,oTargetPC) == TRUE ||
-             GetHasFeat(1465,oTargetPC) == TRUE ||
-             GetHasFeat(1468,oTargetPC) == TRUE ||
-             GetHasFeat(1469,oTargetPC) == TRUE ||
-             GetHasFeat(1470,oTargetPC) == TRUE ||
-             GetHasFeat(1471,oTargetPC) == TRUE )
-        {
-            iXPPen = iHD*500;
-        }
-
-        if (GetHitDice(oTargetPC) <=5)
-        {
-            iXPPen = 0;
-        }
-
+        int iXPPen = PenaltyForResurrection(oTargetPC, 100);
         SetXP(oTargetPC, iXP - iXPPen);
+
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oTargetPC);
         TeleportObjectToLocation(oTargetPC, lTarget);
         if (GetAreaFromLocation(lTarget) == OBJECT_INVALID)
@@ -836,6 +799,11 @@ void EventReviveUndPCBody(object oTarget, object oReviver=OBJECT_INVALID)
         ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eEffect, lTarget);
         DestroyObject(oTarget);
         SetPCDeadStatus(oTargetPC, 0);
+
+        int iXP = GetXP(oTargetPC);
+        int iXPPen = PenaltyForResurrection(oTargetPC, 250);
+        SetXP(oTargetPC, iXP - iXPPen);
+        
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oTargetPC);
         TeleportObjectToLocation(oTargetPC, lTarget);
         if (GetAreaFromLocation(lTarget) == OBJECT_INVALID)
@@ -1017,31 +985,11 @@ void EventRespawnSafePCBody(object oTarget, object oReviver=OBJECT_INVALID)
         ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eEffect, lTarget);
         DestroyObject(oTarget);
         SetPCDeadStatus(oTargetPC, 0);
-        int iHD = GetHitDice(oTargetPC);
+
         int iXP = GetXP(oTargetPC);
-        int iXPPen = iHD*500;
-
-        if ( GetHasFeat(1158,oTargetPC) == TRUE ||
-             GetHasFeat(1156,oTargetPC) == TRUE ||
-             GetHasFeat(1168,oTargetPC) == TRUE ||
-             GetHasFeat(1392,oTargetPC) == TRUE ||
-             GetHasFeat(1399,oTargetPC) == TRUE ||
-             GetHasFeat(1400,oTargetPC) == TRUE ||
-             GetHasFeat(1465,oTargetPC) == TRUE ||
-             GetHasFeat(1468,oTargetPC) == TRUE ||
-             GetHasFeat(1469,oTargetPC) == TRUE ||
-             GetHasFeat(1470,oTargetPC) == TRUE ||
-             GetHasFeat(1471,oTargetPC) == TRUE )
-        {
-            iXPPen = iHD*250;
-        }
-
-        if (GetHitDice(oTargetPC) <=5)
-        {
-            iXPPen = 0;
-        }
-
+        int iXPPen = PenaltyForResurrection(oTargetPC, 500);
         SetXP(oTargetPC, iXP - iXPPen);
+
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oTargetPC);
         TeleportObjectToLocation(oTargetPC, lTarget);
         if (GetAreaFromLocation(lTarget) == OBJECT_INVALID)
@@ -1067,32 +1015,26 @@ void EventRespawnSafeNoBody(object oPC)
     if (GetIsObjectValid(oPC) == TRUE && GetLocalInt(oPC,"Undead") != 1)
     {
         SetPCDeadStatus(oPC, 0);
-        int iHD = GetHitDice(oPC);
+
         int iXP = GetXP(oPC);
-        int iXPPen = iHD*500;
-
-        if ( GetHasFeat(1158,oPC) == TRUE ||
-             GetHasFeat(1156,oPC) == TRUE ||
-             GetHasFeat(1168,oPC) == TRUE ||
-             GetHasFeat(1392,oPC) == TRUE ||
-             GetHasFeat(1399,oPC) == TRUE ||
-             GetHasFeat(1400,oPC) == TRUE ||
-             GetHasFeat(1465,oPC) == TRUE ||
-             GetHasFeat(1468,oPC) == TRUE ||
-             GetHasFeat(1469,oPC) == TRUE ||
-             GetHasFeat(1470,oPC) == TRUE ||
-             GetHasFeat(1471,oPC) == TRUE )
-        {
-            iXPPen = iHD*250;
-        }
-
-        if (GetHitDice(oPC) <=5)
-        {
-            iXPPen = 0;
-        }
-
+        int iXPPen = PenaltyForResurrection(oPC, 500);
         SetXP(oPC, iXP - iXPPen);
+
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oPC);
         TeleportObjectToLocation(oPC, lTarget);
     }
+}
+
+//Calculate XP penalty for resurrection
+int PenaltyForResurrection(object oPC, int iPenPerHD=500)
+{
+    int iHD = GetHitDice(oPC);
+    int iXPPen = iHD*iPenPerHD;
+
+    if (GetHitDice(oPC) <=5)
+    {
+        iXPPen = 0;
+    }
+
+    return iXPPen;
 }
