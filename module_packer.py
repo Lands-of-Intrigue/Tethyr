@@ -120,7 +120,7 @@ def pack(modulePath, sourceDir, tempDir):
 
     print(f'Packing {absModule}')
     packTic = time.perf_counter()
-    p = subprocess.Popen(['nwn_erf', '-e', 'MOD', '-f', modulePath, '-c', tempDir])
+    p = subprocess.Popen(['./lib/nwn_erf', '-e', 'MOD', '-f', modulePath, '-c', tempDir])
     p.wait()
     packToc = time.perf_counter()
     print(f'Packed module to {absModule} in {packToc - packTic:0.1f}s')
@@ -142,12 +142,12 @@ class Converter:
 
     def from_gff(self, file):
         outputJson = file + '.json'
-        p = subprocess.Popen(['nwn_gff', '-i', join(self.tempDir, file), '-o', join(self.srcDir, outputJson), '-p'])
+        p = subprocess.Popen(['./lib/nwn_gff', '-i', join(self.tempDir, file), '-o', join(self.srcDir, outputJson), '-p'])
         p.wait()
 
     def to_gff(self, file):
         outputGff = os.path.splitext(file)[0]
-        p = subprocess.Popen(['nwn_gff', '-i', join(self.srcDir, file), '-o', join(self.tempDir, outputGff)])
+        p = subprocess.Popen(['./lib/nwn_gff', '-i', join(self.srcDir, file), '-o', join(self.tempDir, outputGff)])
         p.wait()
 
 
@@ -157,7 +157,7 @@ class Compiler:
         self.tempDir = tempDir
 
     def compile(self, file):
-        p = subprocess.Popen(['nwnsc', '-lqw', '-b', self.tempDir, '-i', self.srcDir, join(self.srcDir, file)])
+        p = subprocess.Popen(['./lib/nwnsc', '-lqw', '-b', self.tempDir, '-i', self.srcDir, join(self.srcDir, file)])
         p.wait()
 
 
