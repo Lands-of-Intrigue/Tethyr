@@ -130,7 +130,7 @@ void ReportPlayerBleed()
         return;
     }
     // The delay will effect how often players are vocal about bleeding.
-    DelayCommand(6.0, AssignCommand(oPC, ReportPlayerBleed()));
+    DelayCommand(HABDGetBleedTimer(oPC), AssignCommand(oPC, ReportPlayerBleed()));
 
     // Prevent calling this function multiple times
     SetLocalInt(oPC, HABD_REPORT_BLEED_RUNNING, 1);
@@ -139,6 +139,25 @@ void ReportPlayerBleed()
     if (HABD_DM_NOTIFICATION_ON_BLEED) SendMessageToAllDMs(GetName(oPC)+" is bleeding to death! At "+IntToString(iHPs)+" hitpoints.");
     PlayBleedVoice(oPC);
     AssignCommand(oPC, ActionPlayAnimation(ANIMATION_LOOPING_DEAD_BACK, 1.0, 6.0));
+}
+
+// ****************************************************************************
+
+// Protect the player from NPC agro while they are at negative HP for OBJECT_SELF.
+void ProtectFromNPCAgro(float fSafetyTimer);
+
+void ProtectFromNPCAgro(float fSafetyTimer)
+{
+    object oPC = OBJECT_SELF;
+    int iHPs = GetCurrentHitPoints(oPC);
+    // pc is bleeding out, so keep them safe from doubletaps
+    if (iHPs < 0)
+    {
+        // get the next timer check ready
+        AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromNPCAgro(fSafetyTimer)));
+        // make invisible until the next check
+        AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectInvisibility(INVISIBILITY_TYPE_NORMAL), oPC, fSafetyTimer));
+    }
 }
 
 // ****************************************************************************
@@ -260,7 +279,7 @@ void BleedToDeath(float fBleedTimer)
         SetLocalInt(oMod,HABD_LAST_HP+sID, GetCurrentHitPoints(oPC));
 
         // if this is true then the player has died.
-        if (GetCurrentHitPoints(oPC) <= -25)
+        if (GetCurrentHitPoints(oPC) <= -25) // SIOBHAN this is weird. Shouldn't it be at -10 ?
         {
             SendMessageToPC(oPC,"You have died.");
             // Ensure that plot is not still set.
@@ -331,8 +350,12 @@ void main()
         SetLocalInt(oPC, HABD_OLD_FACTION_SET, 1);
     }
     SetStandardFactionReputation(STANDARD_FACTION_HOSTILE, 100, oPC);
+
     // Keep the player from being attacked, stop nearby attackers
-    AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectInvisibility(INVISIBILITY_TYPE_NORMAL), oPC, 6.0));
+    float fSafetyTimer = 6.0;
+    AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromNPCAgro(fSafetyTimer)));
+    AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectInvisibility(INVISIBILITY_TYPE_NORMAL), oPC, fSafetyTimer));
+
 
     // Allow a good chance for healing - will limit HP to -5 on a bleed level hit.
     if (
