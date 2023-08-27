@@ -1031,7 +1031,7 @@ int PenaltyForResurrection(object oPC, int iPenPerHD=500)
     int iHD = GetHitDice(oPC);
     int iXPPen = iHD*iPenPerHD;
 
-    if (GetHitDice(oPC) <=5)
+    if (iHD <=5)
     {
         iXPPen = 0;
     }
