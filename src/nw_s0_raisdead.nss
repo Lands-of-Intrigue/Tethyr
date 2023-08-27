@@ -29,7 +29,6 @@ void main()
     //Declare major variables
     object oPC = OBJECT_SELF;
     object oTarget = GetSpellTargetObject();
-    effect eRaise = EffectResurrection();
     effect eVis = EffectVisualEffect(VFX_IMP_RAISE_DEAD);
     int iUndead = GetLocalInt(oTarget, "iUndead");
 
