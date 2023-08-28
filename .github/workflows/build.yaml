@@ -10,15 +10,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - name: install python
-        run: choco install python311
-      - name: update python dependencies
+      - name: Update python dependencies
         run: pip install pyyaml
-      - name: build module
-        run: python module_packer.py pack
-      - name: prepare target folder
+      - name: Prepare target folder
         run: mkdir server\modules
-      
+      - name: Build module
+        run: python module_packer.py pack
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
