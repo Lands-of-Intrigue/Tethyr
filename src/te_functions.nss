@@ -158,40 +158,40 @@ string Q                        = "'";
     taste though be aware that the toolset script editor does not play nice with
     certain characters, as such a number of colors will generate compile errors.
  */
-const string WHITE      = "<cÿÿÿ>"; // talk
-const string GREY       = "<c¥¥¥>"; //"<c€€€>"; // whisper
-const string LIGHTGREY  = "<c¥¥¥>";
-const string SANDY      = "<cþE>"; // shout
+const string WHITE      = "<cï¿½ï¿½ï¿½>"; // talk
+const string GREY       = "<cï¿½ï¿½ï¿½>"; //"<cï¿½ï¿½ï¿½>"; // whisper
+const string LIGHTGREY  = "<cï¿½ï¿½ï¿½>";
+const string SANDY      = "<cï¿½ï¿½E>"; // shout
 
-const string RED        = "<cþ  >";
-const string DARKRED    = "<c¡*0>";
-const string PINK       = "<cÒdd>";
-const string LIGHTPINK  = "<cædd>";
+const string RED        = "<cï¿½  >";
+const string DARKRED    = "<cï¿½*0>";
+const string PINK       = "<cï¿½dd>";
+const string LIGHTPINK  = "<cï¿½dd>";
 
-const string ORANGE     = "<cþ} >";
-const string YELLOWSERV = "<cþf >"; // experimental
+const string ORANGE     = "<cï¿½} >";
+const string YELLOWSERV = "<cï¿½f >"; // experimental
 
-const string LEMON      = "<cþþ >";
-const string YELLOW     = "<cþ× >";
+const string LEMON      = "<cï¿½ï¿½ >";
+const string YELLOW     = "<cï¿½ï¿½ >";
 
-const string NEONGREEN  = "<c#þ#>"; // tell
-const string GREEN      = "<c0¡0>"; // name preceding description
-const string LIME       = "<c¡Òd>"; // description
-const string LIGHTGREEN = "<c¡Ñd>";
+const string NEONGREEN  = "<c#ï¿½#>"; // tell
+const string GREEN      = "<c0ï¿½0>"; // name preceding description
+const string LIME       = "<cï¿½ï¿½d>"; // description
+const string LIGHTGREEN = "<cï¿½ï¿½d>";
 
-const string DARKBLUE   = "<c  þ>";
-const string BLUE       = "<c zþ>"; // skill blue
-//const string BLUE       = "<cAiE";
-//const string BLUE       = "<cd¡Ñ>";
-const string PERIWINKLE = "<czzþ>";
-const string CYAN       = "<c þþ>"; // saving throw
+const string DARKBLUE   = "<c  ï¿½>";
+const string BLUE       = "<c zï¿½>"; // skill blue
+//const string BLUE       = "<cAiï¿½E";
+//const string BLUE       = "<cdï¿½ï¿½>";
+const string PERIWINKLE = "<czzï¿½>";
+const string CYAN       = "<c ï¿½ï¿½>"; // saving throw
 
-const string LIGHTBLUE  = "<c#ßþ>"; // DM chat
-const string DMBLUE     = "<c#ßþ>"; // DM chat
-const string PALEBLUE   = "<cEþ>"; // name in skill check/saving throw
+const string LIGHTBLUE  = "<c#ï¿½ï¿½>"; // DM chat
+const string DMBLUE     = "<c#ï¿½ï¿½>"; // DM chat
+const string PALEBLUE   = "<cï¿½Eï¿½>"; // name in skill check/saving throw
 
-const string VIOLET     = "<c¡dÑ>";
-const string PURPLE     = "<c¢Gd>";
+const string VIOLET     = "<cï¿½dï¿½>";
+const string PURPLE     = "<cï¿½Gd>";
 
 const string COLOR_END  = "</c>";
 
@@ -200,8 +200,8 @@ const string COLOR_OBJECT       = ORANGE;
 const string COLOR_DESCRIPTION  = LIGHTGREY;
 const string COLOR_MESSAGE      = LIGHTGREY;
 const string COLOR_WHITE        = WHITE;
-const string COLOR_DUMPHEADER   = "<c©>";
-const string COLOR_VARNAME      = "<cE>";
+const string COLOR_DUMPHEADER   = "<cï¿½>";
+const string COLOR_VARNAME      = "<cï¿½E>";
 
 // LIGHT SYSTEM ----------------------------------------------------------------
 const string LIGHT_COLOR    = "LIGHT_COLOR";
@@ -972,12 +972,6 @@ void CreatureSetCommonListeningPatterns(object oCreature = OBJECT_SELF)
 ////////////////////////////////////////////////////////////////////////////////
 //TETHYR CUSTOM FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
-
-//Returns the rank of the PC's deity.
-// 4 - Greater/Intermediate, 3 - Lesser Deity
-// 2 - Demipower, 1 - Dead Power
-// 0 - N/A
-int GetDeityRank(object oPC);
 
 // Attempt to get the name of the location. [File: te_functions]
 string TE_GetLocationName(string sLoc);
@@ -4721,355 +4715,6 @@ int XPGetPCNeedsToLevel(object oPC, int bNext = TRUE)
 // BEGIN TETHYR CUSTOM FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
-//Returns the rank of the PC's deity.
-// 4 - Greater/Intermediate, 3 - Lesser Deity
-// 2 - Demipower, 1 - Dead Power
-// 0 - N/A
-int GetDeityRank(object oPC)
-{
-    object oMod = GetModule();
-    int nPower;
-    if (GetHasFeat(DEITY_Akadi,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Akadi");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Amaunator,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Amaunator");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Auril,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Azuth");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Bane,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Bane");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Beshaba,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Beshaba");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Bhaal,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Bhaal");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Chauntea,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Chauntea");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Cyric,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Deneir");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Deneir,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Deneir");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Dwarven_Powers,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Dwarven_Powers");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Eldath,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Eldath");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Elven_Powers,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Elven_Powers");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Finder_Wyvernspur,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Finder_Wyvernspur");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Garagos,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Garagos");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Gargauth,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Gargauth");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Gnomish_Powers,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Gnomish_Powers");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Gond,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Gond");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Grumbar,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Grumbar");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Gwaeron_Windstrom,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Gwaeron_Windstrom");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Halfling_Powers,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Halfling_Powers");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Helm,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Helm");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Hoar,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Hoar");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Ibrandul,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Ibrandul");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Ilmater,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Ilmater");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Ishtisha,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Ishtisha");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Jergal,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Jergal");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Karsus,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Karsus");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Kelemvor,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Kelemvor");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Kossuth,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Kossuth");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Lathander,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Lathander");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Leira,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Leira");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Lliira,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Lliira");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Loviatar,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Loviatar");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Lurue,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Lurue");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Malar,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Malar");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Mask,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Mask");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Mielikki,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Mielikki");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Milil,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Milil");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Moander,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Moander");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Myrkul,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Myrkul");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Mystra,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Mystra");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Nobanion,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Nobanion");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Oghma,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Oghma");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Orcish_Powers,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Orcish_Powers");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Red_Knight,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Red_Knight");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Savras,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Savras");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Selune,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Selune");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Shar,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Shar");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Sharess,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Sharess");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Shaundakul,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Shaundakul");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Shiallia,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Shiallia");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Siamorphe,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Siamorphe");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Silvanus,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Silvanus");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Sune,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Sune");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Talona,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Talona");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Talos,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Talos");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Tempus,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Tempus");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Torm,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Torm");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Tymora,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Tymora");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Tyr,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Tyr");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Ulutiu,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Ulutiu");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Umberlee,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Umberlee");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Underdark_Powers,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Underdark_Powers");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Valkur,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Valkur");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Velsharoon,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Velsharoon");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Waukeen,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Waukeen");
-        return nPower;
-    }
-    else if (GetHasFeat(DEITY_Xvim,oPC) == TRUE)
-    {
-        nPower = GetLocalInt(oMod,"DEITY_Xvim");
-        return nPower;
-    }
-    else
-    {
-        return 0;
-    }
-}
 
 
 

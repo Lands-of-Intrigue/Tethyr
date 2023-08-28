@@ -165,55 +165,6 @@ void main() {
             return;
         }
     }
-    //Clerical Deity Restrictions
-    if(GetLastSpellCastClass() == CLASS_TYPE_CLERIC)
-    {
-        int nDR = GetDeityRank(oPC);
-        if (nDR == 4)
-        {
-            SendMessageToPC(oPC,"Your deity's power rushes through you!");
-        }
-        else if (nDR == 3)
-        {
-            if(nSL >= 7)
-            {
-                SendMessageToPC(oPC, "Your deity's power is not high enough to sponsor this level of spell.");
-                SetModuleOverrideSpellScriptFinished();
-                return;
-            }
-            else{SendMessageToPC(oPC,"Your deity's power rushes through you!");}
-        }
-        else if (nDR == 2)
-        {
-            if(nSL >= 5)
-            {
-                SendMessageToPC(oPC, "Your deity's power is not high enough to sponsor this level of spell.");
-                SetModuleOverrideSpellScriptFinished();
-                return;
-            }
-            else{SendMessageToPC(oPC,"Your deity's power rushes through you!");}
-        }
-        else if (nDR == 1)
-        {
-            if(nSL >= 3)
-            {
-                SendMessageToPC(oPC, "Your deity's power is not high enough to sponsor this level of spell.");
-                SetModuleOverrideSpellScriptFinished();
-                return;
-            }
-            else{SendMessageToPC(oPC,"Your deity's power rushes through you!");}
-        }
-        else
-        {
-            if(nSL > 3)
-            {
-                SendMessageToPC(oPC, "Your deity's power is not high enough to sponsor this level of spell.");
-                SetModuleOverrideSpellScriptFinished();
-                return;
-            }
-            else{SendMessageToPC(oPC,"Your deity's power rushes through you!");}
-        }
-    }
 
     // Items do not require components
     if (GetIsObjectValid(oItem)) {
