@@ -1,0 +1,26 @@
+name: build-tethyr-module
+run-name: ${{ github.actor }} triggered Lands of Intrigue Tethyr build
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - 'main'
+jobs:
+  build-module:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: install python
+        run: choco install python311
+      - name: update python dependencies
+        run: pip install pyyaml
+      - name: build module
+        run: python module_packer.py pack
+      - name: prepare target folder
+        run: mkdir server\modules
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: loi-alpha-test.mod
+          path: server\modules\loi-alpha-test.mod
