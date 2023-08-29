@@ -31,7 +31,7 @@ void main() {
         return;
     }
     //Hopefully fixes spawning in City of Judgement with Negative HP
-    if(GetTag(GetArea(oPC)) == "CityOfJudgement")
+    if(GetTag(oArea) == "CityofJudgement")
     {
         ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectHeal(GetMaxHitPoints(oPC)),oPC);
     }
