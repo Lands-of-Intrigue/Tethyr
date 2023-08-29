@@ -5,3 +5,5 @@ Join us at our forums https://landsofintrigue.guildtag.com/forums/ or Discord ht
 
 # Requirements (WIP)
 pip install pyyaml
+
+data folder is from the nwserver

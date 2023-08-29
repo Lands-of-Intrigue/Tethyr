@@ -1,4 +1,4 @@
-name: build-tethyr-module
+name: build-tethyr
 run-name: ${{ github.actor }} triggered Lands of Intrigue Tethyr build
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
     branches:
       - 'main'
 jobs:
-  build-module:
+  module:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,4 +20,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: loi-alpha-test.mod
-          path: server\modules\loi-alpha-test.mod
+          path: server\modules\loi-alpha-test_${{ github.head_ref }}.${{ github.sha }}.mod
