@@ -19,5 +19,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
-          name: loi-alpha-test.mod
-          path: server\modules\loi-alpha-test_${{ github.head_ref }}.${{ github.sha }}.mod
+          name: loi-alpha-test_${{ github.head_ref }}.${{ github.sha }}.mod
+          path: server\modules\loi-alpha-test.mod
