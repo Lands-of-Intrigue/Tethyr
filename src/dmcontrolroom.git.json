@@ -1565,7 +1565,7 @@
               "__struct_id": 4,
               "AddCost": {
                 "type": "dword",
-                "value": 0
+                "value": 500
               },
               "BaseItem": {
                 "type": "int",
@@ -1577,7 +1577,7 @@
               },
               "Cost": {
                 "type": "dword",
-                "value": 5337
+                "value": 860
               },
               "Cursed": {
                 "type": "byte",
@@ -1632,11 +1632,11 @@
                     },
                     "CostTable": {
                       "type": "byte",
-                      "value": 2
+                      "value": 28
                     },
                     "CostValue": {
                       "type": "word",
-                      "value": 2
+                      "value": 35
                     },
                     "Param1": {
                       "type": "byte",
@@ -1648,7 +1648,38 @@
                     },
                     "PropertyName": {
                       "type": "word",
-                      "value": 1
+                      "value": 85
+                    },
+                    "Subtype": {
+                      "type": "word",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "ChanceAppear": {
+                      "type": "byte",
+                      "value": 100
+                    },
+                    "CostTable": {
+                      "type": "byte",
+                      "value": 29
+                    },
+                    "CostValue": {
+                      "type": "word",
+                      "value": 11
+                    },
+                    "Param1": {
+                      "type": "byte",
+                      "value": 255
+                    },
+                    "Param1Value": {
+                      "type": "byte",
+                      "value": 0
+                    },
+                    "PropertyName": {
+                      "type": "word",
+                      "value": 86
                     },
                     "Subtype": {
                       "type": "word",
@@ -1734,6 +1765,26 @@
               "TemplateResRef": {
                 "type": "resref",
                 "value": "te_item_7006"
+              },
+              "VarTable": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "Name": {
+                      "type": "cexostring",
+                      "value": "Masterwork"
+                    },
+                    "Type": {
+                      "type": "dword",
+                      "value": 1
+                    },
+                    "Value": {
+                      "type": "int",
+                      "value": 1
+                    }
+                  }
+                ]
               },
               "xModelPart1": {
                 "type": "word",

@@ -87522,7 +87522,7 @@
                     "__struct_id": 11,
                     "AddCost": {
                       "type": "dword",
-                      "value": 0
+                      "value": 500
                     },
                     "BaseItem": {
                       "type": "int",
@@ -87534,7 +87534,7 @@
                     },
                     "Cost": {
                       "type": "dword",
-                      "value": 360
+                      "value": 860
                     },
                     "Cursed": {
                       "type": "byte",
@@ -87581,6 +87581,68 @@
                     "PropertiesList": {
                       "type": "list",
                       "value": [
+                        {
+                          "__struct_id": 0,
+                          "ChanceAppear": {
+                            "type": "byte",
+                            "value": 100
+                          },
+                          "CostTable": {
+                            "type": "byte",
+                            "value": 28
+                          },
+                          "CostValue": {
+                            "type": "word",
+                            "value": 35
+                          },
+                          "Param1": {
+                            "type": "byte",
+                            "value": 255
+                          },
+                          "Param1Value": {
+                            "type": "byte",
+                            "value": 0
+                          },
+                          "PropertyName": {
+                            "type": "word",
+                            "value": 85
+                          },
+                          "Subtype": {
+                            "type": "word",
+                            "value": 0
+                          }
+                        },
+                        {
+                          "__struct_id": 0,
+                          "ChanceAppear": {
+                            "type": "byte",
+                            "value": 100
+                          },
+                          "CostTable": {
+                            "type": "byte",
+                            "value": 29
+                          },
+                          "CostValue": {
+                            "type": "word",
+                            "value": 11
+                          },
+                          "Param1": {
+                            "type": "byte",
+                            "value": 255
+                          },
+                          "Param1Value": {
+                            "type": "byte",
+                            "value": 0
+                          },
+                          "PropertyName": {
+                            "type": "word",
+                            "value": 86
+                          },
+                          "Subtype": {
+                            "type": "word",
+                            "value": 0
+                          }
+                        },
                         {
                           "__struct_id": 0,
                           "ChanceAppear": {

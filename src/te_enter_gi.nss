@@ -532,16 +532,16 @@ void main()
         else if (GetHasFeat(BACKGROUND_SILVER_ELF,oPC) == TRUE)
         {
             //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
-            CreateItemOnObject("te_item_8480", oPC, 1);
-            CreateItemOnObject("te_item_8481", oPC, 1);
+            CreateItemOnObject("bg_elflongblade", oPC, 1);
+
         }
         else if (GetHasFeat(BACKGROUND_GOLD_ELF,oPC) == TRUE)
         {
             //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_1010", oPC, 1);
             CreateItemOnObject("te_item_1004", oPC, 1);
-            CreateItemOnObject("te_item_8480", oPC, 1);
-            CreateItemOnObject("te_item_8481", oPC, 1);
+            CreateItemOnObject("bg_elflongblade", oPC, 1);
+
         }
         else if (GetHasFeat(BACKGROUND_GOLD_DWARF,oPC) == TRUE)
         {
