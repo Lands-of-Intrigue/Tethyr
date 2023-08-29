@@ -23,7 +23,7 @@ void main()
         return;
     }
 
-    if(GetTag(GetArea(oPC)) == "CityOfJudgement")
+    if(GetTag(GetArea(oPC)) == "CityofJudgement")
     {
         ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectHeal(GetMaxHitPoints(oPC)),oPC);
         return;
