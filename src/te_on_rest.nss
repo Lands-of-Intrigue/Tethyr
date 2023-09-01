@@ -546,7 +546,7 @@ int WeatherTest(object oPC)
     float fWind=GetLocalFloat(oWeatherCache,WEATHER_GLOBAL_WIND)*(100.0+IntToFloat(GetLocalInt(oArea,WEATHER_AREA_WIND_MODIFIER)))/100.0;
     float fRain =  GetLocalFloat(oWeatherCache,WEATHER_LOCAL_RAIN);
 
-    if(GetHasFeat(1439,oPC))
+    if(GetHasFeat(1430,oPC))
     {
         return FALSE;
     }
