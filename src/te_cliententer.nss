@@ -23,9 +23,9 @@
 
 void main()
 {
-     string COLOR_S_WHITE     = "<cÿÿÿ>";
-     string COLOR_SGREY       = "<c¥¥¥>";
-     string COLOR_SLIGHTGREY  = "<c¥¥¥>";
+     string COLOR_S_WHITE     = "<cï¿½ï¿½ï¿½>";
+     string COLOR_SGREY       = "<cï¿½ï¿½ï¿½>";
+     string COLOR_SLIGHTGREY  = "<cï¿½ï¿½ï¿½>";
      string COLOR_SSANDY      = ColorTokenShout();
 
      string COLOR_SRED        = ColorTokenRed();
@@ -47,7 +47,7 @@ void main()
      string COLOR_SDARKBLUE   = ColorTokenBlue();
      string COLOR_SBLUE       = ColorTokenSkillCheck();
 
-     string COLOR_SPERIWINKLE = "<czzþ>";
+     string COLOR_SPERIWINKLE = "<czzï¿½>";
      string COLOR_SCYAN       = ColorTokenSkillCheck();
 
      string COLOR_SLIGHTBLUE  = ColorTokenDM();
@@ -63,6 +63,8 @@ void main()
     object oPC = GetEnteringObject();
     object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
     int iHP = GetLocalInt(oItem, "PC_HP");
+
+    SetPlotFlag(oPC, FALSE);
 
         //string sJoinMsg = GetPCPublicCDKey(oPC) + " has joined the server.";
         //NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, sJoinMsg, GetName(oPC));

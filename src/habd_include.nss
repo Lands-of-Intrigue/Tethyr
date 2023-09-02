@@ -367,7 +367,7 @@ See PDF file for additional information.
 const int HABD_SOLO_FAST_BLEED = FALSE;
 const int HABD_NERF_REGENERATION_ITEMS = TRUE;
 const int HABD_NO_DEATH_UNTIL_LEVEL = 5;
-const float HABD_POST_BLEED_INVIS_DUR = 24.0;
+const float HABD_POST_BLEED_INVIS_DUR = 6.0;
 const int HABD_ROUNDS_PER_BLEED_01 = 10;
 const int HABD_ROUNDS_PER_BLEED_02 = 10;
 const int HABD_ROUNDS_PER_BLEED_03 = 10;

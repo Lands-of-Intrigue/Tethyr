@@ -5,6 +5,7 @@
 #include "nwnx_webhook"
 #include "nwnx_webhook_rch"
 #include "nwnx_time"
+#include "habd_include"
 
 void main()
 {
@@ -165,6 +166,20 @@ void main()
             }
             else
             {
+                int iHPs = GetCurrentHitPoints(oPC);
+                if (iHPs < 1 && iHPs >= -25)
+                {
+                    object oMod = GetModule();
+                    string sID = GetPCPlayerName(oPC)+GetName(oPC);
+                    int iState = GetLocalInt(oMod,HABD_PLAYER_STATE+sID);
+                    if (iState == HABD_STATE_PLAYER_ALIVE)
+                    {
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oPC); //sets PC to 1 HP
+                        int nHeal = -6;   //should heal the player to -5 so that bleed script will take over
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nHeal), oPC);
+                    }
+                }
+
                 NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, sJoinMsg, GetName(oPC));
 
                 if(GetTag(oArea) != "CityofJudgement")
