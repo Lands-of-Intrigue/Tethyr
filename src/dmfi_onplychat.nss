@@ -176,7 +176,7 @@ void main()
             if(GetLocalInt(oPC,"LangOn") == 1)
             {
                 int iLangSpoken = GetLocalInt(oPC,"LangSpoken");
-                string LANGCOLOR = "<cEþ>";
+                string LANGCOLOR = "<cÂEÃ¾>";
                 object oArea = GetArea(oPC);
                 string sName = GetName(oPC);
 
@@ -553,7 +553,7 @@ void main()
                     NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, "Translated ("+sShouting+"): "+sNewOriginal, GetName(oPC));
                 }
 
-                string sTranslateShout = "<cEþ>"+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
+                string sTranslateShout = "<cÂEÃ¾>"+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
                 string sColorShout = GetColorForLanguage(iLangShout);
                 string sShoutOutput=sColorShout+TranslateCommonToLanguage(iLangShout,sNewOriginal)+COLOR_END;
 
@@ -2477,6 +2477,7 @@ void main()
             else if (sCurrCommandArg == "Weave" || sCurrCommandArg == "weave" || sCurrCommandArg == "WEAVE")
             {
                 int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
+                int oWild = GetCampaignInt("Deadmagic",GetTag(oArea));
                 if (GetIsDM(oPC) || GetIsDMPossessed(oPC))
                 {
                     SendMessageToPC(oPC, "Exact value is: " + IntToString(oDead));
@@ -2485,19 +2486,23 @@ void main()
                 {
                     if (oDead >=95)
                     {
-                        SendMessageToPC(oPC,"The weave here is damaged enough that you sense nothing.");
+                        SendMessageToPC(oPC,"The fabric of the Weave has been so badly desecrated you sense nothing.");
                     }
                     else if (oDead >=66)
                     {
-                        SendMessageToPC(oPC,"The weave here is extremely damaged.");
+                        SendMessageToPC(oPC,"The fabric of the local Weave is mangled and torn.");
                     }
                     else if (oDead >=33)
                     {
-                        SendMessageToPC(oPC,"The weave here is moderately damaged.");
+                        SendMessageToPC(oPC,"You can sense significant damage to the fabric of the local Weave.");
+                    }
+                    else if (oDead >=1)
+                    {
+                        SendMessageToPC(oPC,"You can sense faint imperfections in the fabric of the local Weave.");
                     }
                     else
                     {
-                        SendMessageToPC(oPC,"The weave here is fairly healthy.");
+                        SendMessageToPC(oPC,"The Weave here is fairly healthy.");
                     }
                 }
             }
@@ -2554,4 +2559,4 @@ void main()
 
 
 
- 
+Â 
