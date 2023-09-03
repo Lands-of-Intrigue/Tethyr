@@ -125,12 +125,13 @@ int X2DeadmagicZone()
     int nSpellFailure = GetCampaignInt("Deadmagic",GetTag(oArea));
 
     //  checking if the caster notises the damage to the weave
-    if(nSpellFailure > 1 && (GetHasFeat(1586, oCaster)))
+    //  note: feat id below was 1586, but it seemed an unused id - should be checking for the Weave Resonance feat instead
+    if(nSpellFailure > 1 && (GetHasFeat(1599, oCaster)))
     {
-       SendMessageToPC(oCaster, "You can sense serious distortions in the local Weave. Spells cast in this area are prone to failure.");
-        if (nSpellFailure < 33) { SendMessageToPC(oCaster, "After further inspection, the weave is minorly damaged here."); }
-        else if (nSpellFailure < 66) { SendMessageToPC(oCaster, "After further inspection, the weave is damaged to a significant degree here."); }
-        else { SendMessageToPC(oCaster, "After further inspection, the weave here is extremely damaged, and will be difficult to repair"); }
+       SendMessageToPC(oCaster, "You sense serious distortions in the local Weave. Spells cast in this area may fail.");
+        if (nSpellFailure < 33) { SendMessageToPC(oCaster, "Further inspection reveals the damage to the Weave is minor."); }
+        else if (nSpellFailure < 66) { SendMessageToPC(oCaster, "Further inspection reveals significant damage to the fabric of the Weave."); }
+        else { SendMessageToPC(oCaster, "Further inspection reveals extreme damage to the fabric of the Weave. It will be difficult to repair."); }
     }
 
     // Mearly casting the spell will strenthen or weaken the weave.
@@ -181,7 +182,7 @@ int X2DeadmagicZone()
         }
         else
         {
-            SendMessageToPC(oCaster, "The spell effect fails inexplicably. In order to learn more, you need to improve your knowledge of spellcraft.");
+            SendMessageToPC(oCaster, "The magic of your spell unravels inexplicably, causing it to fail.");
             return FALSE;
         }
     }
