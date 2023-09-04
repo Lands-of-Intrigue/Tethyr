@@ -2477,7 +2477,6 @@ void main()
             else if (sCurrCommandArg == "Weave" || sCurrCommandArg == "weave" || sCurrCommandArg == "WEAVE")
             {
                 int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
-                int oWild = GetCampaignInt("Deadmagic",GetTag(oArea));
                 if (GetIsDM(oPC) || GetIsDMPossessed(oPC))
                 {
                     SendMessageToPC(oPC, "Exact value is: " + IntToString(oDead));
