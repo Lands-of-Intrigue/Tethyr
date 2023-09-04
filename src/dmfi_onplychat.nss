@@ -176,7 +176,7 @@ void main()
             if(GetLocalInt(oPC,"LangOn") == 1)
             {
                 int iLangSpoken = GetLocalInt(oPC,"LangSpoken");
-                string LANGCOLOR = "<cEþ>";
+                string LANGCOLOR = "<cï¿½Eï¿½>";
                 object oArea = GetArea(oPC);
                 string sName = GetName(oPC);
 
@@ -481,7 +481,6 @@ void main()
                 sHelpCommand += "-decloak : Allows you to remove only the invisibility effect you have cast on yourself. Syntax: -decloak \n";
                 sHelpCommand += "-delete : Allows you to delete a character from your vault. Syntax: -delete \n";
                 sHelpCommand += "-disguise : Allows you to disguise yourself using the various toggles on the examine system. (Class Standing, Strength, Dexterity, and Constitution) Syntax: -disguise \"Command\" Use -disguise help for full list.\n";
-                //sHelpCommand += "-door : Allows you to manage and interact with a nearby settlement door/rentable room. To use properly, stand next the door you wish to modify before typing this command. Syntax: -door \n";  EDITED BY SURREAL CAUSE BAD
                 sHelpCommand += "-emote : Allows you to emote doing a particular action. For a full list of available emotes, use \"-emote list\". Syntax: -emote \"Action\" Ex: -emote sit \n";
                 if(GetLevelByClass(47,oPC)>=1)
                 {
@@ -493,6 +492,7 @@ void main()
                     sHelpCommand += "-ki : Returns your current ki level.\n";
                 }
                 sHelpCommand += "-lang / -speak : Sets new language to speak. Normal speech going forward will be in that language. To no longer speak a language, use \"-lang common\" Syntax: -lang \"language\" Ex: -lang Alzhedo \n";
+                sHelpCommand += "-murder : Perform a coup de grace on the targeted bleeding out PC. \n";
                 sHelpCommand += "-name : If disguise is on, this will allow you to change your displayed name. This will not persist across reset or log-out/crash. Syntax: - name \"Disguise Name\" Ex: -name Malcolm Reed \n";
                 if(GetHasFeat(1203,oPC) == TRUE || GetLevelByClass(CLASS_TYPE_DRUID,oPC) >= 13 || GetHasFeat(1458,oPC) == TRUE)
                 {
@@ -531,7 +531,7 @@ void main()
                     sHelpCommand +="-removewildmagic : removes the specified number to the wild magic of the area (Removing wild magic decreases the chance of wild events).\n";
                     sHelpCommand +="-shopset : sets the price for the given shop unique string., ARG2 = UNIQUE STRING, ARG3 = PRICE\n";
                 }
-                sHelpCommand +="-bug : Gives a bug report to the DMs";
+                // sHelpCommand +="-bug : Gives a bug report to the DMs";
                 SendMessageToPC(oPC,sHelpCommand);
             }
             else if(sCurrCommandArg == "shout")
@@ -553,7 +553,7 @@ void main()
                     NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, "Translated ("+sShouting+"): "+sNewOriginal, GetName(oPC));
                 }
 
-                string sTranslateShout = "<cEþ>"+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
+                string sTranslateShout = "<cï¿½Eï¿½>"+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
                 string sColorShout = GetColorForLanguage(iLangShout);
                 string sShoutOutput=sColorShout+TranslateCommonToLanguage(iLangShout,sNewOriginal)+COLOR_END;
 
@@ -704,6 +704,25 @@ void main()
                 else if(sCommandArg2 == "enchantment"   || sCommandArg2 == "enc" ) SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"Enchantment"))+" spellmastery in enchantment.");
                 else if(sCommandArg2 == "evocation"     || sCommandArg2 == "evo" ) SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"Evocation"))+" spellmastery in evocation.");
                 else if(sCommandArg2 == "illusion"      || sCommandArg2 == "ill" ) SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"Illusion"))+" spellmastery in illusion.");
+            }
+            else if(sCurrCommandArg == "murder")
+            {
+                object oTarget = GetCurrentInteractionTarget();
+                // if the target is a player who is bleeding out
+                if (GetIsPlayerCharacter(oTarget) == TRUE && GetCurrentHitPoints(oTarget) < 1)
+                {
+                    // KILL THEM
+                    SetPlotFlag(oTarget, FALSE);
+                    ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectDamage(100,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_PLUS_FIVE), oTarget);
+
+                    SendMessageToPC(oTarget,"You have been murdered.");
+                    SendMessageToPC(oPC,"You have murdered "+GetName(oTarget)+".");
+                    FloatingTextStringOnCreature(GetName(oTarget)+" has been murdered in cold blood.", oTarget);
+                }
+                else
+                {
+                    SendMessageToPC(oPC,"Invalid murder target. Ctrl+click a bleeding out player character.");
+                }
             }
             else if(sCurrCommandArg == "mythic")
             {
@@ -2554,4 +2573,4 @@ void main()
 
 
 
- 
+ï¿½
