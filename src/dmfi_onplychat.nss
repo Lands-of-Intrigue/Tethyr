@@ -2552,8 +2552,8 @@ void main()
             }
             else if (sCurrCommandArg == "bug" || sCurrCommandArg == "Bug" || sCurrCommandArg == "BUG")
             {
-                 NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_BUG_CHANNEL, "Bug Message: " + sChatMessage, GetName(oPC));
-                 SendMessageToPC(oPC,"Bug report sent, hope to hear back soon");
+                //  NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_BUG_CHANNEL, "Bug Message: " + sChatMessage, GetName(oPC));
+                SendMessageToPC(oPC,"Please visit https://landsofintrigue.guildtag.com/ to log a bug in the forums.");
             }
             else
             {
