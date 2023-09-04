@@ -23,9 +23,9 @@
 
 void main()
 {
-     string COLOR_S_WHITE     = "<cÃ¿Ã¿Ã¿>";
-     string COLOR_SGREY       = "<cÂ¥Â¥Â¥>";
-     string COLOR_SLIGHTGREY  = "<cÂ¥Â¥Â¥>";
+     string COLOR_S_WHITE     = "<cÿÿÿ>";
+     string COLOR_SGREY       = "<c¥¥¥>";
+     string COLOR_SLIGHTGREY  = "<c¥¥¥>";
      string COLOR_SSANDY      = ColorTokenShout();
 
      string COLOR_SRED        = ColorTokenRed();
@@ -47,7 +47,7 @@ void main()
      string COLOR_SDARKBLUE   = ColorTokenBlue();
      string COLOR_SBLUE       = ColorTokenSkillCheck();
 
-     string COLOR_SPERIWINKLE = "<czzÃ¾>";
+     string COLOR_SPERIWINKLE = "<czzþ>";
      string COLOR_SCYAN       = ColorTokenSkillCheck();
 
      string COLOR_SLIGHTBLUE  = ColorTokenDM();
