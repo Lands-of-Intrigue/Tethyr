@@ -14,7 +14,7 @@
   },
   "ChallengeRating": {
     "type": "float",
-    "value": 6.0
+    "value": 12.0
   },
   "ClassList": {
     "type": "list",
@@ -27,7 +27,7 @@
         },
         "ClassLevel": {
           "type": "short",
-          "value": 5
+          "value": 10
         }
       }
     ]
@@ -50,7 +50,7 @@
   },
   "CurrentHitPoints": {
     "type": "short",
-    "value": 21
+    "value": 70
   },
   "DecayTime": {
     "type": "dword",
@@ -143,7 +143,7 @@
   },
   "HitPoints": {
     "type": "short",
-    "value": 21
+    "value": 70
   },
   "Int": {
     "type": "byte",
@@ -177,11 +177,11 @@
   },
   "MaxHitPoints": {
     "type": "short",
-    "value": 26
+    "value": 80
   },
   "NaturalAC": {
     "type": "byte",
-    "value": 5
+    "value": 8
   },
   "NoPermDeath": {
     "type": "byte",
@@ -483,7 +483,67 @@
         },
         "SpellCasterLevel": {
           "type": "byte",
-          "value": 5
+          "value": 12
+        },
+        "SpellFlags": {
+          "type": "byte",
+          "value": 1
+        }
+      },
+      {
+        "__struct_id": 4,
+        "Spell": {
+          "type": "word",
+          "value": 59
+        },
+        "SpellCasterLevel": {
+          "type": "byte",
+          "value": 12
+        },
+        "SpellFlags": {
+          "type": "byte",
+          "value": 1
+        }
+      },
+      {
+        "__struct_id": 4,
+        "Spell": {
+          "type": "word",
+          "value": 59
+        },
+        "SpellCasterLevel": {
+          "type": "byte",
+          "value": 12
+        },
+        "SpellFlags": {
+          "type": "byte",
+          "value": 1
+        }
+      },
+      {
+        "__struct_id": 4,
+        "Spell": {
+          "type": "word",
+          "value": 59
+        },
+        "SpellCasterLevel": {
+          "type": "byte",
+          "value": 12
+        },
+        "SpellFlags": {
+          "type": "byte",
+          "value": 1
+        }
+      },
+      {
+        "__struct_id": 4,
+        "Spell": {
+          "type": "word",
+          "value": 59
+        },
+        "SpellCasterLevel": {
+          "type": "byte",
+          "value": 12
         },
         "SpellFlags": {
           "type": "byte",
@@ -587,7 +647,7 @@
   },
   "WalkRate": {
     "type": "int",
-    "value": 4
+    "value": 5
   },
   "willbonus": {
     "type": "short",
