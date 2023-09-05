@@ -712,6 +712,7 @@ void main()
                 if (GetIsPlayerCharacter(oTarget) == TRUE && GetCurrentHitPoints(oTarget) < 1)
                 {
                     // KILL THEM
+                    AssignCommand(oPC, ActionPlayAnimation(ANIMATION_LOOPING_GET_LOW, 1.0f, 1.2f));
                     SetPlotFlag(oTarget, FALSE);
                     ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectDamage(100,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_PLUS_FIVE), oTarget);
 
