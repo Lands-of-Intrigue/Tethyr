@@ -90,7 +90,7 @@
   },
   "ChallengeRating": {
     "type": "float",
-    "value": 6.0
+    "value": 10.0
   },
   "ClassList": {
     "type": "list",
@@ -103,7 +103,18 @@
         },
         "ClassLevel": {
           "type": "short",
-          "value": 7
+          "value": 10
+        }
+      },
+      {
+        "__struct_id": 2,
+        "Class": {
+          "type": "int",
+          "value": 27
+        },
+        "ClassLevel": {
+          "type": "short",
+          "value": 2
         }
       }
     ]
@@ -142,7 +153,7 @@
   },
   "CurrentHitPoints": {
     "type": "short",
-    "value": 39
+    "value": 72
   },
   "DecayTime": {
     "type": "dword",
@@ -160,7 +171,7 @@
   },
   "Dex": {
     "type": "byte",
-    "value": 16
+    "value": 18
   },
   "Disarmable": {
     "type": "byte",
@@ -357,6 +368,20 @@
         "__struct_id": 1,
         "Feat": {
           "type": "word",
+          "value": 103
+        }
+      },
+      {
+        "__struct_id": 1,
+        "Feat": {
+          "type": "word",
+          "value": 102
+        }
+      },
+      {
+        "__struct_id": 1,
+        "Feat": {
+          "type": "word",
           "value": 50
         }
       }
@@ -382,7 +407,7 @@
   },
   "HitPoints": {
     "type": "short",
-    "value": 39
+    "value": 72
   },
   "Int": {
     "type": "byte",
@@ -451,7 +476,7 @@
   },
   "MaxHitPoints": {
     "type": "short",
-    "value": 60
+    "value": 108
   },
   "NaturalAC": {
     "type": "byte",
@@ -583,7 +608,7 @@
         "__struct_id": 0,
         "Rank": {
           "type": "byte",
-          "value": 10
+          "value": 15
         }
       },
       {
@@ -604,7 +629,7 @@
         "__struct_id": 0,
         "Rank": {
           "type": "byte",
-          "value": 10
+          "value": 15
         }
       },
       {
@@ -756,7 +781,7 @@
   },
   "Str": {
     "type": "byte",
-    "value": 13
+    "value": 10
   },
   "Subrace": {
     "type": "cexostring",
@@ -858,5 +883,81 @@
   "Wis": {
     "type": "byte",
     "value": 8
+  },
+  "xAppearance_Head": {
+    "type": "word",
+    "value": 12
+  },
+  "xArmorPart_RFoot": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_Belt": {
+    "type": "word",
+    "value": 0
+  },
+  "xBodyPart_LBicep": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_LFArm": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_LFoot": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_LHand": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_LShin": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_LShoul": {
+    "type": "word",
+    "value": 0
+  },
+  "xBodyPart_LThigh": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_Neck": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_Pelvis": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_RBicep": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_RFArm": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_RHand": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_RShin": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_RShoul": {
+    "type": "word",
+    "value": 0
+  },
+  "xBodyPart_RThigh": {
+    "type": "word",
+    "value": 1
+  },
+  "xBodyPart_Torso": {
+    "type": "word",
+    "value": 1
   }
 }
