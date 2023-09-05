@@ -142,13 +142,22 @@ void ReportPlayerBleed()
 
 // ****************************************************************************
 
-// Remove plot flag from OBJECT_SELF.
-void EndSafetyGrace();
+// Protect the player from damage while they are at negative HP for OBJECT_SELF.
+void ProtectFromDamage(float fSafetyTimer);
 
-void EndSafetyGrace()
+void ProtectFromDamage(float fSafetyTimer)
 {
-    object oPC = OBJECT_SELF;
     SetPlotFlag(oPC, FALSE);
+    object oPC = OBJECT_SELF;
+    int iHPs = GetCurrentHitPoints(oPC);
+    // pc is bleeding out, so keep them safe
+    if (iHPs < 0)
+    {
+        // get the next timer check ready
+        AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromNPCAgro(fSafetyTimer)));
+        // make invulnerable until the next check
+        SetPlotFlag(oPC, TRUE);
+    }
 }
 
 // ****************************************************************************
@@ -243,8 +252,8 @@ void BleedToDeath(float fBleedTimer)
         // Update local variable with hitpoints for healing option.
         SetLocalInt(oMod,HABD_LAST_HP+sID, GetCurrentHitPoints(oPC));
 
-        // if this is true then the player has died.
-        if (GetCurrentHitPoints(oPC) <= -11)
+        // if this is true then the player has died to massive damage
+        if (GetCurrentHitPoints(oPC) <= -25)
         {
             SendMessageToPC(oPC,"You have died.");
             // Set up the hostile faction again.
@@ -316,7 +325,7 @@ void main()
     // Prevent the player from taking further damage for 1 round
     SetPlotFlag(oPC, TRUE);
     float fSafetyTimer = 6.0;
-    DelayCommand(fSafetyTimer, AssignCommand(oPC, EndSafetyGrace()));
+    AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromDamage(fSafetyTimer)));
 
     // Allow a good chance for healing - will limit HP to -5 on a bleed level hit.
     if (
