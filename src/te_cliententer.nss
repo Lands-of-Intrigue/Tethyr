@@ -15,6 +15,7 @@
 #include "subdual_inc"
 #include "sf_hips_inc"
 #include "loi_functions"
+#include "nwnx_creature"
 #include "nwnx_webhook"
 #include "nwnx_time"
 #include "nwnx_webhook_rch"
