@@ -707,9 +707,22 @@ void main()
             }
             else if(sCurrCommandArg == "murder")
             {
-                object oTarget = GetCurrentInteractionTarget();
+                location lSource = GetLocation(oPC);
+                object oTarget = GetFirstObjectInShape(SHAPE_SPHERE,1.0f,lSource,TRUE,OBJECT_TYPE_CREATURE);
+
+                while (GetIsObjectValid(oTarget))
+                {
+                    SendMessageToPC(oPC,"Checking "+GetName(oTarget)+".");
+                    if (GetIsPlayerCharacter(oTarget) == TRUE && GetCurrentHitPoints(oTarget) < 1)
+                    {
+                        break;
+                    }
+                    oTarget = GetNextObjectInShape(SHAPE_SPHERE,1.0f,lSource,TRUE,OBJECT_TYPE_CREATURE);
+                }
+
+                SendMessageToPC(oPC,"Trying to murder "+GetName(oTarget)+".");
                 // if the target is a player who is bleeding out
-                if (GetIsPlayerCharacter(oTarget) == TRUE && GetCurrentHitPoints(oTarget) < 1)
+                if (GetIsObjectValid(oTarget))
                 {
                     // KILL THEM
                     AssignCommand(oPC, ActionPlayAnimation(ANIMATION_LOOPING_GET_LOW, 1.0f, 1.2f));

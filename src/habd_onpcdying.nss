@@ -147,16 +147,20 @@ void ProtectFromDamage(float fSafetyTimer);
 
 void ProtectFromDamage(float fSafetyTimer)
 {
-    SetPlotFlag(oPC, FALSE);
     object oPC = OBJECT_SELF;
+    SetPlotFlag(oPC, FALSE);
     int iHPs = GetCurrentHitPoints(oPC);
     // pc is bleeding out, so keep them safe
-    if (iHPs < 0)
+    if (iHPs < 1)
     {
         // get the next timer check ready
-        AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromNPCAgro(fSafetyTimer)));
+        AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromDamage(fSafetyTimer)));
         // make invulnerable until the next check
-        SetPlotFlag(oPC, TRUE);
+        SetPlotFlag(oPC, TRUE); 
+        // apply Etherial for a second to drop AI agro
+        AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectEthereal(), oPC, 6.0f));
+
+        // AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectSanctuary(1), oPC, fSafetyTimer));
     }
 }
 
@@ -324,8 +328,10 @@ void main()
 
     // Prevent the player from taking further damage for 1 round
     SetPlotFlag(oPC, TRUE);
-    float fSafetyTimer = 6.0;
+    float fSafetyTimer = 12.0;
     AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromDamage(fSafetyTimer)));
+    // apply Etherial for a second to drop AI agro
+    AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectEthereal(), oPC, 6.0f));
 
     // Allow a good chance for healing - will limit HP to -5 on a bleed level hit.
     if (
