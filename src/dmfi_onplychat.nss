@@ -176,7 +176,7 @@ void main()
             if(GetLocalInt(oPC,"LangOn") == 1)
             {
                 int iLangSpoken = GetLocalInt(oPC,"LangSpoken");
-                string LANGCOLOR = "<cEþ>";
+                string LANGCOLOR = "<cï¿½Eï¿½>";
                 object oArea = GetArea(oPC);
                 string sName = GetName(oPC);
 
@@ -553,7 +553,7 @@ void main()
                     NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, "Translated ("+sShouting+"): "+sNewOriginal, GetName(oPC));
                 }
 
-                string sTranslateShout = "<cEþ>"+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
+                string sTranslateShout = "<cï¿½Eï¿½>"+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
                 string sColorShout = GetColorForLanguage(iLangShout);
                 string sShoutOutput=sColorShout+TranslateCommonToLanguage(iLangShout,sNewOriginal)+COLOR_END;
 
@@ -712,7 +712,6 @@ void main()
 
                 while (GetIsObjectValid(oTarget))
                 {
-                    SendMessageToPC(oPC,"Checking "+GetName(oTarget)+".");
                     if (GetIsPlayerCharacter(oTarget) == TRUE && GetCurrentHitPoints(oTarget) < 1)
                     {
                         break;
@@ -720,7 +719,6 @@ void main()
                     oTarget = GetNextObjectInShape(SHAPE_SPHERE,1.0f,lSource,TRUE,OBJECT_TYPE_CREATURE);
                 }
 
-                SendMessageToPC(oPC,"Trying to murder "+GetName(oTarget)+".");
                 // if the target is a player who is bleeding out
                 if (GetIsObjectValid(oTarget))
                 {
@@ -735,7 +733,7 @@ void main()
                 }
                 else
                 {
-                    SendMessageToPC(oPC,"Invalid murder target. Ctrl+click a bleeding out player character.");
+                    SendMessageToPC(oPC,"No nearby vulnerable victim to murder.");
                 }
             }
             else if(sCurrCommandArg == "mythic")
