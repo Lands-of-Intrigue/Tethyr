@@ -47,8 +47,7 @@ void HealTo1HP(object oPC)
 
     // Give the player a chance to run away
     if (HABD_POST_BLEED_INVIS_DUR > 0.0) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectInvisibility(INVISIBILITY_TYPE_NORMAL), oPC, HABD_POST_BLEED_INVIS_DUR);
-    // Turn the plot flag off after a specific period of time.
-    //SetPlotFlag(oPC, FALSE);
+
     // Raises the player to 1 hp.
     ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(1 - (GetCurrentHitPoints(oPC))), oPC);
     SetLocalInt(oMod,HABD_PLAYER_STATE+sID, HABD_STATE_PLAYER_ALIVE); //set player state to alive
@@ -143,20 +142,25 @@ void ReportPlayerBleed()
 
 // ****************************************************************************
 
-// Protect the player from NPC agro while they are at negative HP for OBJECT_SELF.
-void ProtectFromNPCAgro(float fSafetyTimer);
+// Protect the player from damage while they are at negative HP for OBJECT_SELF.
+void ProtectFromDamage(float fSafetyTimer);
 
-void ProtectFromNPCAgro(float fSafetyTimer)
+void ProtectFromDamage(float fSafetyTimer)
 {
     object oPC = OBJECT_SELF;
+    SetPlotFlag(oPC, FALSE);
     int iHPs = GetCurrentHitPoints(oPC);
-    // pc is bleeding out, so keep them safe from doubletaps
-    if (iHPs < 0)
+    // pc is bleeding out, so keep them safe
+    if (iHPs < 1)
     {
         // get the next timer check ready
-        AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromNPCAgro(fSafetyTimer)));
-        // make invisible until the next check
-        AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectInvisibility(INVISIBILITY_TYPE_NORMAL), oPC, fSafetyTimer));
+        AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromDamage(fSafetyTimer)));
+        // make invulnerable until the next check
+        SetPlotFlag(oPC, TRUE); 
+        // apply Etherial for a second to drop AI agro
+        AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectEthereal(), oPC, 6.0f));
+
+        // AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectSanctuary(1), oPC, fSafetyTimer));
     }
 }
 
@@ -215,6 +219,7 @@ void BleedToDeath(float fBleedTimer)
 {
     object oMod = GetModule();
     object oPC = OBJECT_SELF;
+    SetPlotFlag(oPC, FALSE); // remove Plot flag, in case it hasn't already been cleared
     string sID = GetPCPlayerName(oPC)+GetName(oPC);
     int iNPC = GetLocalInt(OBJECT_SELF, HABD_NPC_BLEED);
     if (HABD_DEBUG) SpeakString("DEBUG: HABD OnBleed, "+GetName(oPC)+", HP: "+IntToString(GetCurrentHitPoints(oPC))+", master: "+GetName(GetMaster(oPC))+", state:"+HABDGetPlayerStateName(oPC), TALKVOLUME_SHOUT);
@@ -225,43 +230,16 @@ void BleedToDeath(float fBleedTimer)
 
     // if you get here - you are dying and have not been healed
     // so you need to roll to see if you stablize
-    int nSavingRoll = d10();
+    int nSavingRoll = d100();
+    int nConMod = GetAbilityModifier(ABILITY_CONSTITUTION, oPC);
+    int nDeathCheck = nSavingRoll + nConMod;
+    SendMessageToPC(oPC,"Death Saving Throw (DC90): d100 + Constitution Modifier = "+IntToString(nDeathCheck));
 
-    // Death can be disabled before a certain level by "faking" the stabilization
-    // check. Do not let the players know that death is disabled because it will
-    // only encourage them to be idiots.
-    if ((HABD_NO_DEATH_UNTIL_LEVEL) && (GetHitDice(oPC) < HABD_NO_DEATH_UNTIL_LEVEL))
+    if (nDeathCheck >= 90)
     {
-        switch (GetCurrentHitPoints(oPC))
-        {
-            case 10:
-            case -1: nSavingRoll = nSavingRoll + 2; break;
-            case 9:
-            case -2: nSavingRoll = nSavingRoll + 3; break;
-            case 8:
-            case -3: nSavingRoll = nSavingRoll + 4; break;
-            case 7:
-            case -4: nSavingRoll = nSavingRoll + 5; break;
-            case 6:
-            case -5: nSavingRoll = nSavingRoll + 6; break;
-            case 5:
-            case -6: nSavingRoll = nSavingRoll + 7; break;
-            case 4:
-            case -7: nSavingRoll = nSavingRoll + 8; break;
-            case 3:
-            case -8: nSavingRoll = nSavingRoll + 9; break;
-            case 2:
-            case -9:
-            default: nSavingRoll = nSavingRoll + 10; break;
-        }
-    }
-
-    if (nSavingRoll > 9)                                                    //set to 9 for 3E - lower for easier stabilization
-    {
-        DelayCommand(1.0, HealTo1HP(oPC));                                   //call heal subroutine
-        // Always make it look like they rolled a 10 to stabilize
-        SendMessageToPC(oPC,"Saving Roll to stop bleeding (at "+IntToString(GetCurrentHitPoints(oPC))+") = 10");
+        SendMessageToPC(oPC,"Succeeded Death Saving Throw!");
         FloatingTextStringOnCreature(GetName(oPC)+" has self-stabilized.", oPC);
+        DelayCommand(6.0, HealTo1HP(oPC));
         DelayCommand(6.0, SendMessageToPC(oPC, "In a life or death effort you have survived, alive but barely."));
         return;
     }
@@ -270,20 +248,18 @@ void BleedToDeath(float fBleedTimer)
     {
         // Most important, keep the bleeding chain going.
         DelayCommand(fBleedTimer, AssignCommand(oPC, BleedToDeath(fBleedTimer)));
-        SendMessageToPC(oPC,"Saving Roll to stop bleeding (at "+IntToString(GetCurrentHitPoints(oPC))+") = " +IntToString(nSavingRoll));
-        //SetPlotFlag(oPC, FALSE);
+
+        SendMessageToPC(oPC,"Failed Death Saving Throw. You will continue to bleed out.");
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_COM_CHUNK_RED_BALLISTA),oPC);
         ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectDamage(1,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_PLUS_FIVE), oPC);
-        //SetPlotFlag(oPC, TRUE);
+
         // Update local variable with hitpoints for healing option.
         SetLocalInt(oMod,HABD_LAST_HP+sID, GetCurrentHitPoints(oPC));
 
-        // if this is true then the player has died.
-        if (GetCurrentHitPoints(oPC) <= -25) // SIOBHAN this is weird. Shouldn't it be at -10 ?
+        // if this is true then the player has died to massive damage
+        if (GetCurrentHitPoints(oPC) <= -25)
         {
             SendMessageToPC(oPC,"You have died.");
-            // Ensure that plot is not still set.
-            //SetPlotFlag(oPC, FALSE);
             // Set up the hostile faction again.
             SetStandardFactionReputation(STANDARD_FACTION_HOSTILE, GetLocalInt(oPC, HABD_OLD_FACTION), oPC);
             DeleteLocalInt(oPC, HABD_OLD_FACTION_SET);
@@ -342,7 +318,6 @@ void main()
     if (GetLocalInt(oPC, HABD_REPORT_BLEED_RUNNING) == 0) DelayCommand(6.0, AssignCommand(oPC, ReportPlayerBleed()));
 
     int iHPs = GetCurrentHitPoints(oPC);
-    //SetPlotFlag(oPC, TRUE);
     // Force friendly to hostile faction.
     if (!GetLocalInt(oPC, HABD_OLD_FACTION_SET))
     {
@@ -351,11 +326,12 @@ void main()
     }
     SetStandardFactionReputation(STANDARD_FACTION_HOSTILE, 100, oPC);
 
-    // Keep the player from being attacked, stop nearby attackers
-    float fSafetyTimer = 6.0;
-    AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromNPCAgro(fSafetyTimer)));
-    AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectInvisibility(INVISIBILITY_TYPE_NORMAL), oPC, fSafetyTimer));
-
+    // Prevent the player from taking further damage for 1 round
+    SetPlotFlag(oPC, TRUE);
+    float fSafetyTimer = 12.0;
+    AssignCommand(oPC, DelayCommand(fSafetyTimer, ProtectFromDamage(fSafetyTimer)));
+    // apply Etherial for a second to drop AI agro
+    AssignCommand(oPC, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectEthereal(), oPC, 6.0f));
 
     // Allow a good chance for healing - will limit HP to -5 on a bleed level hit.
     if (

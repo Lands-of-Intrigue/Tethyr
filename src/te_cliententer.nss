@@ -15,6 +15,7 @@
 #include "subdual_inc"
 #include "sf_hips_inc"
 #include "loi_functions"
+#include "nwnx_creature"
 #include "nwnx_webhook"
 #include "nwnx_time"
 #include "nwnx_webhook_rch"
@@ -23,9 +24,9 @@
 
 void main()
 {
-     string COLOR_S_WHITE     = "<cÿÿÿ>";
-     string COLOR_SGREY       = "<c¥¥¥>";
-     string COLOR_SLIGHTGREY  = "<c¥¥¥>";
+     string COLOR_S_WHITE     = "<cÃ¿Ã¿Ã¿>";
+     string COLOR_SGREY       = "<cÂ¥Â¥Â¥>";
+     string COLOR_SLIGHTGREY  = "<cÂ¥Â¥Â¥>";
      string COLOR_SSANDY      = ColorTokenShout();
 
      string COLOR_SRED        = ColorTokenRed();
@@ -47,7 +48,7 @@ void main()
      string COLOR_SDARKBLUE   = ColorTokenBlue();
      string COLOR_SBLUE       = ColorTokenSkillCheck();
 
-     string COLOR_SPERIWINKLE = "<czzþ>";
+     string COLOR_SPERIWINKLE = "<czzÃ¾>";
      string COLOR_SCYAN       = ColorTokenSkillCheck();
 
      string COLOR_SLIGHTBLUE  = ColorTokenDM();
@@ -63,6 +64,8 @@ void main()
     object oPC = GetEnteringObject();
     object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
     int iHP = GetLocalInt(oItem, "PC_HP");
+
+    SetPlotFlag(oPC, FALSE);
 
         //string sJoinMsg = GetPCPublicCDKey(oPC) + " has joined the server.";
         //NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, sJoinMsg, GetName(oPC));
@@ -368,6 +371,26 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 
 ////////////////////////////////////////////////////////////////////////////////
 //End Journals
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//Begin HACK until we get 2da updates
+////////////////////////////////////////////////////////////////////////////////
+
+    // if character has levels in base full caster classes
+    if(GetLevelByClass(CLASS_TYPE_BARD,oPC)>=1 
+        || GetLevelByClass(CLASS_TYPE_SORCERER,oPC)>=1
+        || GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1)
+    {
+        // and if they don't have Eschew Materials, award it to them
+        if (GetHasFeat(1409,oPC) == FALSE)
+        {
+            NWNX_Creature_AddFeat(oPC, 1409);
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+//End HACK until we get 2da updates
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -11,7 +11,6 @@ void main()
     if(GetIsObjectValid(oBody) == TRUE)
     {
         ApplyEffectToObject(DURATION_TYPE_PERMANENT,SupernaturalEffect( EffectCutsceneGhost()),oPC);
-        SetLocalInt(oItem,"nRespawn",GetLocalInt(oItem,"nRespawn")+1);
         EventRespawnSafePCBody(oBody, oPC);
     }
     else

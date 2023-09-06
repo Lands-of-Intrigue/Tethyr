@@ -726,7 +726,12 @@ void EventRevivePCBody(object oTarget, object oReviver=OBJECT_INVALID)
         SetLocalInt(GetItemPossessedBy(oTargetPC,"PC_Data_Object"),"ShoonAfflic",0);
 
         int iXP = GetXP(oTargetPC);
-        int iXPPen = PenaltyForResurrection(oTargetPC, 250);
+        int iXPPenPerLevel = 500;
+        if (GetIsObjectValid(oReviver))
+        {
+            iXPPenPerLevel = 250;
+        }
+        int iXPPen = PenaltyForResurrection(oTargetPC, iXPPenPerLevel); 
         SetXP(oTargetPC, iXP - iXPPen);
 
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oTargetPC);

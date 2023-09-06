@@ -17,12 +17,9 @@ object oBody = GetObjectByTag(sBodyID);
 
         ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectResurrection(),oPC);
         ApplyEffectToObject(DURATION_TYPE_INSTANT,eHeal,oPC);
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eSanct,oPC,12.0f);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eSanct,oPC,6.0f);
         ApplyEffectToObject(DURATION_TYPE_PERMANENT,SupernaturalEffect( EffectCutsceneGhost()),oPC);
-        SetLocalInt(oItem,"nRespawn",GetLocalInt(oItem,"nRespawn")+1);
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT,SupernaturalEffect( EffectCutsceneGhost()),oPC);
-        SetLocalInt(oItem,"nRespawn",GetLocalInt(oItem,"nRespawn")+1);
-        EventRevivePCBody(oBody, oPC);
+        EventRevivePCBody(oBody);
     }
     else
     {
