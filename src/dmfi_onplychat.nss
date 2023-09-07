@@ -1395,7 +1395,7 @@ void main()
                     }
                     else
                     {
-                        AssignCommand(oPC, PlayAnimation(ANIMATION_LOOPING_GET_LOW, 6.0));
+                        AssignCommand(oPC, PlayAnimation(ANIMATION_LOOPING_GET_LOW, 1.0f, 6.0f));
                         DelayCommand(6.5,TF_Looking(oPC));
                         SetLocalInt(oPC,"nTrackLast",nTimeNow);
                     }
@@ -1420,7 +1420,7 @@ void main()
                         }
                         else
                         {
-                            AssignCommand(oPC, PlayAnimation(ANIMATION_LOOPING_GET_LOW, 6.0));
+                            AssignCommand(oPC, PlayAnimation(ANIMATION_LOOPING_GET_LOW, 1.0f, 6.0f));
                             DelayCommand(6.5,TF_TrackRun(oPC));
                             SetLocalInt(oPC,"nTrackLast",nTimeNow);
                         }
