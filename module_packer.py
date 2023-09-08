@@ -81,7 +81,13 @@ class ModulePacker:
 
         print('Copying script files')
         copyTic = time.perf_counter()
-        copier = Copier(self.tempDir, self.targetDir)
+        subdir = join(self.targetDir, 'scripts')
+        try:
+            os.makedirs(subdir)
+        except FileExistsError:
+            # directory already exists
+            pass
+        copier = Copier(self.tempDir, subdir)
         p.map(copier.copy, scriptFiles)
         copyToc = time.perf_counter()
         print(f'Copied script files {copyToc - copyTic:0.1f}s')
@@ -100,6 +106,14 @@ class ModulePacker:
                 scriptFiles.append(f)
             elif ext != '':
                 gffFiles.append(f)
+
+        # for root, subdirs, files in os.walk(self.targetDir):
+        #     for f in files:
+        #         ext = os.path.splitext(f)[1]
+        #         if ext == '.nss':
+        #             scriptFiles.append(f)
+        #         elif ext != '':
+        #             gffFiles.append(f)
 
         # Greedily try to use all of the cores except for one
         p = multiprocessing.Pool(multiprocessing.cpu_count() - 1) 
@@ -149,8 +163,14 @@ class Converter:
         self.tempDir = tempDir
 
     def from_gff(self, file):
+        subdir = join(self.srcDir, 'resources', os.path.splitext(file)[1][1:])
+        try:
+            os.makedirs(subdir)
+        except FileExistsError:
+            # directory already exists
+            pass
         outputJson = file + '.json'
-        p = subprocess.Popen([self.nwn_gff, '-i', join(self.tempDir, file), '-o', join(self.srcDir, outputJson), '-p'])
+        p = subprocess.Popen([self.nwn_gff, '-i', join(self.tempDir, file), '-o', join(subdir, outputJson), '-p'])
         p.wait()
 
     def to_gff(self, file):
