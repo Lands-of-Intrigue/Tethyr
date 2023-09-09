@@ -187,7 +187,7 @@ class Compiler:
         self.tempDir = tempDir
 
     def compile(self, file):
-        p = subprocess.Popen([self.nwnsc, '-qw', '-n', 'lib/', '-b', self.tempDir, '-i', self.srcDir, join(self.srcDir, file)])
+        p = subprocess.Popen([self.nwnsc, '-qw', '-n', 'lib', '-b', self.tempDir, '-i', self.srcDir, join(self.srcDir, file)])
         p.wait()
 
 
