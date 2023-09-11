@@ -181,68 +181,58 @@ void main()
             AssignCommand(oPC, JumpToLocation(lFail));
             return;
         }
+
+        //Award starting gold
+        RewardGP(3* CalculateStipend(oPC), oPC, FALSE);
+
         //Background Item Creation
         if (GetHasFeat(BACKGROUND_AFFLUENCE,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(2000*fStandingMod), oPC, FALSE);
-
-
         }
         else if (GetHasFeat(BACKGROUND_BRAWLER,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(150*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_cestys", oPC, 1);
-
         }
         else if (GetHasFeat(BACKGROUND_COSMOPOLITAN,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(600*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_0019", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_CRUSADER,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_holycenser", oPC, 1);
             CreateItemOnObject("bandages", oPC, 5);
             CreateItemOnObject("te_book022", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_DUELIST,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(400*fStandingMod), oPC, FALSE);
             CreateItemOnObject("duelingbelt", oPC, 1);
             CreateItemOnObject("bandages", oPC, 5);
             CreateItemOnObject("bg_steeldudagger", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_EVANGELIST,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_evanstaff", oPC, 1);
             CreateItemOnObject("te_9005", oPC, 5);
-
         }
         else if (GetHasFeat(BACKGROUND_FORESTER,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(200*fStandingMod), oPC, FALSE);
             CreateItemOnObject("woodenring", oPC, 1);
             CreateItemOnObject("te_item_9004", oPC, 5);
             CreateItemOnObject("te_item_5024", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_HARD_LABORER,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(600*fStandingMod), oPC, FALSE);
             CreateItemOnObject("workboots", oPC, 1);
             CreateItemOnObject("bandages", oPC, 1);
             CreateItemOnObject("bg_workbelt", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_HEALER,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(400*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_healerneck", oPC, 1);
             CreateItemOnObject("bg_healerglove", oPC, 10);
         }
         else if (GetHasFeat(BACKGROUND_KNIGHT,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(1000*fStandingMod), oPC, FALSE);
             SetLocalInt(oItem,"hrs_07",TRUE);
             CreateItemOnObject("knightlycloak", oPC, 1);
             CreateItemOnObject("te_writknight",oPC,1);
@@ -251,19 +241,16 @@ void main()
         }
         else if (GetHasFeat(BACKGROUND_HEDGEMAGE,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(250*fStandingMod), oPC, FALSE);
             CreateItemOnObject("apprenticessta", oPC, 1);
             CreateItemOnObject("te_item_8457", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_MENDICANT,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(0*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_humblerobe", oPC, 1);
             CreateItemOnObject("te_item_8144", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_MERCHANT,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(1000*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_merchantneck", oPC, 1);
             CreateItemOnObject("te_item_0007", oPC, 3);
             CreateItemOnObject("te_item_0009", oPC, 3);
@@ -272,62 +259,49 @@ void main()
         }
         else if (GetHasFeat(BACKGROUND_MINSTREL,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(400*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_fancylute", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_OCCULTIST,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
             CreateItemOnObject("summonersmanual", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_SABOTEUR,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_saboglove", oPC, 1);
             CreateItemOnObject("it_trap019", oPC, 1);
             CreateItemOnObject("it_trap018", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_SCOUT,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(400*fStandingMod), oPC, FALSE);
             CreateItemOnObject("scoutsring", oPC, 1);
             CreateItemOnObject("bg_scoutcloak",oPC,1);
 
         }
         else if (GetHasFeat(BACKGROUND_SNEAK,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_thiefglove", oPC, 1);
             CreateItemOnObject("te_thieftools", oPC, 1);
-
-
         }
         else if (GetHasFeat(BACKGROUND_SOLDIER,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(600*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_soldierhelm", oPC, 1);
             CreateItemOnObject("te_footsoldier",oPC,1);
-
         }
         else if (GetHasFeat(BACKGROUND_TRAVELER,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_walkingstick", oPC, 1);
             CreateItemOnObject("bg_tatteredboots", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_SPELLFIRE,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(400*fStandingMod), oPC, FALSE);
             CreateItemOnObject("depletedring", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_SHADOW,oPC) == TRUE)
         {
-            RewardGP(FloatToInt(400*fStandingMod), oPC, FALSE);
             CreateItemOnObject("it_sparsc610", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_CARAVANNER, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_0007", oPC, 3);
             CreateItemOnObject("te_item_0009", oPC, 3);
             CreateItemOnObject("te_item_0010", oPC, 3);
@@ -335,73 +309,58 @@ void main()
         }
         else if (GetHasFeat(BACKGROUND_CHURCH_ACOLYTE, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_9005", oPC, 5);
             CreateItemOnObject("te_book022", oPC, 1);
-
         }
         else if (GetHasFeat(BACKGROUND_CIRCLE_BORN, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(150*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_8155", oPC, 1);
             CreateItemOnObject("te_dr_sash", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_ENLIGHTENED_STUDENT, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(450*fStandingMod), oPC, FALSE);
             CreateItemOnObject("ringofknowledge", oPC, 1);
             CreateItemOnObject("te_item_8457", oPC, 1);
             CreateItemOnObject("te_book002", oPC, 1);
             CreateItemOnObject("te_item_8456", oPC, 1);
-
         }
         else if (GetHasFeat(BACKGROUND_HAREM_TRAINED, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_8331", oPC, 1);
-
         }
         else if (GetHasFeat(BACKGROUND_HARPER, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_harperbrooch", oPC, 1);
-
         }
         else if (GetHasFeat(BACKGROUND_KNIGHT_SQUIRE, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_8456", oPC, 1);
             CreateItemOnObject("bg_squirebelt", oPC, 1);
             CreateItemOnObject("bg_squirehelm", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_TALFIRIAN, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_book028", oPC, 1);
             CreateItemOnObject("te_item_0002", oPC, 1);
             CreateItemOnObject("mal_sm_illus1", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_THEOCRAT, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
             CreateItemOnObject("it_prayerbook", oPC, 1);
             CreateItemOnObject("te_item_9005", oPC, 5);
             CreateItemOnObject("te_book022", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_WARD_TRIAD, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_triadneck", oPC, 1);
             CreateItemOnObject("te_book022", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_ZHENTARIM, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(750*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_zhentneck", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_CALISHITE_TRAINED, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(750*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_8374", oPC, 1);
             CreateItemOnObject("te_item_8339", oPC, 1);
             CreateItemOnObject("it_spellbook", oPC, 1);
@@ -410,64 +369,50 @@ void main()
         }
         else if (GetHasFeat(BACKGROUND_AMN_TRAINED, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(750*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_2011", oPC, 1);
             CreateItemOnObject("ShieldKnightCoin", oPC, 1);
             CreateItemOnObject("mal_sm_conj1", oPC, 1);
             CreateItemOnObject("it_spellbook", oPC, 1);
         }
-        else if (GetHasFeat(1460, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_ELDRETH, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(100*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_lesselfcloak", oPC, 1);
             CreateItemOnObject("bg_eldrethbow", oPC, 1);
         }
-        else if (GetHasFeat(1461, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_ELMANESSE, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(100*fStandingMod), oPC, FALSE);
         }
-        else if (GetHasFeat(1462, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_SULDUSK, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(50*fStandingMod), oPC, FALSE);
         }
-        else if (GetHasFeat(1463, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_DUKES_WARBAND, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(500*fStandingMod), oPC, FALSE);
-
         }
-        else if (GetHasFeat(1464, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_CALISHITE_SLAVE, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(0*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_brokenshackle", oPC, 1);
             CreateItemOnObject("bg_worncloak", oPC, 1);
         }
-        else if (GetHasFeat(1465, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_SELDARINE_PRIEST, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(100*fStandingMod), oPC, FALSE);
         }
-        else if (GetHasFeat(1466, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_HIGH_MAGE, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(100*fStandingMod), oPC, FALSE);
         }
-        else if (GetHasFeat(1467, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_UNDERDARK_EXILE, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(0*fStandingMod), oPC, FALSE);
         }
-        else if (GetHasFeat(1468, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_THUNDER_TWIN, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
         }
-        else if (GetHasFeat(1469, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_HEIR, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(750*fStandingMod), oPC, FALSE);
         }
-        else if (GetHasFeat(1470, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_MORDINS_PRIEST, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
         }
-        else if (GetHasFeat(1471, oPC) == TRUE)
+        else if (GetHasFeat(BACKGROUND_WARY_SWORDKNIGHT, oPC) == TRUE)
         {
-            RewardGP(FloatToInt(450*fStandingMod), oPC, FALSE);
         }
 
 

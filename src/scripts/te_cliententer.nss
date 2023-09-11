@@ -517,8 +517,10 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
         AdjustReputation(oPC,GetObjectByTag(FACTION_KEEP_BROSTDEF),100);
     }
 
-    // do any other module OnClientEnter work here
-    ExecuteScript("x3_mod_pre_enter",OBJECT_SELF); // Override for other skin systems
+    // fetch last stipend payout
+    
+
+    // Horse restoration
     if ((GetIsPC(oPC)||GetIsDM(oPC))&&!GetHasFeat(FEAT_HORSE_MENU,oPC))
     { // add horse menu
         HorseAddHorseMenu(oPC);
