@@ -2528,11 +2528,11 @@ void main()
                     }
                     else if (oDead >=10)
                     {
-                        SendMessageToPC(oPC,"You sense the fabric of the Weave has become disrupted here.")
+                        SendMessageToPC(oPC,"You sense the fabric of the Weave has become disrupted here.");
                     }
                     else if (oDead >=1)
                     {
-                        SendMessageToPC(oPC,"You can sense faint imperfections in the fabric of the Weave here.")
+                        SendMessageToPC(oPC,"You can sense faint imperfections in the fabric of the Weave here.");
                     }
                     else
                     {
