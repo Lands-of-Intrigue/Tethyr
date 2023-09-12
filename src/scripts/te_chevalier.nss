@@ -67,15 +67,15 @@ void main()
 
                    IPSafeAddItemProperty(oItem, ItemPropertySkillBonus(SKILL_DISCIPLINE, 4), 0.0, X2_IP_ADDPROP_POLICY_KEEP_EXISTING,TRUE);
                    IPSafeAddItemProperty(oItem, ItemPropertySkillBonus(SKILL_RIDE, 4), 0.0, X2_IP_ADDPROP_POLICY_KEEP_EXISTING,TRUE);
-                   if (GetHasFeat(1349))
+                   if (GetHasFeat(1349, oPC))
                    {
                         IPSafeAddItemProperty(oItem, ItemPropertyACBonus(2), 0.0, X2_IP_ADDPROP_POLICY_KEEP_EXISTING,TRUE);
                    }
-                   if (GetHasFeat(1346))
+                   if (GetHasFeat(1346, oPC))
                    {
                         IPSafeAddItemProperty(oItem, ItemPropertyACBonus(2), 0.0, X2_IP_ADDPROP_POLICY_KEEP_EXISTING,TRUE);
                    }
-                   if (GetHasFeat(1331))
+                   if (GetHasFeat(1331, oPC))
                    {
                         IPSafeAddItemProperty(oItem, ItemPropertyACBonus(2), 0.0, X2_IP_ADDPROP_POLICY_KEEP_EXISTING,TRUE);
                         IPSafeAddItemProperty(oItem, ItemPropertyAbilityBonus(IP_CONST_ABILITY_CHA,2), 0.0, X2_IP_ADDPROP_POLICY_KEEP_EXISTING,TRUE);
