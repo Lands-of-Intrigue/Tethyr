@@ -81,7 +81,13 @@ class ModulePacker:
 
         print('Copying script files')
         copyTic = time.perf_counter()
-        copier = Copier(self.tempDir, self.targetDir)
+        subdir = join(self.targetDir, 'scripts')
+        try:
+            os.makedirs(subdir)
+        except FileExistsError:
+            # directory already exists
+            pass
+        copier = Copier(self.tempDir, subdir)
         p.map(copier.copy, scriptFiles)
         copyToc = time.perf_counter()
         print(f'Copied script files {copyToc - copyTic:0.1f}s')
@@ -94,19 +100,27 @@ class ModulePacker:
 
         gffFiles = []
         scriptFiles = []
-        for f in os.listdir(self.targetDir):
-            ext = os.path.splitext(f)[1]
-            if ext == '.nss':
-                scriptFiles.append(f)
-            elif ext != '':
-                gffFiles.append(f)
+        # for f in os.listdir(self.targetDir):
+        #     ext = os.path.splitext(f)[1]
+        #     if ext == '.nss':
+        #         scriptFiles.append(f)
+        #     elif ext != '':
+        #         gffFiles.append(f)
+
+        for root, subdirs, files in os.walk(self.targetDir):
+            for f in files:
+                ext = os.path.splitext(f)[1]
+                if ext == '.nss':
+                    scriptFiles.append(f)
+                elif ext != '':
+                    gffFiles.append(f)
 
         # Greedily try to use all of the cores except for one
         p = multiprocessing.Pool(multiprocessing.cpu_count() - 1) 
 
         print('Compiling scripts')
         compileTic = time.perf_counter()
-        compiler = Compiler(self.nwnsc, self.targetDir, self.tempDir)
+        compiler = Compiler(self.nwnsc, join(self.targetDir, 'scripts'), self.tempDir)
         p.map(compiler.compile, scriptFiles)
         compileToc = time.perf_counter()
         print(f'Compiled scripts in {compileToc - compileTic:0.1f}s')
@@ -120,7 +134,7 @@ class ModulePacker:
 
         print('Copying script files')
         copyTic = time.perf_counter()
-        copier = Copier(self.targetDir, self.tempDir)
+        copier = Copier(join(self.targetDir, 'scripts'), self.tempDir)
         p.map(copier.copy, scriptFiles)
         copyToc = time.perf_counter()
         print(f'Copied script files {copyToc - copyTic:0.1f}s')
@@ -149,13 +163,20 @@ class Converter:
         self.tempDir = tempDir
 
     def from_gff(self, file):
+        subdir = join(self.srcDir, 'resources', os.path.splitext(file)[1][1:])
+        try:
+            os.makedirs(subdir)
+        except FileExistsError:
+            # directory already exists
+            pass
         outputJson = file + '.json'
-        p = subprocess.Popen([self.nwn_gff, '-i', join(self.tempDir, file), '-o', join(self.srcDir, outputJson), '-p'])
+        p = subprocess.Popen([self.nwn_gff, '-i', join(self.tempDir, file), '-o', join(subdir, outputJson), '-p'])
         p.wait()
 
     def to_gff(self, file):
+        subdir = join(self.srcDir, 'resources', os.path.splitext(os.path.splitext(file)[0])[1][1:])
         outputGff = os.path.splitext(file)[0]
-        p = subprocess.Popen([self.nwn_gff, '-i', join(self.srcDir, file), '-o', join(self.tempDir, outputGff)])
+        p = subprocess.Popen([self.nwn_gff, '-i', join(subdir, file), '-o', join(self.tempDir, outputGff)])
         p.wait()
 
 
@@ -166,7 +187,7 @@ class Compiler:
         self.tempDir = tempDir
 
     def compile(self, file):
-        p = subprocess.Popen([self.nwnsc, '-qw', '-n', '.', '-b', self.tempDir, '-i', self.srcDir, join(self.srcDir, file)])
+        p = subprocess.Popen([self.nwnsc, '-qw', '-n', 'lib', '-b', self.tempDir, '-i', self.srcDir, join(self.srcDir, file)])
         p.wait()
 
 

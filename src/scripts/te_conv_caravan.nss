@@ -1,0 +1,16 @@
+//::///////////////////////////////////////////////
+//:: FileName te_conv_caravan
+//:://////////////////////////////////////////////
+//:://////////////////////////////////////////////
+//:: Created By: Script Wizard
+//:: Created On: 12/1/2017 12:10:44 AM
+//:://////////////////////////////////////////////
+int StartingConditional()
+{
+
+    // Make sure the player has the required feats
+    if(!GetHasFeat(1391, GetPCSpeaker()))
+        return FALSE;
+
+    return TRUE;
+}

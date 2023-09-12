@@ -1,0 +1,31 @@
+#include "x3_inc_horse"
+
+void main()
+{
+    object oPC         = GetPCSpeaker();
+    location lPC       = GetLocation(oPC);
+    object oLightBard  = GetItemPossessedBy(oPC,"te_lightbard");
+    object oMediumBard = GetItemPossessedBy(oPC,"te_medbard");
+    object oHeavyBard  = GetItemPossessedBy(oPC,"te_heabard");
+    object oItem       = GetItemPossessedBy(oPC,"PC_Data_Object");
+    object oMount;
+
+    if(GetIsObjectValid(oHeavyBard) == TRUE)
+    {
+        oMount = HorseCreateHorse("te_hrs_white",lPC,oPC,"",2594);
+    }
+    else if(GetIsObjectValid(oMediumBard) == TRUE)
+    {
+        oMount = HorseCreateHorse("te_hrs_white",lPC,oPC,"",2593);
+    }
+    else if(GetIsObjectValid(oLightBard) == TRUE)
+    {
+        oMount = HorseCreateHorse("te_hrs_white",lPC,oPC,"",2592);
+    }
+    else
+    {
+        oMount = HorseCreateHorse("te_hrs_white",lPC,oPC,"",2590);
+    }
+
+    SetLocalInt(oItem,"te_hrs_white",0);
+}

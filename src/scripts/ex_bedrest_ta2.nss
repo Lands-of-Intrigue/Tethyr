@@ -1,0 +1,25 @@
+//::////////////////////////////////////////////////////////////////////////////
+//:: Excelsior Rest System, Bed Rest Conversation
+//:: Name: ex_bedrest_ta2
+//:: Copyright (c) 2001 Bioware Corp.
+//::////////////////////////////////////////////////////////////////////////////
+/*
+    Informs the PC that they haven't reached the require time to rest.
+*/
+//::////////////////////////////////////////////////////////////////////////////
+//:: Created By: Ardimus
+//:: Created On: 30 Oct 2005
+//::////////////////////////////////////////////////////////////////////////////
+#include "ex_i0_date_time"
+
+int StartingConditional()
+{
+    object oPC = GetPCSpeaker();
+    int bRESTBED = CheckDateStringExpired(oPC, "REST_BED");
+
+    if (bRESTBED == FALSE)
+    {
+      return TRUE;
+    }
+    return FALSE;
+}
