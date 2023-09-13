@@ -124,25 +124,36 @@ int X2DeadmagicZone()
     object oArea = GetArea(oCaster);
     int nSpellFailure = GetCampaignInt("Deadmagic",GetTag(oArea));
 
-    //  checking if the caster notises the damage to the weave
-    if(nSpellFailure > 1 && (GetHasFeat(1586, oCaster)))
+    //  checking if the caster notices the damage to the weave
+    //  this used to check feat 1586, which seemed to lead nowhere
+    //  it now checks for the weave resonance feat
+    if (nSpellFailure > 1 && (GetHasFeat(1599, oCaster)))
     {
-       SendMessageToPC(oCaster, "You can sense serious distortions in the local Weave. Spells cast in this area are prone to failure.");
-        if (nSpellFailure < 33) { SendMessageToPC(oCaster, "After further inspection, the weave is minorly damaged here."); }
-        else if (nSpellFailure < 66) { SendMessageToPC(oCaster, "After further inspection, the weave is damaged to a significant degree here."); }
-        else { SendMessageToPC(oCaster, "After further inspection, the weave here is extremely damaged, and will be difficult to repair"); }
+       SendMessageToPC(oCaster, "You sense strange distortions in the local Weave. Spells cast in this area are prone to failure.");
+       if(nSpellFailure < 33)
+       {
+        SendMessageToPC(oCaster, "Further inspection suggests that the damage to the Weave is probably minor.");
+       }
+       else if (nSpellFailure < 66)
+       {
+        SendMessageToPC(oCaster, "Further inspection suggests significant damage to the fabric of the Weave.");
+       }
+       else
+       {
+        SendMessageToPC(oCaster, "Further inspection suggests extreme damage to the fabric of the Weave. It will be difficult to repair");
+       }
     }
 
     // Mearly casting the spell will strenthen or weaken the weave.
-    if (GetLevelByClass(48 , oCaster)  >=1)
+    if (GetLevelByClass(48 , oCaster)  >=1) // shadow channeller
     {
     SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure + (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/4));
     }
-    else if (GetHasFeat(1300, oCaster))
+    else if (GetHasFeat(1300, oCaster)) // shadow magic feat
     {
         SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure + (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/8));
     }
-    else if(GetLevelByClass(56, oCaster)  >= 1)
+    else if(GetLevelByClass(56, oCaster)  >= 1) // mystic knight
     {
         SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/4));
         //SetLocalInt(oArea, "Deadmagic", nSpellFailure - TE_GetCasterLevel(oCaster, GetLastSpellCastClass()));
@@ -181,7 +192,7 @@ int X2DeadmagicZone()
         }
         else
         {
-            SendMessageToPC(oCaster, "The spell effect fails inexplicably. In order to learn more, you need to improve your knowledge of spellcraft.");
+            SendMessageToPC(oCaster, "The spell fails, its magic seeming to unravel and disspate inexplicably.");
             return FALSE;
         }
     }
