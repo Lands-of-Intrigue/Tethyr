@@ -29,6 +29,7 @@
 #include "gs_inc_fixture"
 #include "te_functions"
 #include "gs_inc_shop"
+#include "loi_weave"
 
 const string DMFI_PLAYERCHAT_SCRIPTNAME = "dmfi_plychat_exe";
 
@@ -469,7 +470,7 @@ void main()
 
             if(sCurrCommandArg == "help"||sCurrCommandArg == "HELP"||sCurrCommandArg == "Help")
             {
-                string sHelpCommand ="SP Console Command List: \n";
+                string sHelpCommand ="Lands of Intrigue Console Command List: \n";
                 sHelpCommand += "-help : Gives Command List \n";
                 sHelpCommand += "! : Allows you to speak as a valid animal companion. Syntax: !<text>\n";
                 sHelpCommand += "@ : Allows you to speak as a valid familiar. Syntax: @<text>\n";
@@ -2522,7 +2523,7 @@ void main()
                     {
                         SendMessageToPC(oPC,"The weave here is extremely damaged.");
                     }
-                    else if (oDead >=33)
+                    else if (nDead >=33)
                     {
                         SendMessageToPC(oPC,"The weave here is moderately damaged.");
                     }
@@ -2534,27 +2535,23 @@ void main()
             }
             else if ((sCurrCommandArg == "adddeadmagic" || sCurrCommandArg == "AddDeadMagic" || sCurrCommandArg == "ADDDEADMAGIC" || sCurrCommandArg == "Adddeadmagic") && GetIsDM(oPC))
             {
-                int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
-                SetCampaignInt("Deadmagic",GetTag(oArea),oDead + StringToInt(sCommandArg2));
-                SendMessageToPC(oPC, "New Dead Magic: " + IntToString(oDead + StringToInt(sCommandArg2)));
+                int nDead = AddDeadMagic(GetTag(oArea), StringToInt(sCommandArg2));
+                SendMessageToPC(oPC, "New Dead Magic: " + IntToString(nDead));
             }
             else if ((sCurrCommandArg == "removedeadmagic" || sCurrCommandArg == "RemoveDeadMagic" || sCurrCommandArg == "REMOVEDEADMAGIC" || sCurrCommandArg == "Removedeadmagic") && GetIsDM(oPC))
             {
-                int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
-                SetCampaignInt("Deadmagic",GetTag(oArea),oDead - StringToInt(sCommandArg2));
-                SendMessageToPC(oPC, "New Dead Magic: " + IntToString(oDead + StringToInt(sCommandArg2)));
+                int nDead = AddDeadMagic(GetTag(oArea), -1 * StringToInt(sCommandArg2));
+                SendMessageToPC(oPC, "New Dead Magic: " + IntToString(nDead));
             }
             else if ((sCurrCommandArg == "addwildmagic" || sCurrCommandArg == "AddWildMagic" || sCurrCommandArg == "ADDWILDMAGIC" || sCurrCommandArg == "Addwildmagic") && GetIsDM(oPC))
             {
-                int oDead = GetCampaignInt("Wildmagic",GetTag(oArea));
-                SetCampaignInt("Wildmagic",GetTag(oArea),oDead + StringToInt(sCommandArg2));
-                SendMessageToPC(oPC, "New Wild Magic: " + IntToString(oDead + StringToInt(sCommandArg2)));
+                int nWild = AddWildMagic(GetTag(oArea), StringToInt(sCommandArg2));
+                SendMessageToPC(oPC, "New Wild Magic: " + IntToString(nWild));
             }
             else if ((sCurrCommandArg == "removewildmagic" || sCurrCommandArg == "RemoveWildMagic" || sCurrCommandArg == "REMOVEWILDMAGIC" || sCurrCommandArg == "Removewildmagic") && GetIsDM(oPC))
             {
-                int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
-                SetCampaignInt("Wildmagic",GetTag(oArea),oDead - StringToInt(sCommandArg2));
-                SendMessageToPC(oPC, "New Wild Magic: " + IntToString(oDead + StringToInt(sCommandArg2)));
+                int nWild = AddWildMagic(GetTag(oArea), -1 * StringToInt(sCommandArg2));
+                SendMessageToPC(oPC, "New Wild Magic: " + IntToString(nWild));
             }
             else if ((sCurrCommandArg == "shopset" || sCurrCommandArg == "ShopSet" || sCurrCommandArg == "SHOPSET" || sCurrCommandArg == "Shopset") && GetIsDM(oPC))
             {

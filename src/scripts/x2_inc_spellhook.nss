@@ -38,22 +38,12 @@
 #include "x2_inc_craft"
 #include "x3_inc_horse"
 #include "te_functions"
-#include "sp_wild_func"
+#include "loi_weave"
 #include "nwnx_creature"
 
 
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
-// Deadmagic zone
-// this function will check if the caster is in a Deadmagic zone and
-// to what degree the deadmagic affects the caster Shadow weave practitioners
-// and Mystran specialty priests will be immune
-int X2DeadmagicZone();
-
-// Wildmagic zone
-// This function will check for any wild magic effects and send calls to the
-// wild magic tables based on that.
-void X2WildMagicZone();
 
 //Mythic XP Hookin for Wisdom and Intelligence.
 //Gives 1 Mythic XP in a stat based on arcane
@@ -90,103 +80,6 @@ int X2GetSpellCastOnSequencerItem(object oItem);
 
 int X2RunUserDefinedSpellScript();
 
-
-void X2WildMagicZone()
-{
-   object oTarget = GetSpellTargetObject();
-   int nSpell = GetSpellId();
-   object oCaster = OBJECT_SELF;
-   object oArea = GetArea(oCaster);
-   int nWildChance = GetCampaignInt("Wildmagic",GetTag(oArea));
-   if(nWildChance > 1 && ( (GetLevelByClass(CLASS_TYPE_DRUID, oCaster) >= 3) || (GetLevelByClass(CLASS_TYPE_RANGER, oCaster) >= 5) ))
-   {
-        SendMessageToPC(oCaster, "The weave has become strange and foreign here, magic may have additional unintended effects.");
-   }
-   if (GetLevelByClass(56, oCaster )>= 1)
-   {
-        SetCampaignInt("Wildmagic",GetTag(oArea), nWildChance - d8(1));
-   }
-   else if (GetLevelByClass(49, oCaster) >= 1 && d100(1) > 50)
-   {
-        SetCampaignInt("Wildmagic",GetTag(oArea), nWildChance + d8(1));
-   }
-
-   if(GetCampaignInt("Wildmagic",GetTag(oArea)) < 0)   {SetCampaignInt("Deadmagic",GetTag(oArea),0);}
-   if(GetCampaignInt("Wildmagic",GetTag(oArea)) > 100) {SetCampaignInt("Deadmagic",GetTag(oArea),100);}
-
-   if (d100(1) < nWildChance)
-        WildMagicEffects(oCaster, oTarget);
-}
-
-int X2DeadmagicZone()
-{
-    object oCaster = OBJECT_SELF;
-    object oArea = GetArea(oCaster);
-    int nSpellFailure = GetCampaignInt("Deadmagic",GetTag(oArea));
-
-    //  checking if the caster notises the damage to the weave
-    if(nSpellFailure > 1 && (GetHasFeat(1586, oCaster)))
-    {
-       SendMessageToPC(oCaster, "You can sense serious distortions in the local Weave. Spells cast in this area are prone to failure.");
-        if (nSpellFailure < 33) { SendMessageToPC(oCaster, "After further inspection, the weave is minorly damaged here."); }
-        else if (nSpellFailure < 66) { SendMessageToPC(oCaster, "After further inspection, the weave is damaged to a significant degree here."); }
-        else { SendMessageToPC(oCaster, "After further inspection, the weave here is extremely damaged, and will be difficult to repair"); }
-    }
-
-    // Mearly casting the spell will strenthen or weaken the weave.
-    if (GetLevelByClass(48 , oCaster)  >=1)
-    {
-    SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure + (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/4));
-    }
-    else if (GetHasFeat(1300, oCaster))
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure + (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/8));
-    }
-    else if(GetLevelByClass(56, oCaster)  >= 1)
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/4));
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - TE_GetCasterLevel(oCaster, GetLastSpellCastClass()));
-    }
-    else if(GetHasFeat(DEITY_Mystra, oCaster) && ( GetLevelByClass(CLASS_TYPE_CLERIC, oCaster)  >= 1 || GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) >= 1))
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/6));
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - TE_GetCasterLevel(oCaster, GetLastSpellCastClass()));
-    }
-    else if(GetHasFeat(DEITY_Azuth, oCaster) && GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) >= 1)
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - ( TE_GetCasterLevel(oCaster, GetLastSpellCastClass()) / 8 ));
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - ( TE_GetCasterLevel(oCaster, GetLastSpellCastClass()) / 2 ));
-    }
-    else
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea),nSpellFailure - 1);
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - 1);
-    }
-
-    // making shure that Deadmagic is no less then 0 (full strength of the weave) or greater than 100 (100% spell falliure)
-    if(GetCampaignInt("Deadmagic",GetTag(oArea)) < 0)   {SetCampaignInt("Deadmagic",GetTag(oArea),0);}
-    if(GetCampaignInt("Deadmagic",GetTag(oArea)) > 100) {SetCampaignInt("Deadmagic",GetTag(oArea),100);}
-
-    // roll for spell failliure
-    if(d100() < nSpellFailure)
-    {
-        // check if caster has reason to ignore thise spell failliure if caster is shadow weave practitioner or Mystran cleric then they ignore it
-
-    if(GetHasFeat(1300, oCaster)==TRUE ||
-      (GetHasFeat(DEITY_Mystra, oCaster)==TRUE && ( GetLevelByClass(CLASS_TYPE_CLERIC, oCaster)  >= 1 || GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) >= 1))
-          )
-
-        {
-          return TRUE;
-        }
-        else
-        {
-            SendMessageToPC(oCaster, "The spell effect fails inexplicably. In order to learn more, you need to improve your knowledge of spellcraft.");
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
 
 void X2MythicXP()
 {
@@ -449,17 +342,17 @@ int X3ShapeShiftSpell(object oTarget)
 //------------------------------------------------------------------------------
 int X2PreSpellCastCode()
 {
-   object oTarget = GetSpellTargetObject();
+    object oTarget = GetSpellTargetObject();
 
-   int nContinue;
+    int nContinue;
 
-
+    object oCaster = OBJECT_SELF;
     //check deadmagic
-    if (X2DeadmagicZone() == FALSE)
+    if (X2DeadmagicZone(oCaster) == FALSE)
     {
         return FALSE;
     }
-    X2WildMagicZone();
+    X2WildMagicZone(oCaster, oTarget);
     X2MythicXP();
    //---------------------------------------------------------------------------
    // This small addition will check to see if the target is mounted and the
