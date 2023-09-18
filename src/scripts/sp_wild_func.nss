@@ -78,27 +78,17 @@ void WildMagicEffects(object oPerson, object oTarget)
     int nDeadSet;
     float fDelay;
 
-    while (nTable > 28) {
-        nTable = d100(1);
-    }
+    nTable = 1 + d100(1) % 25;
+
     int nRand;
     switch(nTable) {
-    case 1: //Caster Glows Color, 1d6 rounds
-        oEnd = oPerson;
-        nRand = d6(1);
-        nDuration = d6(1);
-        if (nRand == 1)
-            eEnd = EffectVisualEffect(VFX_DUR_AURA_BLUE);
-        else if (nRand == 2)
-            eEnd = EffectVisualEffect(VFX_DUR_AURA_BROWN);
-        else if (nRand == 3)
-            eEnd = EffectVisualEffect(VFX_DUR_AURA_GREEN);
-        else if (nRand == 4)
-            eEnd = EffectVisualEffect(VFX_DUR_AURA_MAGENTA);
-        else if (nRand == 5)
-            eEnd = EffectVisualEffect(VFX_DUR_AURA_ORANGE);
-        else if (nRand == 6)
-            eEnd = EffectVisualEffect(VFX_DUR_AURA_RED);
+    case 1:  //Hiccups for 1d6 rounds
+        SpeakString("[An uncontrollable hiccup errupts from " + GetName(oPerson) + ".]");
+        int nHiccups = d6(1);
+        while (nHiccups > 1)
+        {
+            DelayCommand(RoundsToSeconds(nHiccups), SpeakString("[Hiccups.]"));
+        }
         break;
     case 2: //Pixie Dust Visual Effect, 3d10 + 10 Rounds
         oEnd = oPerson;
@@ -236,7 +226,6 @@ void WildMagicEffects(object oPerson, object oTarget)
                 eEnd = EffectPetrify();
         }
         break;
-    //case 16:  //REMOVED FOR BALANCE. PCS SHOULD NOT GET A BUNCH OF GEMS LOL// Gem Spray: All creatures in a 30-meter cone, directed from the caster to the target, are hit with 1d5 gems. This causes d4 bludgeoning damage for each gem (inflicted as a single damage source), and the gems are added to the creature's inventory. A reflex save is allowed for half damage (but evasion does not apply). The gems that can be produced are garnet (5%), fire agate (30%), diamond (30%), and sapphire (35%).
     case 16:  // Grass Growth (entanglement for 1d6 rounds)
         eEnd = EffectEntangle();
         nInstant = FALSE;
@@ -309,31 +298,6 @@ void WildMagicEffects(object oPerson, object oTarget)
         nInstant = FALSE;
         nDuration = d8(1);
         break;
-    case 26:  // Heavy Rain Effects (no gameplay effect) 5 Rounds
-        nAreaBool = -1;
-        oArea = GetArea(oPerson);
-        nWeather = GetWeather(oArea);
-        SetWeather(oArea, WEATHER_RAIN);
-        DelayCommand(RoundsToSeconds(5), SetWeather(oArea, -1));
-        break;
-    case 27:  // Dead magic increases by 50 for 1d20 rounds
-        nDead = GetCampaignInt("DeadMagic", GetTag(GetArea(oPerson)));
-        nAreaBool = -1;
-        if (nDead > 50) {nDeadSet = nDead - 50;} else {nDeadSet = 0;}
-        SetCampaignInt("DeadMagic", GetTag(GetArea(oPerson)), nDeadSet);
-        DelayCommand(RoundsToSeconds(d20(1)), SetCampaignInt("DeadMagic", GetTag(GetArea(oPerson)), nDead));
-        break;
-   case 28:  // Dead magic decreases by 50 for 1d20 rounds
-        nDead = GetCampaignInt("DeadMagic", GetTag(GetArea(oPerson)));
-        nAreaBool = -1;
-        if (nDead < 50) {nDeadSet = nDead + 50;} else {nDeadSet = 100;}
-        SetCampaignInt("DeadMagic", GetTag(GetArea(oPerson)), nDeadSet);
-        DelayCommand(RoundsToSeconds(d20(1)), SetCampaignInt("DeadMagic", GetTag(GetArea(oPerson)), nDead));
-        break;
-
-
-
-
 
     }
     if (nAreaBool == 0)
@@ -435,4 +399,25 @@ void WildMagicEffects(object oPerson, object oTarget)
         ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oEnd));
     }
     return;
+}
+
+void ApplyWildMagicGlow(object oPC)
+{
+    int nRand = d6(1);
+    effect eGlow;
+    if (nRand == 1)
+        eGlow = EffectVisualEffect(VFX_DUR_AURA_BLUE);
+    else if (nRand == 2)
+        eGlow = EffectVisualEffect(VFX_DUR_AURA_BROWN);
+    else if (nRand == 3)
+        eGlow = EffectVisualEffect(VFX_DUR_AURA_GREEN);
+    else if (nRand == 4)
+        eGlow = EffectVisualEffect(VFX_DUR_AURA_MAGENTA);
+    else if (nRand == 5)
+        eGlow = EffectVisualEffect(VFX_DUR_AURA_ORANGE);
+    else if (nRand == 6)
+        eGlow = EffectVisualEffect(VFX_DUR_AURA_RED);
+
+    int nDuration = d6(1);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eGlow, oPC, RoundsToSeconds(nDuration));
 }

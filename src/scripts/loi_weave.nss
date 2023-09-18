@@ -41,26 +41,28 @@ int AddDeadMagicChance(string sAreaTag, int nAmount);
 
 void X2WildMagicZone(object oCaster, object oTarget)
 {
-   object oArea = GetArea(oCaster);
-   int nWildChance = FetchWildMagicChance(GetTag(oArea));
-   if(nWildChance > 1)
-   {
-        SendMessageToPC(oCaster, "The weave has become strange and foreign here, magic may have additional unintended effects.");
-   }
-   if (GetLevelByClass(56, oCaster )>= 1)
-   {
-        SetCampaignInt("Wildmagic",GetTag(oArea), nWildChance - d8(1));
-   }
-   else if (GetLevelByClass(49, oCaster) >= 1 && d100(1) > 50)
-   {
-        SetCampaignInt("Wildmagic",GetTag(oArea), nWildChance + d8(1));
-   }
+    object oArea = GetArea(oCaster);
+    int nWildChance = FetchWildMagicChance(GetTag(oArea));
 
-   if(GetCampaignInt("Wildmagic",GetTag(oArea)) < 0)   {SetCampaignInt("Deadmagic",GetTag(oArea),0);}
-   if(GetCampaignInt("Wildmagic",GetTag(oArea)) > 100) {SetCampaignInt("Deadmagic",GetTag(oArea),100);}
+    if (GetLevelByClass(CLASS_TYPE_SPELLFIRE, oCaster) >= 1 
+        || GetLevelByClass(CLASS_TYPE_BLIGHTER, oCaster) >= 1)
+    {
+        nWildChance = AddWildMagicChance(d4(1));
+        return; // corruptor, so exit without invoking wild magic reduction or effect
+    } 
+    else if (nWildChance > 1)
+    {
+        nWildChance = AddWildMagicChance(-1);
+    }
 
-   if (d100(1) < nWildChance)
-        WildMagicEffects(oCaster, oTarget);
+    if (nWildChance > 1)
+    {
+        DetectionCheck(oCaster);
+        if (d100(1) < nWildChance)
+        {
+            WildMagicEffects(oCaster, oTarget);
+        }
+    }
 }
 
 int FetchWildMagicChance(string sAreaTag)
@@ -81,64 +83,39 @@ int X2DeadmagicZone(object oCaster)
     object oArea = GetArea(oCaster);
     int nSpellFailure = GetCampaignInt("Deadmagic",GetTag(oArea));
 
-    //  checking if the caster notises the damage to the weave
-    if(nSpellFailure > 1 && (GetHasFeat(1586, oCaster)))
+    if (GetHasFeat(FEAT_SHADOW_WEAVE_MAGIC, oCaster)
+        || GetLevelByClass(CLASS_TYPE_SHADOW_CHANNELER, oCaster)  >=1)
     {
-       SendMessageToPC(oCaster, "You can sense serious distortions in the local Weave. Spells cast in this area are prone to failure.");
-        if (nSpellFailure < 33) { SendMessageToPC(oCaster, "After further inspection, the weave is minorly damaged here."); }
-        else if (nSpellFailure < 66) { SendMessageToPC(oCaster, "After further inspection, the weave is damaged to a significant degree here."); }
-        else { SendMessageToPC(oCaster, "After further inspection, the weave here is extremely damaged, and will be difficult to repair"); }
+        nSpellFailure = AddDeadMagicChance(1 + d4(1));
+        return TRUE;
+    } 
+    else if (GetHasFeat(DEITY_Shar, oCaster))
+    {
+        return TRUE; // Shar worshippers are immune to shadow weave
     }
-
-    // Mearly casting the spell will strenthen or weaken the weave.
-    if (GetLevelByClass(48 , oCaster)  >=1)
+    else if (nSpellFailure > 1)
     {
-    SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure + (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/4));
-    }
-    else if (GetHasFeat(1300, oCaster))
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure + (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/8));
-    }
-    else if(GetLevelByClass(56, oCaster)  >= 1)
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/4));
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - TE_GetCasterLevel(oCaster, GetLastSpellCastClass()));
-    }
-    else if(GetHasFeat(DEITY_Mystra, oCaster) && ( GetLevelByClass(CLASS_TYPE_CLERIC, oCaster)  >= 1 || GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) >= 1))
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/6));
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - TE_GetCasterLevel(oCaster, GetLastSpellCastClass()));
-    }
-    else if(GetHasFeat(DEITY_Azuth, oCaster) && GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) >= 1)
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - ( TE_GetCasterLevel(oCaster, GetLastSpellCastClass()) / 8 ));
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - ( TE_GetCasterLevel(oCaster, GetLastSpellCastClass()) / 2 ));
-    }
-    else
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea),nSpellFailure - 1);
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - 1);
-    }
-
-    // making shure that Deadmagic is no less then 0 (full strength of the weave) or greater than 100 (100% spell falliure)
-    if(GetCampaignInt("Deadmagic",GetTag(oArea)) < 0)   {SetCampaignInt("Deadmagic",GetTag(oArea),0);}
-    if(GetCampaignInt("Deadmagic",GetTag(oArea)) > 100) {SetCampaignInt("Deadmagic",GetTag(oArea),100);}
-
-    // roll for spell failliure
-    if(d100() < nSpellFailure)
-    {
-        // check if caster has reason to ignore thise spell failliure if caster is shadow weave practitioner or Mystran cleric then they ignore it
-
-    if(GetHasFeat(1300, oCaster)==TRUE ||
-      (GetHasFeat(DEITY_Mystra, oCaster)==TRUE && ( GetLevelByClass(CLASS_TYPE_CLERIC, oCaster)  >= 1 || GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) >= 1))
-          )
-
+        nChanceToRemove = 1;
+        if (GetHasFeat(DEITY_Mystra, oCaster))
         {
-          return TRUE;
+            nChanceToRemove += 1;
         }
-        else
+        if (GetHasFeat(DEITY_Azuth, oCaster))
         {
-            SendMessageToPC(oCaster, "The spell effect fails inexplicably. In order to learn more, you need to improve your knowledge of spellcraft.");
+            nChanceToRemove += 1;
+        }
+        if (GetHasFeat(FEAT_WEAVE_RESONANCE, oCaster))
+        {
+            nChanceToRemove += 2;
+        }
+        nSpellFailure = AddDeadMagicChance(nSpellFailure - nChanceToRemove);
+    }
+
+    if (nSpellFailure > 1)
+    {
+        DetectionCheck(oCaster);
+        if (d100(1) < nSpellFailure)
+        {
             return FALSE;
         }
     }
@@ -201,4 +178,12 @@ int AddWeaveCorruption(string sCorruptionDB, string sAreaTag, int nAmount)
     string sWildData = IntToString(nTotal) + TOKENIZER_CHAR + IntToString(nTimestamp);
     SetCampaignString(sCorruptionDB, sWildData);
     return nTotal;
+}
+
+void DetectionCheck(object oPC)
+{
+   if (GetSkillRank(SKILL_SPELLCRAFT, oPC) + d20() <= 15)
+   {
+        SendMessageToPC(oPC, "As you draw upon the local Weave, you sense distortions.");
+   }
 }
