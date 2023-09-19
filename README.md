@@ -1,16 +1,17 @@
-# Lands of Intrigue Tethyr
-is a NWN persistent world
+# Lands of Intrigue - Tethyr
+is a NWN persistent world.
 
 Join us at our forums https://landsofintrigue.guildtag.com/forums/ or Discord https://discord.gg/3saQtCZYwV
 
-# Requirements (WIP)
+# Requirements
 
-docker
-python3
-pip install pyyaml
+* docker
+* python3
+* pip install pyyaml
 
 # How to add my module changes to the repository
 
+Bug fixes are very welcome! But please do not submit unsolicited features for review. Contact us on discord or the forums first please.
 
 ```
 git checkout main
@@ -31,23 +32,20 @@ python module_packer.py unpack
 git add src
 git commit
 git pull origin main
-git commit
 git push --set-upstream origin myname_somethingDescriptive
 ```
 
-Then, use the github website to find your branch and make a pull request against main.
+Then, use the github website to find your branch and make a pull request against main. Ideally, there should be no conflicts. If there are, you will resolve them. With areas, this may be difficult to do through text, so you may want to get in contact with the person who made the change that conflicts with yours to get an idea of how to best fix it. You may find it easiest to undo your change, perform this process, then redo your change after.
 
 Check your pull request to make sure that it only contains your changes.
 
-All pull requests by contributors are expected to be tested beforehand in a locally run server (see docker-compose.yaml) with a comprehensive description.
-
-Bug fixes are very welcome! Please do not submit unsolicited features for review. Contact us on discord or the forums first please.
+> All pull requests by contributors are expected to be tested beforehand in a locally run server (see docker-compose.yaml) with a comprehensive description.
 
 # Baked in dependencies
 
-data folder is from the nwserver 8193.35.40
+The data/ folder is from the nwserver 8193.35.40
 
-lib is from 
+The lib/ tools are from 
 * https://github.com/nwneetools/nwnsc
 * https://github.com/niv/neverwinter.nim
 
