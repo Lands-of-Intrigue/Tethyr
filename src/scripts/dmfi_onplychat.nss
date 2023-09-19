@@ -1426,7 +1426,7 @@ void main()
                     }
                     else
                     {
-                        AssignCommand(oPC, PlayAnimation(ANIMATION_LOOPING_GET_LOW, 6.0));
+                        AssignCommand(oPC, PlayAnimation(ANIMATION_LOOPING_GET_LOW, 1.0f, 6.0f));
                         DelayCommand(6.5,TF_Looking(oPC));
                         SetLocalInt(oPC,"nTrackLast",nTimeNow);
                     }
@@ -1451,7 +1451,7 @@ void main()
                         }
                         else
                         {
-                            AssignCommand(oPC, PlayAnimation(ANIMATION_LOOPING_GET_LOW, 6.0));
+                            AssignCommand(oPC, PlayAnimation(ANIMATION_LOOPING_GET_LOW, 1.0f, 6.0f));
                             DelayCommand(6.5,TF_TrackRun(oPC));
                             SetLocalInt(oPC,"nTrackLast",nTimeNow);
                         }
@@ -2516,19 +2516,27 @@ void main()
                 {
                     if (oDead >=95)
                     {
-                        SendMessageToPC(oPC,"The weave here is damaged enough that you sense nothing.");
+                        SendMessageToPC(oPC,"The fabric of the Weave here has been so badly damaged, you feel nothing at all - only its absence.");
                     }
                     else if (oDead >=66)
                     {
-                        SendMessageToPC(oPC,"The weave here is extremely damaged.");
+                        SendMessageToPC(oPC,"The fabric of the Weave here is unmistakably mangled and torn. It may soon unravel completely.");
                     }
                     else if (oDead >=33)
                     {
-                        SendMessageToPC(oPC,"The weave here is moderately damaged.");
+                        SendMessageToPC(oPC,"You sense the fabric of the Weave has suffered significant damage here.");
+                    }
+                    else if (oDead >=10)
+                    {
+                        SendMessageToPC(oPC,"You sense the fabric of the Weave has become disrupted here.");
+                    }
+                    else if (oDead >=1)
+                    {
+                        SendMessageToPC(oPC,"You can sense faint imperfections in the fabric of the Weave here.");
                     }
                     else
                     {
-                        SendMessageToPC(oPC,"The weave here is fairly healthy.");
+                        SendMessageToPC(oPC,"The Weave here is healthy.");
                     }
                 }
             }
