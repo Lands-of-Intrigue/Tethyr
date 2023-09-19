@@ -2,15 +2,15 @@
   "__data_type": "UTI ",
   "AddCost": {
     "type": "dword",
-    "value": 3493
+    "value": 350
   },
   "BaseItem": {
     "type": "int",
-    "value": 15
+    "value": 3
   },
   "Charges": {
     "type": "byte",
-    "value": 5
+    "value": 0
   },
   "Comment": {
     "type": "cexostring",
@@ -18,7 +18,7 @@
   },
   "Cost": {
     "type": "dword",
-    "value": 3500
+    "value": 420
   },
   "Cursed": {
     "type": "byte",
@@ -27,35 +27,40 @@
   "DescIdentified": {
     "type": "cexolocstring",
     "value": {
-      "0": "This specially made magical lens helps to reveal traps and aids with attempts to find hidden treasures.",
-      "id": 16807793
+      "0": "This well made bastard sword was crafted during the Interregnum and still functions exceptionally, even though the civil war ended a few years ago.\n"
     }
   },
   "Description": {
     "type": "cexolocstring",
     "value": {
-      "0": "A holy symbol is the physical focus for the manifestation of a god's will.",
-      "id": 16807793
+      "0": "Bastard swords are also known as hand-and-a-half swords, falling between the longsword and greatsword in length."
     }
   },
   "Identified": {
     "type": "byte",
-    "value": 0
+    "value": 1
   },
   "LocalizedName": {
     "type": "cexolocstring",
     "value": {
-      "0": "Lens of Detection",
-      "id": 16807514
+      "0": "Masterwork Steel Bastard Sword"
     }
   },
   "ModelPart1": {
     "type": "byte",
-    "value": 28
+    "value": 111
+  },
+  "ModelPart2": {
+    "type": "byte",
+    "value": 111
+  },
+  "ModelPart3": {
+    "type": "byte",
+    "value": 111
   },
   "PaletteID": {
     "type": "byte",
-    "value": 187
+    "value": 186
   },
   "Plot": {
     "type": "byte",
@@ -72,11 +77,11 @@
         },
         "CostTable": {
           "type": "byte",
-          "value": 25
+          "value": 28
         },
         "CostValue": {
           "type": "word",
-          "value": 5
+          "value": 15
         },
         "Param1": {
           "type": "byte",
@@ -88,11 +93,11 @@
         },
         "PropertyName": {
           "type": "word",
-          "value": 52
+          "value": 85
         },
         "Subtype": {
           "type": "word",
-          "value": 14
+          "value": 0
         }
       },
       {
@@ -103,85 +108,23 @@
         },
         "CostTable": {
           "type": "byte",
-          "value": 0
+          "value": 29
         },
         "CostValue": {
           "type": "word",
-          "value": 0
-        },
-        "Param1": {
-          "type": "byte",
-          "value": 255
-        },
-        "Param1Value": {
-          "type": "byte",
-          "value": 0
-        },
-        "PropertyName": {
-          "type": "word",
-          "value": 63
-        },
-        "Subtype": {
-          "type": "word",
-          "value": 30
-        }
-      },
-      {
-        "__struct_id": 0,
-        "ChanceAppear": {
-          "type": "byte",
-          "value": 100
-        },
-        "CostTable": {
-          "type": "byte",
-          "value": 0
-        },
-        "CostValue": {
-          "type": "word",
-          "value": 0
-        },
-        "Param1": {
-          "type": "byte",
-          "value": 255
-        },
-        "Param1Value": {
-          "type": "byte",
-          "value": 0
-        },
-        "PropertyName": {
-          "type": "word",
-          "value": 63
-        },
-        "Subtype": {
-          "type": "word",
-          "value": 8
-        }
-      },
-      {
-        "__struct_id": 0,
-        "ChanceAppear": {
-          "type": "byte",
-          "value": 100
-        },
-        "CostTable": {
-          "type": "byte",
-          "value": 0
-        },
-        "CostValue": {
-          "type": "word",
-          "value": 0
-        },
-        "Param1": {
-          "type": "byte",
           "value": 11
         },
+        "Param1": {
+          "type": "byte",
+          "value": 255
+        },
         "Param1Value": {
           "type": "byte",
           "value": 0
         },
         "PropertyName": {
           "type": "word",
-          "value": 81
+          "value": 86
         },
         "Subtype": {
           "type": "word",
@@ -200,15 +143,45 @@
   },
   "Tag": {
     "type": "cexostring",
-    "value": "te_detectionlens"
+    "value": "te_item_5001"
   },
   "TemplateResRef": {
     "type": "resref",
-    "value": "te_detectionlens"
+    "value": "te_mwsteelbs"
   },
   "VarTable": {
     "type": "list",
     "value": [
+      {
+        "__struct_id": 0,
+        "Name": {
+          "type": "cexostring",
+          "value": "Masterwork"
+        },
+        "Type": {
+          "type": "dword",
+          "value": 1
+        },
+        "Value": {
+          "type": "int",
+          "value": 1
+        }
+      },
+      {
+        "__struct_id": 0,
+        "Name": {
+          "type": "cexostring",
+          "value": "Material"
+        },
+        "Type": {
+          "type": "dword",
+          "value": 1
+        },
+        "Value": {
+          "type": "int",
+          "value": 2
+        }
+      },
       {
         "__struct_id": 0,
         "Name": {
@@ -221,13 +194,21 @@
         },
         "Value": {
           "type": "int",
-          "value": 1750
+          "value": 420
         }
       }
     ]
   },
   "xModelPart1": {
     "type": "word",
-    "value": 28
+    "value": 111
+  },
+  "xModelPart2": {
+    "type": "word",
+    "value": 111
+  },
+  "xModelPart3": {
+    "type": "word",
+    "value": 111
   }
 }

@@ -13,22 +13,35 @@ pip install pyyaml
 
 
 ```
-git pull
 git checkout main
+git pull
 ```
 
 Update packer_settings.xml so that the 'from' field is pointing to your module
 
+Now, you need to set a detached head in git to the point in time that you pulled your module from on main.
+You can find the commit hash ids from inspecting the history of the main branch.
+
+For example:
 ```
+git checkout 5a6c69b8e1a268c3266929a06f30ab0b8191e215
 git branch myname_somethingDescriptive
-git checkout 
+git checkout myname_somethingDescriptive
 python module_packer.py unpack
+git add src
+git commit
 git pull origin main
 git commit
-git push –-set-upstream origin myname_somethingDescriptive
+git push --set-upstream origin myname_somethingDescriptive
 ```
 
-Then, use the github website to find your branch and make a pull request against main
+Then, use the github website to find your branch and make a pull request against main.
+
+Check your pull request to make sure that it only contains your changes.
+
+All pull requests by contributors are expected to be tested beforehand in a locally run server (see docker-compose.yaml) with a comprehensive description.
+
+Bug fixes are very welcome! Please do not submit unsolicited features for review. Contact us on discord or the forums first please.
 
 # Baked in dependencies
 
