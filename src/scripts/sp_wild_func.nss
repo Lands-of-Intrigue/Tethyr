@@ -83,11 +83,13 @@ void WildMagicEffects(object oPerson, object oTarget)
     int nRand;
     switch(nTable) {
     case 1:  //Hiccups for 1d6 rounds
-        SpeakString("[An uncontrollable hiccup errupts from " + GetName(oPerson) + ".]");
-        int nHiccups = d6(1);
-        while (nHiccups > 1)
         {
-            DelayCommand(RoundsToSeconds(nHiccups), SpeakString("[Hiccups.]"));
+            SpeakString("[An uncontrollable hiccup errupts from " + GetName(oPerson) + ".]");
+            int nHiccups = d6(1);
+            while (nHiccups > 1)
+            {
+                DelayCommand(RoundsToSeconds(nHiccups), SpeakString("[Hiccups.]"));
+            }
         }
         break;
     case 2: //Pixie Dust Visual Effect, 3d10 + 10 Rounds

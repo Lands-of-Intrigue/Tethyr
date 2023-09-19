@@ -2508,30 +2508,30 @@ void main()
             }
             else if (sCurrCommandArg == "Weave" || sCurrCommandArg == "weave" || sCurrCommandArg == "WEAVE")
             {
-                int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
+                int nDead = FetchDeadMagicChance(GetTag(oArea));
                 if (GetIsDM(oPC) || GetIsDMPossessed(oPC))
                 {
-                    SendMessageToPC(oPC, "Exact value is: " + IntToString(oDead));
+                    SendMessageToPC(oPC, "Exact value is: " + IntToString(nDead));
                 }
                 if (GetHasFeat(1599, oPC) || GetIsDM(oPC) || GetIsDMPossessed(oPC))
                 {
-                    if (oDead >=95)
+                    if (nDead >= 95)
                     {
                         SendMessageToPC(oPC,"The fabric of the Weave here has been so badly damaged, you feel nothing at all - only its absence.");
                     }
-                    else if (oDead >=66)
+                    else if (nDead >= 66)
                     {
                         SendMessageToPC(oPC,"The fabric of the Weave here is unmistakably mangled and torn. It may soon unravel completely.");
                     }
-                    else if (nDead >=33)
+                    else if (nDead >= 33)
                     {
                         SendMessageToPC(oPC,"You sense the fabric of the Weave has suffered significant damage here.");
                     }
-                    else if (oDead >=10)
+                    else if (nDead >= 10)
                     {
                         SendMessageToPC(oPC,"You sense the fabric of the Weave has become disrupted here.");
                     }
-                    else if (oDead >=1)
+                    else if (nDead >= 1)
                     {
                         SendMessageToPC(oPC,"You can sense faint imperfections in the fabric of the Weave here.");
                     }
@@ -2543,22 +2543,22 @@ void main()
             }
             else if ((sCurrCommandArg == "adddeadmagic" || sCurrCommandArg == "AddDeadMagic" || sCurrCommandArg == "ADDDEADMAGIC" || sCurrCommandArg == "Adddeadmagic") && GetIsDM(oPC))
             {
-                int nDead = AddDeadMagic(GetTag(oArea), StringToInt(sCommandArg2));
+                int nDead = AddDeadMagicChance(GetTag(oArea), StringToInt(sCommandArg2));
                 SendMessageToPC(oPC, "New Dead Magic: " + IntToString(nDead));
             }
             else if ((sCurrCommandArg == "removedeadmagic" || sCurrCommandArg == "RemoveDeadMagic" || sCurrCommandArg == "REMOVEDEADMAGIC" || sCurrCommandArg == "Removedeadmagic") && GetIsDM(oPC))
             {
-                int nDead = AddDeadMagic(GetTag(oArea), -1 * StringToInt(sCommandArg2));
+                int nDead = AddDeadMagicChance(GetTag(oArea), -1 * StringToInt(sCommandArg2));
                 SendMessageToPC(oPC, "New Dead Magic: " + IntToString(nDead));
             }
             else if ((sCurrCommandArg == "addwildmagic" || sCurrCommandArg == "AddWildMagic" || sCurrCommandArg == "ADDWILDMAGIC" || sCurrCommandArg == "Addwildmagic") && GetIsDM(oPC))
             {
-                int nWild = AddWildMagic(GetTag(oArea), StringToInt(sCommandArg2));
+                int nWild = AddWildMagicChance(GetTag(oArea), StringToInt(sCommandArg2));
                 SendMessageToPC(oPC, "New Wild Magic: " + IntToString(nWild));
             }
             else if ((sCurrCommandArg == "removewildmagic" || sCurrCommandArg == "RemoveWildMagic" || sCurrCommandArg == "REMOVEWILDMAGIC" || sCurrCommandArg == "Removewildmagic") && GetIsDM(oPC))
             {
-                int nWild = AddWildMagic(GetTag(oArea), -1 * StringToInt(sCommandArg2));
+                int nWild = AddWildMagicChance(GetTag(oArea), -1 * StringToInt(sCommandArg2));
                 SendMessageToPC(oPC, "New Wild Magic: " + IntToString(nWild));
             }
             else if ((sCurrCommandArg == "shopset" || sCurrCommandArg == "ShopSet" || sCurrCommandArg == "SHOPSET" || sCurrCommandArg == "Shopset") && GetIsDM(oPC))

@@ -38,21 +38,27 @@ int AddDeadMagicChance(string sAreaTag, int nAmount);
 
 
 
+// PRIVATE METHODS, DO NOT CALL THESE OUTSIDE THIS SCRIPT
+int FetchWeaveCorruption(string sCorruptionDB, string sAreaTag);
+int AddWeaveCorruption(string sCorruptionDB, string sAreaTag, int nAmount);
+void DetectionCheck(object oPC);
+
+
 
 void X2WildMagicZone(object oCaster, object oTarget)
 {
-    object oArea = GetArea(oCaster);
-    int nWildChance = FetchWildMagicChance(GetTag(oArea));
+    string sAreaTag = GetTag(GetArea(oCaster));
+    int nWildChance = FetchWildMagicChance(sAreaTag);
 
     if (GetLevelByClass(CLASS_TYPE_SPELLFIRE, oCaster) >= 1 
         || GetLevelByClass(CLASS_TYPE_BLIGHTER, oCaster) >= 1)
     {
-        nWildChance = AddWildMagicChance(d4(1));
+        nWildChance = AddWildMagicChance(sAreaTag, d4(1));
         return; // corruptor, so exit without invoking wild magic reduction or effect
     } 
     else if (nWildChance > 1)
     {
-        nWildChance = AddWildMagicChance(-1);
+        nWildChance = AddWildMagicChance(sAreaTag, -1);
     }
 
     if (nWildChance > 1)
@@ -72,7 +78,7 @@ int FetchWildMagicChance(string sAreaTag)
 
 int AddWildMagicChance(string sAreaTag, int nAmount)
 {
-    return AddWeaveCorruption(WILDMAGIC_DB, sAreaTag, nAmount)
+    return AddWeaveCorruption(WILDMAGIC_DB, sAreaTag, nAmount);
 }
 
 
@@ -80,13 +86,13 @@ int AddWildMagicChance(string sAreaTag, int nAmount)
 
 int X2DeadmagicZone(object oCaster)
 {
-    object oArea = GetArea(oCaster);
-    int nSpellFailure = GetCampaignInt("Deadmagic",GetTag(oArea));
+    string sAreaTag = GetTag(GetArea(oCaster));
+    int nSpellFailure = FetchDeadMagicChance(sAreaTag);
 
     if (GetHasFeat(FEAT_SHADOW_WEAVE_MAGIC, oCaster)
-        || GetLevelByClass(CLASS_TYPE_SHADOW_CHANNELER, oCaster)  >=1)
+        || GetLevelByClass(CLASS_TYPE_SHADOW_ADEPT, oCaster)  >=1)
     {
-        nSpellFailure = AddDeadMagicChance(1 + d4(1));
+        nSpellFailure = AddDeadMagicChance(sAreaTag, 1 + d4(1));
         return TRUE;
     } 
     else if (GetHasFeat(DEITY_Shar, oCaster))
@@ -95,7 +101,7 @@ int X2DeadmagicZone(object oCaster)
     }
     else if (nSpellFailure > 1)
     {
-        nChanceToRemove = 1;
+        int nChanceToRemove = 1;
         if (GetHasFeat(DEITY_Mystra, oCaster))
         {
             nChanceToRemove += 1;
@@ -108,7 +114,7 @@ int X2DeadmagicZone(object oCaster)
         {
             nChanceToRemove += 2;
         }
-        nSpellFailure = AddDeadMagicChance(nSpellFailure - nChanceToRemove);
+        nSpellFailure = AddDeadMagicChance(sAreaTag, nSpellFailure - nChanceToRemove);
     }
 
     if (nSpellFailure > 1)
@@ -135,7 +141,6 @@ int AddDeadMagicChance(string sAreaTag, int nAmount)
 
 
 
-
 // PRIVATE METHODS, DO NOT CALL THESE OUTSIDE THIS SCRIPT
 
 int FetchWeaveCorruption(string sCorruptionDB, string sAreaTag)
@@ -157,7 +162,7 @@ int FetchWeaveCorruption(string sCorruptionDB, string sAreaTag)
         string sWildData = IntToString(nChance) 
             + TOKENIZER_CHAR 
             + IntToString(nLastTimestamp + nIntervals * nDecayPeriod);
-        SetCampaignString(sCorruptionDB, sWildData);
+        SetCampaignString(sCorruptionDB, sAreaTag, sWildData);
     }
     return nChance;
 }
@@ -176,14 +181,14 @@ int AddWeaveCorruption(string sCorruptionDB, string sAreaTag, int nAmount)
     }
     int nTimestamp = SQLite_GetTimeStamp();
     string sWildData = IntToString(nTotal) + TOKENIZER_CHAR + IntToString(nTimestamp);
-    SetCampaignString(sCorruptionDB, sWildData);
+    SetCampaignString(sCorruptionDB, sAreaTag, sWildData);
     return nTotal;
 }
 
 void DetectionCheck(object oPC)
 {
-   if (GetSkillRank(SKILL_SPELLCRAFT, oPC) + d20() <= 15)
-   {
-        SendMessageToPC(oPC, "As you draw upon the local Weave, you sense distortions.");
-   }
+    if (GetSkillRank(SKILL_SPELLCRAFT, oPC) + d20() >= 15)
+    {
+        SendMessageToPC(oPC, "As you draw upon the local Weave, you sense something is amiss.");
+    }
 }

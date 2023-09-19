@@ -1,15 +1,6 @@
-//::///////////////////////////////////////////////
-//:: Lands of Intrigue Affliction Function Handler
-//:: //:: Function(D20) 2017
-//:://////////////////////////////////////////////
-//:://////////////////////////////////////////////
-//:: Format Created By: Jonathan Lorentsen
-//:: Email: jlorents93@hotmail.com
-//:: Created On: 8Jun16
-//:: Functions/Scripts By: David Novotny
-//:: Email: Raetzain@gmail.com
-//:: Created On: 12 Feb 2017
-//:://////////////////////////////////////////////
+// For some reason, this has bloated to include constants.
+// This should be split over time.
+
 const int BACKGROUND_LOWER = 1150;
 const int BACKGROUND_MIDDLE = 1151;
 const int BACKGROUND_UPPER = 1152;
@@ -61,13 +52,20 @@ const int BACKGROUND_TALFIRIAN = 1398;
 const int BACKGROUND_THEOCRAT = 1399;
 const int BACKGROUND_WARD_TRIAD = 1400;
 const int BACKGROUND_ZHENTARIM = 1401;
+
+const int CLASS_TYPE_WARLOCK = 47;
+const int CLASS_TYPE_SHADOW_CHANNELER = 48;
 const int CLASS_TYPE_SPELLFIRE = 49;
 const int CLASS_TYPE_BLIGHTER = 50;
 const int CLASS_TYPE_BLACKCOAT = 51;
 const int CLASS_TYPE_WARMAGE = 52;
 const int CLASS_TYPE_BLADESINGER = 53;
 const int CLASS_TYPE_SHADOW_ADEPT = 54;
-const int CLASS_TYPE_WARLOCK = 47;
+const int CLASS_TYPE_ELDKNIGHT = 55;
+const int CLASS_TYPE_MYSTICKNIGHT = 56;
+const int CLASS_TYPE_ARTIFICER = 57;
+const int CLASS_TYPE_MAGE_BREAKER = 58;
+
 const int DEITY_Akadi = 1304;
 const int DEITY_Auril = 1305;
 const int DEITY_Azuth = 1306;

@@ -1,5 +1,6 @@
 #include "inc_spell_func"
 #include "te_afflic_func"
+#include "loi_const_feats"
 // used for generate new location
 #include "X0_I0_POSITION"
 // persistent vars on pc's skin
