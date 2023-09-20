@@ -346,14 +346,6 @@ int X2PreSpellCastCode()
 
     int nContinue;
 
-    object oCaster = OBJECT_SELF;
-    //check deadmagic
-    if (X2DeadmagicZone(oCaster) == FALSE)
-    {
-        return FALSE;
-    }
-    X2WildMagicZone(oCaster, oTarget);
-    X2MythicXP();
    //---------------------------------------------------------------------------
    // This small addition will check to see if the target is mounted and the
    // spell is therefor one that should not be permitted.
@@ -384,6 +376,18 @@ int X2PreSpellCastCode()
        {
             return TRUE;
        }
+   }
+   else 
+   {
+        // Only apply wild and dead magic to PCs.
+        // We don't want environmental effects or DM events to break.
+        if (X2DeadmagicZone(OBJECT_SELF) == FALSE)
+        {
+            return FALSE;
+        }
+        X2WildMagicZone(OBJECT_SELF, oTarget);
+
+        X2MythicXP();
    }
 
    //---------------------------------------------------------------------------

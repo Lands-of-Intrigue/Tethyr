@@ -50,8 +50,7 @@ void X2WildMagicZone(object oCaster, object oTarget)
     string sAreaTag = GetTag(GetArea(oCaster));
     int nWildChance = FetchWildMagicChance(sAreaTag);
 
-    if (GetLevelByClass(CLASS_TYPE_SPELLFIRE, oCaster) >= 1 
-        || GetLevelByClass(CLASS_TYPE_BLIGHTER, oCaster) >= 1)
+    if (GetLevelByClass(CLASS_TYPE_SPELLFIRE, oCaster) >= 1)
     {
         nWildChance = AddWildMagicChance(sAreaTag, d4(1));
         return; // corruptor, so exit without invoking wild magic reduction or effect
