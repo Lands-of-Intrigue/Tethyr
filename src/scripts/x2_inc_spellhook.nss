@@ -370,14 +370,14 @@ int X2PreSpellCastCode()
    // with TRUE (unless they are DM possessed or in the Wild Magic Area in
    // Chapter 2 of Hordes of the Underdark.
    //---------------------------------------------------------------------------
-   if (!GetIsPC(OBJECT_SELF))
+   if (GetIsPlayerCharacter(OBJECT_SELF) == FALSE)
    {
        if( !GetIsDMPossessed(OBJECT_SELF) && !GetLocalInt(GetArea(OBJECT_SELF), "X2_L_WILD_MAGIC"))
        {
             return TRUE;
        }
    }
-   else 
+   else
    {
         // Only apply wild and dead magic to PCs.
         // We don't want environmental effects or DM events to break.

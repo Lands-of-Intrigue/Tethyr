@@ -89,7 +89,8 @@ int X2DeadmagicZone(object oCaster)
     int nSpellFailure = FetchDeadMagicChance(sAreaTag);
 
     if (GetHasFeat(FEAT_SHADOW_WEAVE_MAGIC, oCaster)
-        || GetLevelByClass(CLASS_TYPE_SHADOW_ADEPT, oCaster)  >=1)
+        || GetLevelByClass(CLASS_TYPE_SHADOW_ADEPT, oCaster)  >=1
+        || GetLevelByClass(CLASS_TYPE_SHADOW_CHANNELER, oCaster)  >=1)
     {
         nSpellFailure = AddDeadMagicChance(sAreaTag, 1 + d4(1));
         return TRUE;
