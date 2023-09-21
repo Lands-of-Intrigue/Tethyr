@@ -182,8 +182,7 @@ void main()
             return;
         }
 
-        //Award starting gold
-        RewardGP(3* CalculateStipend(oPC), oPC, FALSE);
+        AwardStartingGold(oPC);
 
         //Background Item Creation
         if (GetHasFeat(BACKGROUND_AFFLUENCE,oPC) == TRUE)
@@ -454,50 +453,37 @@ void main()
         //Subrace Starting Items
         if (GetHasFeat(BACKGROUND_COPPER_ELF,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_lesselfcloak", oPC, 1);
             CreateItemOnObject("bg_lesselfboots", oPC, 1);
-
-
         }
         else if (GetHasFeat(BACKGROUND_GREEN_ELF,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_lesselfcloak", oPC, 1);
             CreateItemOnObject("bg_lesselfboots", oPC, 1);
-
-
         }
         else if (GetHasFeat(BACKGROUND_DARK_ELF,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_lessdrowcloak", oPC, 1);
             CreateItemOnObject("bg_lessdrowboots", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_SILVER_ELF,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_elflongblade", oPC, 1);
-
         }
         else if (GetHasFeat(BACKGROUND_GOLD_ELF,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(1050*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_1010", oPC, 1);
             CreateItemOnObject("te_item_1004", oPC, 1);
             CreateItemOnObject("bg_elflongblade", oPC, 1);
-
         }
         else if (GetHasFeat(BACKGROUND_GOLD_DWARF,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(650*fStandingMod), oPC, FALSE);
             CreateItemOnObject("wblmhw003", oPC, 1);
             CreateItemOnObject("te_item_8482", oPC, 1);
             CreateItemOnObject("te_item_8483", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_GREY_DWARF,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(650*fStandingMod), oPC, FALSE);
             CreateItemOnObject("travelersneckl", oPC, 1);
             CreateItemOnObject("te_item_8482", oPC, 1);
             CreateItemOnObject("te_item_8483", oPC, 1);
@@ -505,32 +491,27 @@ void main()
         }
         else if (GetHasFeat(BACKGROUND_SHIELD_DWARF,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(650*fStandingMod), oPC, FALSE);
             CreateItemOnObject("travelersneckl", oPC, 1);
             CreateItemOnObject("te_item_8482", oPC, 1);
             CreateItemOnObject("te_item_8483", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_OUTSIDER,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(200*fStandingMod), oPC, FALSE);
             CreateItemOnObject("bg_shadyhood", oPC, 1);
             CreateItemOnObject("bg_worncloak", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_AASIMAR,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(200*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_9005", oPC, 5);
             CreateItemOnObject("te_item_5021", oPC, 1);
 
         }
         else if (GetHasFeat(BACKGROUND_TIEFLING, oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(200*fStandingMod), oPC, FALSE);
             CreateItemOnObject("te_item_5023", oPC, 1);
         }
         else if (GetHasFeat(BACKGROUND_NAT_LYCAN,oPC) == TRUE)
         {
-            //RewardGP(FloatToInt(300*fStandingMod), oPC, FALSE);
             CreateItemOnObject("brokentoothamule", oPC, 1);
         }
 

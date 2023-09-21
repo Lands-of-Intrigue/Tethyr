@@ -1,6 +1,9 @@
+#include "nw_i0_plot"
+
 const int BACKGROUND_LOWER = 1150;
 const int BACKGROUND_MIDDLE = 1151;
 const int BACKGROUND_UPPER = 1152;
+
 const int BACKGROUND_AFFLUENCE = 1153;
 const int BACKGROUND_BRAWLER = 1154;
 const int BACKGROUND_COSMOPOLITAN = 1155;
@@ -49,7 +52,6 @@ const int BACKGROUND_TALFIRIAN = 1398;
 const int BACKGROUND_THEOCRAT = 1399;
 const int BACKGROUND_WARD_TRIAD = 1400;
 const int BACKGROUND_ZHENTARIM = 1401;
-
 const int BACKGROUND_ELDRETH = 1460;
 const int BACKGROUND_ELMANESSE = 1461;
 const int BACKGROUND_SULDUSK = 1462;
@@ -63,8 +65,24 @@ const int BACKGROUND_HEIR = 1469;
 const int BACKGROUND_MORDINS_PRIEST = 1470;
 const int BACKGROUND_WARY_SWORDKNIGHT = 1471;
 
-//Returns the stipend for a given PC    
+// Must be less than a world year
+const int STIPEND_INTERVAL_WORLD_DAYS = 30;
+
+
+
+// Returns the stipend for a given PC    
 int CalculateStipend(object oPC);
+
+// Determines based on world dates stored in the PC data object whether they are due a stipend
+void PossiblyPayStipend(object oPC);
+
+// Awards the player their stipend
+void AwardStipend(object oPC);
+
+// Returns the starting gold for a given PC    
+void AwardStartingGold(object oPC);
+
+
 
 int CalculateStipend(object oPC)
 {
@@ -319,4 +337,65 @@ int CalculateStipend(object oPC)
     }
 
     return FloatToInt(iStipend * fSocialClass);
+}
+
+void PossiblyPayStipend(object oPC)
+{
+    object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
+    int nLastPayoutYear = GetLocalInt(oItem, "last_stipend_payout_year");
+    int nThisYear  = GetCalendarYear();
+    int nInterval = nThisYear - nLastPayoutYear;
+
+    if (nInterval > 1) //more than a year between stipends
+    {
+        AwardStipend(oPC);
+    }
+    else if (nInterval >= 0) //interval is 0 or 1, further calculations necessary
+    {
+        int nLastPayoutMonth = GetLocalInt(oItem, "last_stipend_payout_month");
+        int nLastPayoutDay   = GetLocalInt(oItem, "last_stipend_payout_day");
+        int nThisMonth = GetCalendarMonth();
+        int nThisDay   = GetCalendarDay();
+
+        int nLastPayout = nLastPayoutMonth * 30 + nLastPayoutDay;
+        int nThis = nInterval * 12 * 30 + nThisMonth * 30 + nThisDay;
+
+        if (nThis - nLastPayout > STIPEND_INTERVAL_WORLD_DAYS)
+        {
+            AwardStipend(oPC);
+        }
+    }
+    // else weird backwards time so do nothing
+}
+
+void AwardStipend(object oPC)
+{
+    object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
+    int nStipend = CalculateStipend(oPC);
+
+    string sQual = "no";
+    if (nStipend > 500)
+        sQual = "a lavish";
+    else if (nStipend > 50)
+        sQual = "a moderate";
+    else if (nStipend > 1)
+        sQual = "a meagre";
+    SendMessageToPC(oPC, "Your background affords you " + sQual + " stipend.");
+
+    RewardGP(nStipend, oPC, FALSE);
+    SetLocalInt(oItem, "last_stipend_payout_year",  GetCalendarYear());
+    SetLocalInt(oItem, "last_stipend_payout_month", GetCalendarMonth());
+    SetLocalInt(oItem, "last_stipend_payout_day",   GetCalendarDay());
+}
+
+void AwardStartingGold(object oPC)
+{
+    object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
+
+    int nStartingGold = 3 * CalculateStipend(oPC);
+
+    RewardGP(nStartingGold, oPC, FALSE);
+    SetLocalInt(oItem, "last_stipend_payout_year",  GetCalendarYear());
+    SetLocalInt(oItem, "last_stipend_payout_month", GetCalendarMonth());
+    SetLocalInt(oItem, "last_stipend_payout_day",   GetCalendarDay());
 }
