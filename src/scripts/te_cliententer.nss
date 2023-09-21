@@ -18,6 +18,7 @@
 #include "nwnx_creature"
 #include "nwnx_webhook"
 #include "nwnx_time"
+#include "nwnx_util"
 #include "nwnx_webhook_rch"
 #include "x3_inc_horse"
 #include "colors_inc"
@@ -202,16 +203,16 @@ void main()
 //Time based Journal Entries:
 
     //Campaign Clock:
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") > -1)  {AddJournalQuestEntry("te_camp1",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  2)  {AddJournalQuestEntry("te_camp2",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  4)  {AddJournalQuestEntry("te_camp3",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  8)  {AddJournalQuestEntry("te_camp4",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  10) {AddJournalQuestEntry("te_camp5",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  13) {AddJournalQuestEntry("te_camp6",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  15) {AddJournalQuestEntry("te_camp7",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  20) {AddJournalQuestEntry("te_camp8",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  25) {AddJournalQuestEntry("te_camp9",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  30) {AddJournalQuestEntry("te_camp10",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") > -1)  {AddJournalQuestEntry("te_camp1",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  2)  {AddJournalQuestEntry("te_camp2",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  4)  {AddJournalQuestEntry("te_camp3",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  8)  {AddJournalQuestEntry("te_camp4",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  10) {AddJournalQuestEntry("te_camp5",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  13) {AddJournalQuestEntry("te_camp6",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  15) {AddJournalQuestEntry("te_camp7",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  20) {AddJournalQuestEntry("te_camp8",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  25) {AddJournalQuestEntry("te_camp9",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  30) {AddJournalQuestEntry("te_camp10",1,oPC);}
 
 
 /*
@@ -519,6 +520,10 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 
     // do any other module OnClientEnter work here
     ExecuteScript("x3_mod_pre_enter",OBJECT_SELF); // Override for other skin systems
+    
+    PossiblyPayStipend(oPC);
+
+    // Horse restoration
     if ((GetIsPC(oPC)||GetIsDM(oPC))&&!GetHasFeat(FEAT_HORSE_MENU,oPC))
     { // add horse menu
         HorseAddHorseMenu(oPC);
