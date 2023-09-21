@@ -68,6 +68,13 @@
           "type": "cexostring",
           "value": ""
         }
+      },
+      {
+        "__struct_id": 9,
+        "Comment": {
+          "type": "cexostring",
+          "value": "Window for usewindow script.\r\n\r\nInstructions:\r\n\r\nGive this window a unique TAG.\r\nCreate a waypoint where the other side of the window will be,\r\nwith the tag DST_ + the tag of the window.\r\n\r\nie:\r\nWindow = InnI1\r\nWaypoint = DST_InnI1\r\n\r\n\r\nIf the window is a second (or 3rd) storey window, set a local INT variable on it named\r\nHEIGHT\r\n\r\nset HEIGHT to 1  for an upper storey window\r\nset HEIGHT to 2, 3, or 4 for a bird's eye view from 20, 30, or 40 meters up.\r\n(do not set HEIGHT at all, if it is a ground floor window)\r\n\r\n"
+        }
       }
     ]
   },

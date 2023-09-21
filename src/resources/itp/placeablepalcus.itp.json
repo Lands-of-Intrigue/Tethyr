@@ -1091,6 +1091,33 @@
                 "type": "byte",
                 "value": 78
               },
+              "LIST": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "NAME": {
+                      "type": "cexostring",
+                      "value": "Book 1"
+                    },
+                    "RESREF": {
+                      "type": "resref",
+                      "value": "book1"
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "NAME": {
+                      "type": "cexostring",
+                      "value": "Book 2"
+                    },
+                    "RESREF": {
+                      "type": "resref",
+                      "value": "book002"
+                    }
+                  }
+                ]
+              },
               "STRREF": {
                 "type": "dword",
                 "value": 16810802
@@ -1117,6 +1144,33 @@
                     "ID": {
                       "type": "byte",
                       "value": 49
+                    },
+                    "LIST": {
+                      "type": "list",
+                      "value": [
+                        {
+                          "__struct_id": 0,
+                          "NAME": {
+                            "type": "cexostring",
+                            "value": "Carpet 1"
+                          },
+                          "RESREF": {
+                            "type": "resref",
+                            "value": "carpet1"
+                          }
+                        },
+                        {
+                          "__struct_id": 0,
+                          "NAME": {
+                            "type": "cexostring",
+                            "value": "Carpet 2"
+                          },
+                          "RESREF": {
+                            "type": "resref",
+                            "value": "carpet002"
+                          }
+                        }
+                      ]
                     },
                     "STRREF": {
                       "type": "dword",
@@ -1266,6 +1320,22 @@
                     "ID": {
                       "type": "byte",
                       "value": 37
+                    },
+                    "LIST": {
+                      "type": "list",
+                      "value": [
+                        {
+                          "__struct_id": 0,
+                          "NAME": {
+                            "type": "cexostring",
+                            "value": "Chair 1"
+                          },
+                          "RESREF": {
+                            "type": "resref",
+                            "value": "chair1"
+                          }
+                        }
+                      ]
                     },
                     "STRREF": {
                       "type": "dword",
@@ -1454,6 +1524,44 @@
               "ID": {
                 "type": "byte",
                 "value": 96
+              },
+              "LIST": {
+                "type": "list",
+                "value": [
+                  {
+                    "__struct_id": 0,
+                    "NAME": {
+                      "type": "cexostring",
+                      "value": "Bottle - Clear"
+                    },
+                    "RESREF": {
+                      "type": "resref",
+                      "value": "tm_pl_btlclea001"
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "NAME": {
+                      "type": "cexostring",
+                      "value": "Cup 1"
+                    },
+                    "RESREF": {
+                      "type": "resref",
+                      "value": "tm_pl_btlclea002"
+                    }
+                  },
+                  {
+                    "__struct_id": 0,
+                    "NAME": {
+                      "type": "cexostring",
+                      "value": "Cup 2"
+                    },
+                    "RESREF": {
+                      "type": "resref",
+                      "value": "tm_pl_btlclea003"
+                    }
+                  }
+                ]
               },
               "STRREF": {
                 "type": "dword",
@@ -3700,6 +3808,17 @@
               "RESREF": {
                 "type": "resref",
                 "value": "shipswheel"
+              }
+            },
+            {
+              "__struct_id": 0,
+              "NAME": {
+                "type": "cexostring",
+                "value": "Stone Wall 1"
+              },
+              "RESREF": {
+                "type": "resref",
+                "value": "usewindow002"
               }
             },
             {
