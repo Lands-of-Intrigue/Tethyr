@@ -374,7 +374,7 @@ void AwardStipend(object oPC)
     int nStipend = CalculateStipend(oPC);
 
     string sQual = "no";
-    if (nStipend > 500)
+    if (nStipend > 200)
         sQual = "a lavish";
     else if (nStipend > 50)
         sQual = "a moderate";
