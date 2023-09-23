@@ -101,20 +101,20 @@ int X2DeadmagicZone(object oCaster)
     }
     else if (nSpellFailure > 1)
     {
-        int nChanceToRemove = 1;
+        int nChanceToRemove = -1;
         if (GetHasFeat(DEITY_Mystra, oCaster))
         {
-            nChanceToRemove += 1;
+            nChanceToRemove -= 1;
         }
         if (GetHasFeat(DEITY_Azuth, oCaster))
         {
-            nChanceToRemove += 1;
+            nChanceToRemove -= 1;
         }
         if (GetHasFeat(FEAT_WEAVE_RESONANCE, oCaster))
         {
-            nChanceToRemove += 2;
+            nChanceToRemove -= 2;
         }
-        nSpellFailure = AddDeadMagicChance(sAreaTag, nSpellFailure - nChanceToRemove);
+        nSpellFailure = AddDeadMagicChance(sAreaTag, nChanceToRemove);
     }
 
     if (nSpellFailure > 1)
