@@ -1618,7 +1618,7 @@ void main()
                     NWNX_Player_SetAlwaysWalk(oPC,TRUE);
                     SetLocalInt(oPC,"walk", 1);
                 }
-                else
+                else if (GetStealthMode(oPC) == FALSE)
                 {
                     NWNX_Player_SetAlwaysWalk(oPC,FALSE);
                     SetLocalInt(oPC,"walk", 0);
