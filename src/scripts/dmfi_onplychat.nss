@@ -1776,7 +1776,7 @@ void main()
                     AssignCommand(oPlayer, PlayAnimation(ANIMATION_LOOPING_CUSTOM20, 1.0, 10000.0));
                 else
                 {
-                    SendMessageToPC(oPC,"I'm sorry Dave, I can't do that. Type \"-emote list\" for a list of all available emotes.");
+                    SendMessageToPC(oPC,"Unrecognized emote. Type \"-emote list\" for a list of all available emotes.");
                 }
             }
             else if(sCurrCommandArg == "roll" || sCurrCommandArg == "Roll" || sCurrCommandArg == "ROLL")
