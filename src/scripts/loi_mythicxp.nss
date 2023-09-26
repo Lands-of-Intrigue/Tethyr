@@ -24,8 +24,11 @@ void TickMythicXp(object oPC, int nAbility)
 {
     object oData = GetItemPossessedBy(oPC,"PC_Data_Object");
     string sDataKey = MYTHIC_DATA_KEY_PREFIX + AbilityToString(nAbility);
-    int nNextMythicXp = GetLocalInt(oData, sDataKey) + 1;
-    SetLocalInt(oData, sDataKey, nNextMythicXp);
+    int nMythicXp = GetLocalInt(oData, sDataKey);
+    if (nMythicXp < MYTHIC_XP_BONUS_2)
+    {
+        SetLocalInt(oData, sDataKey, nMythicXp + 1);
+    }
 }
 
 void ApplyMythicBonuses(object oPC)
