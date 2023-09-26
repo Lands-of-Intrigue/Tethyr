@@ -520,8 +520,6 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 
     // do any other module OnClientEnter work here
     ExecuteScript("x3_mod_pre_enter",OBJECT_SELF); // Override for other skin systems
-    
-    PossiblyPayStipend(oPC);
 
     // Horse restoration
     if ((GetIsPC(oPC)||GetIsDM(oPC))&&!GetHasFeat(FEAT_HORSE_MENU,oPC))
@@ -544,4 +542,18 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 
     // initialize DMFI
     dmfiInitialize(oPC);
+
+    PossiblyPayStipend(oPC); 
+    
+    // warning for old mythic XP system
+    object oData = GetItemPossessedBy(oPC,"PC_Data_Object");
+    if (GetLocalInt(oData, "MythicSTR") != 0
+        || GetLocalInt(oData, "MythicDEX") != 0
+        || GetLocalInt(oData, "MythicCON") != 0
+        || GetLocalInt(oData, "MythicINT") != 0
+        || GetLocalInt(oData, "MythicWIS") != 0
+        || GetLocalInt(oData, "MythicCHA") != 0)
+    {
+        SendMessageToPC(oPC,"ALERT! Your character needs to be remade. Please contact a DM. You may continue to play your character in the mean time.");
+    }
 }
