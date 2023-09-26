@@ -1,5 +1,7 @@
 #include "nwnx_time"
 #include "nwnx_creature"
+#include "loi_mythicxp"
+
 void DoRubbleLoot(object oPC);
 void DoShanatarLoot(object oPC);
 void DoBodyLoot(object oPC,int nType);
@@ -617,14 +619,5 @@ void DoDragonLoot(object oPC)
 
 void DoIntMythic(object oPC)
 {
-    int iInt = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT");
-                SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT", iInt+1);
-                if (
-                iInt + 1 == 1000 ||
-                iInt + 1 == 2000 ||
-                iInt + 1 == 4000 ||
-                iInt + 1 == 8000 )
-                {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_INTELLIGENCE, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_INTELLIGENCE)+1);
-                }
+    TickMythicXp(oPC, ABILITY_INTELLIGENCE);
 }

@@ -51,6 +51,7 @@
 #include "loi_functions"
 #include "te_afflic_func"
 #include "nwnx_creature"
+#include "loi_mythicxp"
 
 string REST_IN_SHIFTS = "You cannot rest while another party member is resting, sleep in shifts.";
 string NOT_TIRED = " is not tired enough.";
@@ -215,8 +216,9 @@ void EndRest(object oPC)
   }
   // Heal recovery health based on quality of resting.
   int nRecoveryHP = GetRestingQuality(oPC);
-
   SetHitPoints(oPC, nRecoveryHP);
+
+  ApplyMythicBonuses(oPC);
 
   REffect(oPC);
 
