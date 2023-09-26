@@ -39,14 +39,14 @@
 #include "x3_inc_horse"
 #include "te_functions"
 #include "loi_weave"
+#include "loi_mythicxp"
 #include "nwnx_creature"
 
 
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
-//Mythic XP Hookin for Wisdom and Intelligence.
-//Gives 1 Mythic XP in a stat based on arcane
+//Mythic XP Hookin for spellcasting stat
 void X2MythicXP();
 
 // Use Magic Device Check.
@@ -85,61 +85,26 @@ void X2MythicXP()
 {
     if(GetIsPC(OBJECT_SELF))
     {
-    object oPC = OBJECT_SELF;
-        if(GetLastSpellCastClass() == 56)
+        object oPC = OBJECT_SELF;
+        int nCasterClass = GetLastSpellCastClass();
+        if(nCasterClass == CLASS_TYPE_MYSTICKNIGHT)
         {
            if (d2(1) == 1)
            {
-                int iInt = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT");
-                SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT", iInt+1);
-                if (
-                iInt + 1 == 1000 ||
-                iInt + 1 == 2000 ||
-                iInt + 1 == 4000 ||
-                iInt + 1 == 8000 )
-                {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_INTELLIGENCE, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_INTELLIGENCE)+1);
-                }
+                TickMythicXp(oPC, ABILITY_INTELLIGENCE);
            }
            else
            {
-                int iWis = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS");
-                SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS", iWis+1);
-                if (
-                iWis + 1 == 1000 ||
-                iWis + 1 == 2000 ||
-                iWis + 1 == 4000 ||
-                iWis + 1 == 8000 )
-                {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_WISDOM, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_WISDOM)+1);
-                }
+                TickMythicXp(oPC, ABILITY_WISDOM);
            }
         }
-        else if(TE_ArcaneCasterClass(GetLastSpellCastClass()))
+        else if(TE_ArcaneCasterClass(nCasterClass))
         {
-                int iInt = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT");
-                SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT", iInt+1);
-                if (
-                iInt + 1 == 1000 ||
-                iInt + 1 == 2000 ||
-                iInt + 1 == 4000 ||
-                iInt + 1 == 8000 )
-                {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_INTELLIGENCE, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_INTELLIGENCE)+1);
-                }
+            TickMythicXp(oPC, ABILITY_INTELLIGENCE);
         }
-        else
+        else if(TE_DivineCasterClass(nCasterClass))
         {
-                int iWis = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS");
-                SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS", iWis+1);
-                if (
-                iWis + 1 == 1000 ||
-                iWis + 1 == 2000 ||
-                iWis + 1 == 4000 ||
-                iWis + 1 == 8000 )
-                {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_WISDOM, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_WISDOM)+1);
-                }
+            TickMythicXp(oPC, ABILITY_WISDOM);
         }
     }
 }

@@ -1,6 +1,8 @@
 #include "x2_inc_switches"
 #include "nwnx_item"
 #include "nwnx_creature"
+#include "loi_mythicxp"
+
 void bandage(object oPC , object oTarget)
 {
      int roll = d20(1);
@@ -22,16 +24,7 @@ void bandage(object oPC , object oTarget)
           {
                SendMessageToPC(oTarget, "The bandages stop the bleeding.");
           }
-          int iWis = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS");
-          SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS", iWis+1);
-          if (
-                iWis + 1 == 1000 ||
-                iWis + 1 == 2000 ||
-                iWis + 1 == 4000 ||
-                iWis + 1 == 8000 )
-          {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_WISDOM, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_WISDOM)+1);
-          }
+          TickMythicXp(oPC, ABILITY_WISDOM);
      }
      else
      {

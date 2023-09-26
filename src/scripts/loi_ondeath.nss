@@ -6,6 +6,7 @@
 #include "nwnx_webhook_rch"
 #include "nwnx_time"
 #include "habd_include"
+#include "loi_mythicxp"
 
 void main()
 {
@@ -178,6 +179,7 @@ void main()
                         int nHeal = -6;   //should heal the player to -5 so that bleed script will take over
                         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nHeal), oPC);
                     }
+                    return;
                 }
 
                 NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, sJoinMsg, GetName(oPC));
@@ -205,6 +207,8 @@ void main()
                 //Set Player Data Object iPCDead 1
                 SetPCDeadStatus(oPC, 1);
             }
+
+            ResetMythicXp(oPC);
 
             struct NWNX_WebHook_Message sJoinMessage;
             sJoinMessage.sUsername = "Player Logs";

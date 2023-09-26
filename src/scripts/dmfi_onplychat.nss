@@ -30,6 +30,7 @@
 #include "te_functions"
 #include "gs_inc_shop"
 #include "loi_weave"
+#include "loi_mythicxp"
 
 const string DMFI_PLAYERCHAT_SCRIPTNAME = "dmfi_plychat_exe";
 
@@ -494,6 +495,7 @@ void main()
                 }
                 sHelpCommand += "-lang / -speak : Sets new language to speak. Normal speech going forward will be in that language. To no longer speak a language, use \"-lang common\" Syntax: -lang \"language\" Ex: -lang Alzhedo \n";
                 sHelpCommand += "-murder : Perform a coup de grace on the targeted bleeding out PC. \n";
+                sHelpCommand += "-mythic : Returns the current Mythic Points that your character has earned. \n";
                 sHelpCommand += "-name : If disguise is on, this will allow you to change your displayed name. This will not persist across reset or log-out/crash. Syntax: - name \"Disguise Name\" Ex: -name Malcolm Reed \n";
                 if(GetHasFeat(1203,oPC) == TRUE || GetLevelByClass(CLASS_TYPE_DRUID,oPC) >= 13 || GetHasFeat(1458,oPC) == TRUE)
                 {
@@ -739,13 +741,7 @@ void main()
             }
             else if(sCurrCommandArg == "mythic")
             {
-                SendMessageToPC(oPC,"A new point in each skill is achieved at 1000, 2000, 4000, and 8000 Mythic Points.");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicSTR"))+" Mythic Strength Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicDEX"))+" Mythic Dexterity Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicCON"))+" Mythic Constitution Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT"))+" Mythic Intelligence Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS"))+" Mythic Wisdom Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicCHA"))+" Mythic Charisma Points");
+                ReportMythicXp(oPC);
             }
             else if(sCurrCommandArg == "animation" || sCurrCommandArg == "anim" || sCurrCommandArg == "anime")
             {

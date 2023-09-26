@@ -368,6 +368,8 @@ void RetrievePersistentInventory(string inventory_tag, object target_inventory, 
 object GetPersistentInventory(string inventory_tag, string pcid="0");
 // an ability check. if bVerbose=TRUE, ability check is broadcast - [FILE: _inc_util]
 int GetAbilityCheck(object oPC, int nAbility, int nDC, int bVerbose=FALSE);
+// maps the ability id to a string value
+string AbilityToString(int nAbility);
 // a skill check. if bVerbose=TRUE, ability check is broadcast - [FILE: _inc_util]
 // return value is measure of success greater than DC +1. 0 = failure, 1 = minimal success, 2 = 1 greater than minimal etc...
 int H_DoSkillCheck(object oPC, int nSkill, int nDC, int bVerbose=FALSE);
@@ -1665,16 +1667,8 @@ int GetAbilityCheck(object oPC, int nAbility, int nDC, int bVerbose=FALSE)
 
     if(bVerbose)
     {
-        string sResponse, sAbility, sResult;
-        switch(nAbility)
-        {
-            case ABILITY_CHARISMA: sAbility="Charisma"; break;
-            case ABILITY_CONSTITUTION: sAbility="Constitution"; break;
-            case ABILITY_DEXTERITY: sAbility="Dexterity"; break;
-            case ABILITY_INTELLIGENCE: sAbility="Intelligence"; break;
-            case ABILITY_STRENGTH: sAbility="Strength"; break;
-            case ABILITY_WISDOM: sAbility="Wisdom"; break;
-        }
+        string sAbility = AbilityToString(nAbility);
+        string sResponse, sResult;
         if(bSuccess)
             sResult = "Success";
         else
@@ -1687,6 +1681,21 @@ int GetAbilityCheck(object oPC, int nAbility, int nDC, int bVerbose=FALSE)
     }
 
     return bSuccess;
+}
+
+string AbilityToString(int nAbility)
+{
+    string sAbility = "";
+    switch(nAbility)
+    {
+        case ABILITY_CHARISMA: sAbility="cha"; break;
+        case ABILITY_CONSTITUTION: sAbility="con"; break;
+        case ABILITY_DEXTERITY: sAbility="dex"; break;
+        case ABILITY_INTELLIGENCE: sAbility="int"; break;
+        case ABILITY_STRENGTH: sAbility="str"; break;
+        case ABILITY_WISDOM: sAbility="wis"; break;
+    }
+    return sAbility;
 }
 
 int H_DoSkillCheck(object oPC, int nSkill, int nDC, int bVerbose=FALSE)
