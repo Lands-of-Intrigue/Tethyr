@@ -61,12 +61,8 @@ int TE_SH_GetSalePrice(object oShop);
 int TE_SH_GetItemValue(object oItem);
 //Transfers nGold from oPC inventory to Playervault of sID at sBank
 void TE_GoldTransfer(object oPC, string sID, int nGold, string sBank);
-//Returns whether merchant license is required
-int TE_SH_GetMerchant(object oShop);
 //Returns whether barony insignia is required
 int TE_SH_GetInsignia(object oShop);
-//Sets whether merchant license is required
-void TE_SH_SetMerchant(object oShop,int nReq = FALSE);
 //Sets whether barony insignia is required
 void TE_SH_SetInsignia(object oShop,int nReq = FALSE);
 //Gets price for renting the stall
@@ -321,23 +317,11 @@ void TE_GoldTransfer(object oPC, string sID, int nGold, string sBank)
     NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_BANK_CHANNEL, sReturn, sBank);
 }
 
-//Return whether merchant license is required
-int TE_SH_GetMerchant(object oShop)
-{
-    string sUnique    = GetLocalString(oShop, "sUnique");
-    return GetCampaignInt(sDatabase, "MERC_"+sUnique);
-}
 //Return whether barony insignia is required
 int TE_SH_GetInsignia(object oShop)
 {
     string sUnique    = GetLocalString(oShop, "sUnique");
     return GetCampaignInt(sDatabase, "INSI_"+sUnique);
-}
-//Return whether merchant license is required
-void TE_SH_SetMerchant(object oShop,int nReq = FALSE)
-{
-    string sUnique    = GetLocalString(oShop, "sUnique");
-    SetCampaignInt(sDatabase, "MERC_"+sUnique, nReq);
 }
 //Return whether barony insignia is required
 void TE_SH_SetInsignia(object oShop,int nReq = FALSE)
