@@ -1,5 +1,6 @@
 #include "nw_i0_plot"
 #include "nwnx_creature"
+#include "loi_background"
 
 void main()
 {
@@ -8,7 +9,6 @@ void main()
     int iCL = GetHitDice(oPC);
     location lNo = GetLocation(GetObjectByTag("WP_Starting_Area"));
     location lFail = GetLocation(GetObjectByTag("WP_NewCharacter"));
-    float fStandingMod = 1.0;
     object oCreate;
 
     object oInvent = GetFirstItemInInventory(oPC);
@@ -111,24 +111,14 @@ void main()
         SetLocalInt(oItem,"12",1);
     }
 
-    //Faction Standing based on Class Standing (Starting Gold Modifiers)
-    if (GetHasFeat(BACKGROUND_LOWER, oPC) == TRUE)
-    {
-        float fStandingMod = 0.9;
-    }
-    else if (GetHasFeat(BACKGROUND_MIDDLE, oPC) == TRUE)
-    {
-        float fStandingMod = 1.0;
-    }
-    else if (GetHasFeat(BACKGROUND_UPPER,oPC) == TRUE)
-    {
-        float fStandingMod = 1.2;
-    }
-
     //Base starting Items
     if (iCL == 3)
     {
-        if (GetHasFeat(BACKGROUND_UPPER,oPC) == TRUE || GetHasFeat(BACKGROUND_MIDDLE,oPC) == TRUE || GetHasFeat(BACKGROUND_LOWER,oPC) == TRUE)
+        object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
+        int iState = GetLocalInt(oItem,"BG_Select");
+
+        if (iState == 8 &&
+            (GetHasFeat(BACKGROUND_UPPER,oPC) == TRUE || GetHasFeat(BACKGROUND_MIDDLE,oPC) == TRUE || GetHasFeat(BACKGROUND_LOWER,oPC) == TRUE))
         {
             oCreate = CreateItemOnObject("bandages", oPC, 3);
             SetIdentified(oCreate,TRUE);
