@@ -483,6 +483,7 @@ void main()
                 sHelpCommand += "-debuff : Allows you to completely remove all spells you have cast on yourself. Syntax: -debuff \n";
                 sHelpCommand += "-decloak : Allows you to remove only the invisibility effect you have cast on yourself. Syntax: -decloak \n";
                 sHelpCommand += "-delete : Allows you to delete a character from your vault. Syntax: -delete \n";
+                // sHelpCommand += "-description : Modify your description. Syntax: -description \n";
                 sHelpCommand += "-disguise : Allows you to disguise yourself using the various toggles on the examine system. (Class Standing, Strength, Dexterity, and Constitution) Syntax: -disguise \"Command\" Use -disguise help for full list.\n";
                 sHelpCommand += "-emote : Allows you to emote doing a particular action. For a full list of available emotes, use \"-emote list\". Syntax: -emote \"Action\" Ex: -emote sit \n";
                 if(GetLevelByClass(47,oPC)>=1)

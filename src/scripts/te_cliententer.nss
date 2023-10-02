@@ -21,46 +21,9 @@
 #include "nwnx_util"
 #include "nwnx_webhook_rch"
 #include "x3_inc_horse"
-#include "colors_inc"
 
 void main()
 {
-     string COLOR_S_WHITE     = "<cÿÿÿ>";
-     string COLOR_SGREY       = "<c¥¥¥>";
-     string COLOR_SLIGHTGREY  = "<c¥¥¥>";
-     string COLOR_SSANDY      = ColorTokenShout();
-
-     string COLOR_SRED        = ColorTokenRed();
-     string COLOR_SDARKRED    = ColorTokenRed();
-     string COLOR_SPINK       = ColorTokenPink();
-     string COLOR_SLIGHTPINK  = ColorTokenPink();
-
-     string COLOR_SORANGE     = ColorTokenOrange();
-     string COLOR_SYELLOWSERV = ColorTokenServer();
-
-     string COLOR_SLEMON      = ColorTokenYellow();
-     string COLOR_SYELLOW     = ColorTokenYellow();
-
-     string COLOR_SNEONGREEN  = ColorTokenTell();
-     string COLOR_SGREEN      = ColorTokenGreen();
-     string COLOR_SLIME       = ColorTokenGreen();
-     string COLOR_SLIGHTGREEN = ColorTokenGreen();
-
-     string COLOR_SDARKBLUE   = ColorTokenBlue();
-     string COLOR_SBLUE       = ColorTokenSkillCheck();
-
-     string COLOR_SPERIWINKLE = "<czzþ>";
-     string COLOR_SCYAN       = ColorTokenSkillCheck();
-
-     string COLOR_SLIGHTBLUE  = ColorTokenDM();
-     string COLOR_SDMBLUE     = ColorTokenDM();
-     string COLOR_SPALEBLUE   = ColorTokenSkillCheck();
-
-     string COLOR_SVIOLET     = ColorTokenLightPurple();
-     string COLOR_SPURPLE     = ColorTokenPurple();
-
-     string COLOR_SEND  = ColorTokenEnd();
-
     SF_HipsRestrictionOnClientEnter();
     object oPC = GetEnteringObject();
     object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
@@ -397,17 +360,17 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 ////////////////////////////////////////////////////////////////////////////////
 //Begin PC Welcome:
 ////////////////////////////////////////////////////////////////////////////////
-    string sWelcome = COLOR_SGREEN+"Welcome to Lands of Intrigue!";
-    sWelcome += "\n"+COLOR_SPERIWINKLE+"For information about the setting and current timeline please check Discord and your in-game Journal.";
-    sWelcome += "\n"+COLOR_SPERIWINKLE+"This is a Roleplay Server, so above all, we ask that you stay "+COLOR_SRED+"In Character"+COLOR_SPERIWINKLE+" at all times.";
-    sWelcome += "\n"+COLOR_SRED+"Please report all Module and Server specific Bugs in Discord and all NWN:EE specific bugs to Beamdog. ";
-    sWelcome += "\n"+COLOR_SYELLOW+"We hope you enjoy your stay.";
+    string sWelcome = GREEN+"Welcome to Lands of Intrigue!"+COLOR_END;
+    sWelcome += "\n"+WHITE+"For information about the setting and current timeline please check Discord and your in-game Journal."+COLOR_END;
+    sWelcome += "\n"+WHITE+"This is a Roleplay Server, so above all, we ask that you stay "+COLOR_END+BLUE+"In Character"+COLOR_END+WHITE+" at all times. "+COLOR_END;
+    sWelcome += "\n"+LIGHTGREY+"Please report all Module and Server specific Bugs on our forums and all NWN:EE specific bugs to Beamdog. "+COLOR_END;
+    sWelcome += "\n"+YELLOW+"We hope you enjoy your stay."+COLOR_END;
 
     SendMessageToPC(oPC,sWelcome);
 
     if ((GetCurrentHitPoints(oPC) > iHP) && (iHP != 0))
     {
-        SendMessageToPC(oPC,(COLOR_SRED+"Restoring Previously Recorded Hitpoints:"));
+        SendMessageToPC(oPC,(RED+"Restoring Previously Recorded Hitpoints:"+COLOR_END));
         ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectDamage((GetCurrentHitPoints(oPC)-iHP),DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_PLUS_TWENTY),oPC);
     }
 
