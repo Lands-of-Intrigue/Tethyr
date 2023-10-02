@@ -31,6 +31,7 @@
 #include "gs_inc_shop"
 #include "loi_weave"
 #include "loi_mythicxp"
+#include "colors_inc"
 
 const string DMFI_PLAYERCHAT_SCRIPTNAME = "dmfi_plychat_exe";
 
@@ -178,7 +179,7 @@ void main()
             if(GetLocalInt(oPC,"LangOn") == 1)
             {
                 int iLangSpoken = GetLocalInt(oPC,"LangSpoken");
-                string LANGCOLOR = "<cÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½EÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½>";
+                string sLangColor = ColorTokenOrange();
                 object oArea = GetArea(oPC);
                 string sName = GetName(oPC);
 
@@ -192,7 +193,7 @@ void main()
 
                 NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, "Translated ("+sSpeaking+"): "+sOriginal, GetName(oPC));
 
-                string sTranslate = LANGCOLOR+sName+" ("+sSpeaking+"): "+sOriginal+"</c>";
+                string sTranslate = sLangColor+sName+" ("+sSpeaking+"): "+sOriginal+"</c>";
                 string sColorOut = GetColorForLanguage(iLangSpoken);
                 string sOutput=sColorOut+TranslateCommonToLanguage(iLangSpoken,sOriginal)+COLOR_END;
 
@@ -557,7 +558,7 @@ void main()
                     NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, "Translated ("+sShouting+"): "+sNewOriginal, GetName(oPC));
                 }
 
-                string sTranslateShout = "<cÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½EÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½>"+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
+                string sTranslateShout = ColorTokenShout()+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
                 string sColorShout = GetColorForLanguage(iLangShout);
                 string sShoutOutput=sColorShout+TranslateCommonToLanguage(iLangShout,sNewOriginal)+COLOR_END;
 
