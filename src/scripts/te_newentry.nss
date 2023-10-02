@@ -1,53 +1,17 @@
-const string WHITE      = "<cððð>"; // talk
-const string GREY       = "<cŠŠŠ>"; //"<c€€€>"; // whisper
-const string LIGHTGREY  = "<c¥¥¥>";
-const string SANDY      = "<cþïP>"; // shout
-
-const string RED        = "<cþ  >";
-const string DARKRED    = "<c¡*0>";
-const string PINK       = "<cÒdd>";
-const string LIGHTPINK  = "<cædd>";
-
-const string ORANGE     = "<cþ} >";
-const string YELLOWSERV = "<cþf >"; // experimental
-
-const string LEMON      = "<cþþ >";
-const string YELLOW     = "<cþ× >";
-
-const string NEONGREEN  = "<c#þ#>"; // tell
-const string GREEN      = "<c0¡0>"; // name preceding description
-const string LIME       = "<c¡Òd>"; // description
-const string LIGHTGREEN = "<c¡Ñd>";
-
-const string DARKBLUE   = "<c  þ>";
-const string BLUE       = "<c zþ>"; // skill blue
-//const string BLUE       = "<cAiá>";
-//const string BLUE       = "<cd¡Ñ>";
-const string PERIWINKLE = "<czzþ>";
-const string CYAN       = "<c þþ>"; // saving throw
-
-const string LIGHTBLUE  = "<c#ßþ>"; // DM chat
-const string DMBLUE     = "<c#ßþ>"; // DM chat
-const string PALEBLUE   = "<c‡þþ>"; // name in skill check/saving throw
-
-const string VIOLET     = "<c¡dÑ>";
-const string PURPLE     = "<c¢Gd>";
-
-const string COLOR_END  = "</c>";
-
 #include "nwnx_admin"
 #include "nwnx_player"
 #include "nwnx_player_qbs"
+#include "te_functions"
 
 void main()
 {
     object oPC = GetEnteringObject();
-    SendMessageToPC(oPC, YELLOW+"Welcome to Lands of Intrigue!");
+    SendMessageToPC(oPC, GREEN+"Welcome to Lands of Intrigue!");
     SendMessageToPC(oPC, YELLOW+"This room is where Customization Feats will be applied to your character. You have been granted enough XP to reach Level 3. Please make sure you fully levelup before doing anything else in this room. All of your first three classes must be the same. Afterwards, there are no restrictions. 3.5 Edition multiclassing rules apply. ");
     SendMessageToPC(oPC, YELLOW+"Pull one of the levers to your left or right to select Customization Feats such as Class Standing, Background, Ethnicity, Deity, Language and Proficiencies.  Please note that some of these choices such as Class Standing and Background do affect certain dialogue options and mechanical opportunities in-game. ");
     SendMessageToPC(oPC, RED+"Warning: You must have completed Customization Feat Selection and leveled up to Level 3 before you leave this room.");
-    SendMessageToPC(oPC, RED+"Note: If you appear to be a dwarf and are not a dwarf please re-log and it will be fixed.");
-    SendMessageToPC(oPC, RED+"Note: Languages can be selected. If you do not have any options that appear for you, you have reached the limit of languages you can select.");
+    SendMessageToPC(oPC, ORANGE+"Note: If you appear to be a dwarf and are not a dwarf please re-log and it will be fixed.");
+    SendMessageToPC(oPC, ORANGE+"Note: Languages can be selected. If you do not have any options that appear for you, you have reached the limit of languages you can select.");
 
     NWNX_Player_ForcePlaceableExamineWindow(oPC,GetNearestObjectByTag("te_welcome",oPC,1));
     NWNX_Player_SetQuickBarSlot(oPC,12,NWNX_Player_QBS_UseFeat(1106));

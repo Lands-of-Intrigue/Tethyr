@@ -9,6 +9,7 @@
 #include "nbde_inc"
 #include "x0_i0_spawncond"
 #include "zdlg_include_i"
+#include "colors_inc"
 
 
 const string FACTION_GROVE_SPIRE     = "A_GroveSpire";
@@ -155,54 +156,48 @@ const string WP_INVENTORY       = "wp_inventory_persist";
 string BR                       = "\n";
 string Q                        = "'";
 
-/*  These are the colors used in the AID responses. They may be adjusted to
-    taste though be aware that the toolset script editor does not play nice with
-    certain characters, as such a number of colors will generate compile errors.
- */
-const string WHITE      = "<c���>"; // talk
-const string GREY       = "<c���>"; //"<c���>"; // whisper
-const string LIGHTGREY  = "<c���>";
-const string SANDY      = "<c��E>"; // shout
+// COLORS
+string WHITE      = ColorTokenDialog(); // talk
+string GREY       = ColorTokenWhisper(); // whisper
+string LIGHTGREY  = ColorToken(192,192,192);
+string SANDY      = ColorTokenShout(); // shout
 
-const string RED        = "<c�  >";
-const string DARKRED    = "<c�*0>";
-const string PINK       = "<c�dd>";
-const string LIGHTPINK  = "<c�dd>";
+string RED        = ColorTokenRed();
+string DARKRED    = ColorTokenRed();
+string PINK       = ColorTokenPink();
+string LIGHTPINK  = ColorTokenPink();
 
-const string ORANGE     = "<c�} >";
-const string YELLOWSERV = "<c�f >"; // experimental
+string ORANGE     = ColorTokenOrange();
 
-const string LEMON      = "<c�� >";
-const string YELLOW     = "<c�� >";
+string LEMON      = ColorTokenYellow();
+string YELLOW     = ColorTokenYellow();
 
-const string NEONGREEN  = "<c#�#>"; // tell
-const string GREEN      = "<c0�0>"; // name preceding description
-const string LIME       = "<c��d>"; // description
-const string LIGHTGREEN = "<c��d>";
+string NEONGREEN  = ColorTokenTell(); // tell
+string GREEN      = ColorTokenGreen(); // name preceding description
+string LIME       = ColorTokenGreen(); // description
+string LIGHTGREEN = ColorTokenGreen();
 
-const string DARKBLUE   = "<c  �>";
-const string BLUE       = "<c z�>"; // skill blue
-//const string BLUE       = "<cAi�E";
-//const string BLUE       = "<cd��>";
-const string PERIWINKLE = "<czz�>";
-const string CYAN       = "<c ��>"; // saving throw
+string DARKBLUE   = ColorTokenBlue();
+string BLUE       = ColorTokenSkillCheck(); // skill blue
+string PERIWINKLE = ColorTokenSkillCheck();
+string CYAN       = ColorTokenSkillCheck(); // saving throw
 
-const string LIGHTBLUE  = "<c#��>"; // DM chat
-const string DMBLUE     = "<c#��>"; // DM chat
-const string PALEBLUE   = "<c�E�>"; // name in skill check/saving throw
+string LIGHTBLUE  = ColorTokenDM(); // DM chat
+string DMBLUE     = ColorTokenDM(); // DM chat
+string PALEBLUE   = ColorTokenSkillCheck(); // name in skill check/saving throw
 
-const string VIOLET     = "<c�d�>";
-const string PURPLE     = "<c�Gd>";
+string VIOLET     = ColorTokenLightPurple();
+string PURPLE     = ColorTokenPurple();
 
-const string COLOR_END  = "</c>";
+string COLOR_END  = ColorTokenEnd();
 
-const string COLOR_ACTION       = RED;
-const string COLOR_OBJECT       = ORANGE;
-const string COLOR_DESCRIPTION  = LIGHTGREY;
-const string COLOR_MESSAGE      = LIGHTGREY;
-const string COLOR_WHITE        = WHITE;
-const string COLOR_DUMPHEADER   = "<c�>";
-const string COLOR_VARNAME      = "<c�E>";
+string COLOR_ACTION       = RED;
+string COLOR_OBJECT       = ORANGE;
+string COLOR_DESCRIPTION  = LIGHTGREY;
+string COLOR_MESSAGE      = LIGHTGREY;
+string COLOR_WHITE        = WHITE;
+string COLOR_DUMPHEADER   = WHITE;
+string COLOR_VARNAME      = LIGHTGREY;
 
 // LIGHT SYSTEM ----------------------------------------------------------------
 const string LIGHT_COLOR    = "LIGHT_COLOR";

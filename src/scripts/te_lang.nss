@@ -6,19 +6,19 @@ string GetColorForLanguage(int iLangSpoken)
 
     switch (iLangSpoken)
     {
-        case 1:  sReturn = "<cþïP>"; break; //Elven
-        case 2:  sReturn = "<cþïP>"; break; //Gnomish
-        case 3:  sReturn = "<cþïP>"; break; //Halfling
-        case 4:  sReturn = "<cþïP>"; break; //Dwarven
+        case 1:  sReturn = YELLOW; break; //Elven
+        case 2:  sReturn = YELLOW; break; //Gnomish
+        case 3:  sReturn = YELLOW; break; //Halfling
+        case 4:  sReturn = YELLOW; break; //Dwarven
         case 5:  sReturn = LIGHTGREEN; break; //Orcish
         case 6:  sReturn = LIGHTGREEN; break; //Goblin
         case 7:  sReturn = RED; break; //Draconic
         case 8:  sReturn = LIGHTGREEN; break; //Animal
-        case 9:  sReturn = "<cþþþ>"; break; //Thieves Cant
-        case 10: sReturn = "<cþþþ>"; break; //Celestial
+        case 9:  sReturn = WHITE; break; //Thieves Cant
+        case 10: sReturn = VIOLET; break; //Celestial
         case 11: sReturn = DARKRED; break; //Abyssal
         case 12: sReturn = DARKRED; break; //Infernal
-        case 13: sReturn = "<cþþþ>"; break; //Drow
+        case 13: sReturn = PURPLE; break; //Drow
         case 14: sReturn = LIGHTGREEN; break; //Druidic
         case 22: sReturn = ORANGE; break; //Illuskan
         case 23: sReturn = ORANGE; break; //Alzhedo
@@ -32,9 +32,9 @@ string GetColorForLanguage(int iLangSpoken)
         case 53: sReturn = ORANGE; break; //Chondathan
         case 55: sReturn = ORANGE; break; //Chultan
         case 56: sReturn = ORANGE; break; //Damaran
-        case 64: sReturn = "<cþïP>"; break; //Duergar
-        case 81: sReturn = "<cþþþ>"; break; //Drow Sign
-        default: sReturn = "<cþþþ>"; break;
+        case 64: sReturn = PURPLE; break; //Duergar
+        case 81: sReturn = WHITE; break; //Drow Sign
+        default: sReturn = WHITE; break;
     }
     return sReturn;
 }

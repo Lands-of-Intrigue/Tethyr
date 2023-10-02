@@ -31,6 +31,7 @@
 #include "gs_inc_shop"
 #include "loi_weave"
 #include "loi_mythicxp"
+#include "colors_inc"
 
 const string DMFI_PLAYERCHAT_SCRIPTNAME = "dmfi_plychat_exe";
 
@@ -178,7 +179,7 @@ void main()
             if(GetLocalInt(oPC,"LangOn") == 1)
             {
                 int iLangSpoken = GetLocalInt(oPC,"LangSpoken");
-                string LANGCOLOR = "<c�E�>";
+                string sLangColor = ColorTokenOrange();
                 object oArea = GetArea(oPC);
                 string sName = GetName(oPC);
 
@@ -192,7 +193,7 @@ void main()
 
                 NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, "Translated ("+sSpeaking+"): "+sOriginal, GetName(oPC));
 
-                string sTranslate = LANGCOLOR+sName+" ("+sSpeaking+"): "+sOriginal+"</c>";
+                string sTranslate = sLangColor+sName+" ("+sSpeaking+"): "+sOriginal+"</c>";
                 string sColorOut = GetColorForLanguage(iLangSpoken);
                 string sOutput=sColorOut+TranslateCommonToLanguage(iLangSpoken,sOriginal)+COLOR_END;
 
@@ -482,6 +483,7 @@ void main()
                 sHelpCommand += "-debuff : Allows you to completely remove all spells you have cast on yourself. Syntax: -debuff \n";
                 sHelpCommand += "-decloak : Allows you to remove only the invisibility effect you have cast on yourself. Syntax: -decloak \n";
                 sHelpCommand += "-delete : Allows you to delete a character from your vault. Syntax: -delete \n";
+                // sHelpCommand += "-description : Modify your description. Syntax: -description \n";
                 sHelpCommand += "-disguise : Allows you to disguise yourself using the various toggles on the examine system. (Class Standing, Strength, Dexterity, and Constitution) Syntax: -disguise \"Command\" Use -disguise help for full list.\n";
                 sHelpCommand += "-emote : Allows you to emote doing a particular action. For a full list of available emotes, use \"-emote list\". Syntax: -emote \"Action\" Ex: -emote sit \n";
                 if(GetLevelByClass(47,oPC)>=1)
@@ -503,6 +505,7 @@ void main()
                 }
                 sHelpCommand += "-place : Allows you to update the name or description of a placeable. Functions similarly to the writing system. Type \"-place help\" for all available commands. Syntax: -place. \n";
                 sHelpCommand += "-piety : Returns your current divine standing in the form of piety (0-100)\n";
+                sHelpCommand += "-portrait : Returns your portrait resource reference (res_ref). Type \"-portrait set res_ref\" to reassign your portrait\n";
                 sHelpCommand += "-proficiency : Allows you to select a proficiency if the conversation does not appear for you the first time.\n";
                 sHelpCommand += "-rest : Gives next rest time. \n";
                 sHelpCommand += "-rename : Allows you to change the name and description of an object in your inventory. Type \"-rename help\" for all available commands. Syntax: -rename.\n";
@@ -556,7 +559,7 @@ void main()
                     NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, "Translated ("+sShouting+"): "+sNewOriginal, GetName(oPC));
                 }
 
-                string sTranslateShout = "<c�E�>"+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
+                string sTranslateShout = ColorTokenShout()+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
                 string sColorShout = GetColorForLanguage(iLangShout);
                 string sShoutOutput=sColorShout+TranslateCommonToLanguage(iLangShout,sNewOriginal)+COLOR_END;
 
@@ -1237,6 +1240,18 @@ void main()
             {
                 string sPiety = IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"nPiety"));
                 SendMessageToPC(oPC,"Your Piety is currently "+sPiety+".");
+            }
+            else if(sCurrCommandArg == "portrait")
+            {
+                if (sCommandArg2 == "set")
+                {
+                    SetPortraitResRef(oPC, sCommandArg3);
+                    SendMessageToPC(oPC,"Your portrait is now set to "+GetPortraitResRef(oPC));
+                }
+                else
+                {
+                    SendMessageToPC(oPC,"Your portrait resource reference is "+GetPortraitResRef(oPC));
+                }
             }
             else if(sCurrCommandArg == "write")
             {
