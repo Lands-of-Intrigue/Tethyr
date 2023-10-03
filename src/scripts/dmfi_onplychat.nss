@@ -108,7 +108,6 @@ void main()
 
     if((GetPCChatVolume() == TALKVOLUME_TALK) || (GetPCChatVolume()==TALKVOLUME_WHISPER))
     {
-        SetPCChatMessage("");
         string sFirstChar = GetStringLeft(sChatMessage, 1);
         string sMessage = GetStringRight(sChatMessage, GetStringLength(sChatMessage) - 1);
 
@@ -337,11 +336,12 @@ void main()
                 }
             }
         }
+        SetPCChatMessage("");
     }
     else if (GetPCChatVolume() == TALKVOLUME_PARTY)
     {
-        SetPCChatMessage("");
         SendMessageToPC(oPC, RED+ "Party Chat is Disabled." +COLOR_END+ " Your message was: " +sChatMessage);
+        SetPCChatMessage("");
     }
 }
 
