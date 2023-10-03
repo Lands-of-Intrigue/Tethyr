@@ -21,9 +21,14 @@
 
 const string DMFI_PLAYERCHAT_SCRIPTNAME = "dmfi_plychat_exe";
 
-const string EMOTE_STYLE_TOKEN_NARRATIVE = "\"";
-// const string EMOTE_STYLE_TOKEN_BRACKET_1 = "[";
-// const string EMOTE_STYLE_TOKEN_BRACKET_2 = "]";
+const int NARRATION_STYLE_QUOTATIONS = 0;
+const int NARRATION_STYLE_BRACKETS   = 1;
+const int NARRATION_STYLE_STARS      = 2;
+
+const string QUOTATION_CHARACTER = "\"";
+const string BRACKET_OPEN_CHARACTER = "[";
+const string BRACKET_CLOSE_CHARACTER = "]";
+const string STAR_CHARACTER = "*";
 
 ////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS, do not call outside of on chat
@@ -103,6 +108,7 @@ void main()
 
     if((GetPCChatVolume() == TALKVOLUME_TALK) || (GetPCChatVolume()==TALKVOLUME_WHISPER))
     {
+        SetPCChatMessage("");
         string sFirstChar = GetStringLeft(sChatMessage, 1);
         string sMessage = GetStringRight(sChatMessage, GetStringLength(sChatMessage) - 1);
 
@@ -172,64 +178,124 @@ void main()
                 sEmoteColor = DARKBLUE;
             }
 
-            // emote style parsing
             string sCurrentChar = sFirstChar;
             int i = 0;
             int bSpeaking = FALSE;
             int bEmoting = FALSE;
             string sSpeech = sSpeechStart;
             string sSpeechObscured = sSpeechStart;
-            while (i < GetStringLength(sOriginal))
+
+            int nNarrationStyle = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"), "narration_style");
+
+            if (nNarrationStyle == NARRATION_STYLE_BRACKETS || nNarrationStyle == NARRATION_STYLE_STARS)
             {
-                if (sCurrentChar == EMOTE_STYLE_TOKEN_NARRATIVE)
+                string sEmoteStartChar = BRACKET_OPEN_CHARACTER;
+                string sEmoteEndChar = BRACKET_CLOSE_CHARACTER;
+                if (nNarrationStyle == NARRATION_STYLE_STARS)
                 {
-                    if (!bEmoting && !bSpeaking) // first character
-                    {
-                        sSpeech         += sSpeechColor + sCurrentChar;
-                        sSpeechObscured += sSpeechColor + sCurrentChar;
-                        bSpeaking = TRUE;
-                    }
-                    else if (bEmoting)
-                    {
-                        sSpeech         += COLOR_END + sSpeechColor + sCurrentChar;
-                        sSpeechObscured += COLOR_END + sSpeechColor + sCurrentChar;
-                        bSpeaking = TRUE;
-                        bEmoting = FALSE;
-                    }
-                    else if (bSpeaking)
-                    {
-                        sSpeech         += sCurrentChar + COLOR_END + sEmoteColor;
-                        sSpeechObscured += sCurrentChar + COLOR_END + sEmoteColor;
-                        bSpeaking = FALSE;
-                        bEmoting = TRUE;
-                    }
+                    sEmoteStartChar = STAR_CHARACTER;
+                    sEmoteEndChar = STAR_CHARACTER;
                 }
-                else
+
+                while (i < GetStringLength(sOriginal))
                 {
-                    if (!bEmoting && !bSpeaking) // first character
+                    if (!bEmoting && !bSpeaking)
                     {
-                        sSpeech         += sEmoteColor + sCurrentChar;
-                        sSpeechObscured += sEmoteColor + sCurrentChar;
-                        bEmoting = TRUE;
+                        if (sCurrentChar == sEmoteStartChar)
+                        {
+                            sSpeech         += sEmoteColor + sCurrentChar;
+                            sSpeechObscured += sEmoteColor + sCurrentChar;
+                            bEmoting = TRUE;
+                        }
+                        else
+                        {
+                            sSpeech         += sSpeechColor + sCurrentChar;
+                            sSpeechObscured += sSpeechColor + TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
+                            bSpeaking = TRUE;
+                        }
                     }
                     else if (bEmoting)
                     {
                         sSpeech         += sCurrentChar;
                         sSpeechObscured += sCurrentChar;
+                        if (sCurrentChar == sEmoteEndChar)
+                        {
+                            sSpeech         += COLOR_END;
+                            sSpeechObscured += COLOR_END;
+                            bEmoting = FALSE;
+                        }
                     }
                     else if (bSpeaking)
                     {
-                        sSpeech         += sCurrentChar;
-                        sSpeechObscured += TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
+                        if (sCurrentChar == sEmoteStartChar)
+                        {
+                            sSpeech         += COLOR_END + sEmoteColor + sCurrentChar;
+                            sSpeechObscured += COLOR_END + sEmoteColor + sCurrentChar;
+                            bSpeaking = FALSE;
+                            bEmoting = TRUE;
+                        }
+                        else
+                        {
+                            sSpeech         += sCurrentChar;
+                            sSpeechObscured += TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
+                        }
                     }
+                    i++;
+                    sCurrentChar = GetSubString(sOriginal, i, 1);
                 }
-                i++;
-                sCurrentChar = GetSubString(sOriginal, i, 1);
             }
-
+            else // default to NARRATION_STYLE_QUOTATIONS
+            {
+                while (i < GetStringLength(sOriginal))
+                {
+                    if (sCurrentChar == QUOTATION_CHARACTER)
+                    {
+                        if (!bEmoting && !bSpeaking) // first character
+                        {
+                            sSpeech         += sSpeechColor + sCurrentChar;
+                            sSpeechObscured += sSpeechColor + sCurrentChar;
+                            bSpeaking = TRUE;
+                        }
+                        else if (bEmoting)
+                        {
+                            sSpeech         += COLOR_END + sSpeechColor + sCurrentChar;
+                            sSpeechObscured += COLOR_END + sSpeechColor + sCurrentChar;
+                            bSpeaking = TRUE;
+                            bEmoting = FALSE;
+                        }
+                        else if (bSpeaking)
+                        {
+                            sSpeech         += sCurrentChar + COLOR_END + sEmoteColor;
+                            sSpeechObscured += sCurrentChar + COLOR_END + sEmoteColor;
+                            bSpeaking = FALSE;
+                            bEmoting = TRUE;
+                        }
+                    }
+                    else
+                    {
+                        if (!bEmoting && !bSpeaking) // first character
+                        {
+                            sSpeech         += sEmoteColor + sCurrentChar;
+                            sSpeechObscured += sEmoteColor + sCurrentChar;
+                            bEmoting = TRUE;
+                        }
+                        else if (bEmoting)
+                        {
+                            sSpeech         += sCurrentChar;
+                            sSpeechObscured += sCurrentChar;
+                        }
+                        else if (bSpeaking)
+                        {
+                            sSpeech         += sCurrentChar;
+                            sSpeechObscured += TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
+                        }
+                    }
+                    i++;
+                    sCurrentChar = GetSubString(sOriginal, i, 1);
+                }
+            }
             if (GetPCChatVolume() == TALKVOLUME_TALK)
             {
-                SetPCChatMessage("");
                 object oTalk = GetFirstObjectInShape(SHAPE_SPHERE, 20.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 while (GetIsObjectValid(oTalk))
                 {
@@ -243,7 +309,6 @@ void main()
             }
             else if (GetPCChatVolume() == TALKVOLUME_WHISPER)
             {
-                SetPCChatMessage("");
                 object oWhisp = GetFirstObjectInShape(SHAPE_SPHERE, 10.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
 
                 while (GetIsObjectValid(oWhisp))
@@ -275,11 +340,8 @@ void main()
     }
     else if (GetPCChatVolume() == TALKVOLUME_PARTY)
     {
-        if(!GetIsDM(oPC) && !GetIsDMPossessed(oPC))
-        {
-            SetPCChatMessage("");
-            SendMessageToPC(oPC, RED+ "Party Chat is Disabled." +COLOR_END+ " Your message was: " +sChatMessage);
-        }
+        SetPCChatMessage("");
+        SendMessageToPC(oPC, RED+ "Party Chat is Disabled." +COLOR_END+ " Your message was: " +sChatMessage);
     }
 }
 
@@ -289,7 +351,6 @@ void ProcessCommand(string sCommand)
     string sOriginal = GetPCChatMessage();
     string sChatMessage = sCommand;
     
-    SetPCChatMessage("");
     object oDataObject = GetItemPossessedBy(oPC,"PC_Data_Object");
 
     string sCurrCommandArg = parseArgs(sCommand,0);
@@ -336,6 +397,7 @@ void ProcessCommand(string sCommand)
         sHelpCommand += "-piety : Returns your current divine standing in the form of piety (0-100)\n";
         sHelpCommand += "-portrait : Returns your portrait resource reference (res_ref). Type \"-portrait set res_ref\" to reassign your portrait\n";
         sHelpCommand += "-proficiency : Allows you to select a proficiency if the conversation does not appear for you the first time.\n";
+        sHelpCommand += "-narration : Lets you set your narration style so that language obscurring and emote colouring is applied correctly. Supported options are quotations, brackets, or stars.\n";
         sHelpCommand += "-rest : Gives next rest time. \n";
         sHelpCommand += "-rename : Allows you to change the name and description of an object in your inventory. Type \"-rename help\" for all available commands. Syntax: -rename.\n";
         sHelpCommand += "-roll : Privately rolls a desired skill or ability. For full list of available rolls, use \"-roll list\" Syntax: -roll \"Ability/Skill/Save\" Ex: -roll will \n";
@@ -470,6 +532,29 @@ void ProcessCommand(string sCommand)
         else
         {
             SendMessageToPC(oPC,"Command not available to non-warlocks.");
+        }
+    }
+    else if(sCurrCommandArg == "narration")
+    {
+        if (sCommandArg2 == "quotations" || sCommandArg2 == "0")
+        {
+            SetLocalInt(oDataObject, "narration_style", NARRATION_STYLE_QUOTATIONS);
+            SendMessageToPC(oPC,"Your narrative style is set to quotations. \"Hello\" will indicate speech. Everything else will be narration.");
+        }
+        else if (sCommandArg2 == "brackets" || sCommandArg2 == "1")
+        {
+            SetLocalInt(oDataObject, "narration_style", NARRATION_STYLE_BRACKETS);
+            SendMessageToPC(oPC,"Your narrative style is set to brackets. [smirks] will indicate narration. Everything else will be speech.");
+        }
+        else if (sCommandArg2 == "stars" || sCommandArg2 == "2")
+        {
+            SetLocalInt(oDataObject, "narration_style", NARRATION_STYLE_STARS);
+            SendMessageToPC(oPC,"Your narrative style is set to start. *smirks* will indicate narration. Everything else will be speech.");
+        }
+        else
+        {
+            int nStyle = GetLocalInt(oDataObject, "narration_style");
+            SendMessageToPC(oPC,"Unrecognized option. Please set to quotations (0), brackets (1), or stars (2). Your current narration style is: " + IntToString(nStyle));
         }
     }
     else if(sCurrCommandArg == "rename")
@@ -2406,7 +2491,6 @@ void ProjectSpeechTo(int nAssociateType, string sMessage)
     if(oAssociate != OBJECT_INVALID)
     {
         AssignCommand(oAssociate, ActionSpeakString(sMessage, GetPCChatVolume()));
-        SetPCChatMessage("");
     }
 }
 
