@@ -21,6 +21,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -50,6 +54,10 @@
                 "type": "resref",
                 "value": ""
               },
+              "ConditionParams": {
+                "type": "list",
+                "value": []
+              },
               "Index": {
                 "type": "dword",
                 "value": 0
@@ -76,7 +84,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "<StartAction>[The drunk peasant hiccups.]</Start> Bad 'nough my farm is destroyed, but now ye making me look at yer ugly mug. Can't ye see I be trying ter drink in peace?"
+            "0": "<StartAction>[The drunk peasant hiccups.]</Start> \"Bad 'nough my farm 'as been hit by the Blight, but now ye making me look at yer ugly mug. Can't ye see I be trying ter drink in peace?\""
           }
         }
       }
@@ -84,7 +92,7 @@
   },
   "NumWords": {
     "type": "dword",
-    "value": 31
+    "value": 35
   },
   "PreventZoomIn": {
     "type": "byte",
@@ -95,6 +103,10 @@
     "value": [
       {
         "__struct_id": 0,
+        "ActionParams": {
+          "type": "list",
+          "value": []
+        },
         "Animation": {
           "type": "dword",
           "value": 0
@@ -130,7 +142,7 @@
         "Text": {
           "type": "cexolocstring",
           "value": {
-            "0": "[Okay...]"
+            "0": "[Leave]"
           }
         }
       }
@@ -144,6 +156,10 @@
         "Active": {
           "type": "resref",
           "value": ""
+        },
+        "ConditionParams": {
+          "type": "list",
+          "value": []
         },
         "Index": {
           "type": "dword",
