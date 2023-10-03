@@ -162,11 +162,7 @@ void main()
     {
         if (GetArea(oParty) != oArea)
         {
-            SendMessageToPC(oParty,"You are in a cross-area party. This significantly contributes to lag across the server. Please leave your cross-area party if you are not actively adventuring with those in your party.");
-            if(GetIsDMPossessed(oKiller) == FALSE)
-            {
-                SendMessageToAllDMs(GetName(oParty)+" is in a cross-area party.");
-            }
+            SendMessageToPC(oParty,"You are in a cross-area party. This contributes to lag across the server. Please leave your cross-area party if you are not actively adventuring with those in your party.");
         }
         // Make sure the party member is NOT dead and are within the specified distance
         fDist = GetDistanceToObject(oParty);

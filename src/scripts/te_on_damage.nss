@@ -4,6 +4,8 @@
 #include "x2_inc_itemprop"
 #include "inc_sqlite_time"
 #include "nw_i0_spells"
+#include "loi_mythicxp"
+
 // sets oPC's current hitpoints to value of nHP - [FILE: _inc_util]
 void SetHitPoints(object oPC, int nHP);
 void Mythic(object oTarget, struct NWNX_Damage_DamageEventData data);
@@ -49,17 +51,7 @@ void Mythic(object oTarget, struct NWNX_Damage_DamageEventData data)
     // CON Mythic XP on damage take
     if (GetIsPC(oTarget))
     {
-        int iCon = GetLocalInt(GetItemPossessedBy(oTarget,"PC_Data_Object"),"MythicCON");
-        SetLocalInt(GetItemPossessedBy(oTarget,"PC_Data_Object"),"MythicCON", iCon+1);
-        if (
-        iCon + 1 == 1000 ||
-        iCon + 1 == 2000 ||
-        iCon + 1 == 3000 ||
-        iCon + 1 == 4000 ||
-        iCon + 1 == 8000 )
-        {
-            NWNX_Creature_SetRawAbilityScore(oTarget, ABILITY_CONSTITUTION, NWNX_Creature_GetRawAbilityScore(oTarget, ABILITY_CONSTITUTION)+1);
-        }
+        TickMythicXp(oTarget, ABILITY_CONSTITUTION);
     }
     if (GetIsPC(data.oDamager))
     {
@@ -72,32 +64,11 @@ void Mythic(object oTarget, struct NWNX_Damage_DamageEventData data)
             iRight == BASE_ITEM_LONGBOW ||
             iRight == BASE_ITEM_GRENADE)
         {
-
-            int iDex = GetLocalInt(GetItemPossessedBy(data.oDamager,"PC_Data_Object"),"MythicDEX");
-            SetLocalInt(GetItemPossessedBy(data.oDamager,"PC_Data_Object"),"MythicDEX", iDex+1);
-            if (
-            iDex + 1 == 1000 ||
-            iDex + 1 == 2000 ||
-            iDex + 1 == 3000 ||
-            iDex + 1 == 4000 ||
-            iDex + 1 == 8000 )
-            {
-                NWNX_Creature_SetRawAbilityScore(data.oDamager, ABILITY_DEXTERITY, NWNX_Creature_GetRawAbilityScore(data.oDamager, ABILITY_DEXTERITY)+1);
-            }
+            TickMythicXp(data.oDamager, ABILITY_DEXTERITY);
         }
         else
         {
-            int iStr = GetLocalInt(GetItemPossessedBy(data.oDamager,"PC_Data_Object"),"MythicSTR");
-            SetLocalInt(GetItemPossessedBy(data.oDamager,"PC_Data_Object"),"MythicSTR", iStr+1);
-            if (
-            iStr + 1 == 1000 ||
-            iStr + 1 == 2000 ||
-            iStr + 1 == 3000 ||
-            iStr + 1 == 4000 ||
-            iStr + 1 == 8000 )
-            {
-                NWNX_Creature_SetRawAbilityScore(data.oDamager, ABILITY_STRENGTH, NWNX_Creature_GetRawAbilityScore(data.oDamager, ABILITY_STRENGTH)+1);
-            }
+            TickMythicXp(data.oDamager, ABILITY_STRENGTH);
         }
     }
 }

@@ -38,25 +38,15 @@
 #include "x2_inc_craft"
 #include "x3_inc_horse"
 #include "te_functions"
-#include "sp_wild_func"
+#include "loi_weave"
+#include "loi_mythicxp"
 #include "nwnx_creature"
 
 
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
-// Deadmagic zone
-// this function will check if the caster is in a Deadmagic zone and
-// to what degree the deadmagic affects the caster Shadow weave practitioners
-// and Mystran specialty priests will be immune
-int X2DeadmagicZone();
 
-// Wildmagic zone
-// This function will check for any wild magic effects and send calls to the
-// wild magic tables based on that.
-void X2WildMagicZone();
-
-//Mythic XP Hookin for Wisdom and Intelligence.
-//Gives 1 Mythic XP in a stat based on arcane
+//Mythic XP Hookin for spellcasting stat
 void X2MythicXP();
 
 // Use Magic Device Check.
@@ -91,173 +81,30 @@ int X2GetSpellCastOnSequencerItem(object oItem);
 int X2RunUserDefinedSpellScript();
 
 
-void X2WildMagicZone()
-{
-   object oTarget = GetSpellTargetObject();
-   int nSpell = GetSpellId();
-   object oCaster = OBJECT_SELF;
-   object oArea = GetArea(oCaster);
-   int nWildChance = GetCampaignInt("Wildmagic",GetTag(oArea));
-   if(nWildChance > 1 && ( (GetLevelByClass(CLASS_TYPE_DRUID, oCaster) >= 3) || (GetLevelByClass(CLASS_TYPE_RANGER, oCaster) >= 5) ))
-   {
-        SendMessageToPC(oCaster, "The weave has become strange and foreign here, magic may have additional unintended effects.");
-   }
-   if (GetLevelByClass(56, oCaster )>= 1)
-   {
-        SetCampaignInt("Wildmagic",GetTag(oArea), nWildChance - d8(1));
-   }
-   else if (GetLevelByClass(49, oCaster) >= 1 && d100(1) > 50)
-   {
-        SetCampaignInt("Wildmagic",GetTag(oArea), nWildChance + d8(1));
-   }
-
-   if(GetCampaignInt("Wildmagic",GetTag(oArea)) < 0)   {SetCampaignInt("Deadmagic",GetTag(oArea),0);}
-   if(GetCampaignInt("Wildmagic",GetTag(oArea)) > 100) {SetCampaignInt("Deadmagic",GetTag(oArea),100);}
-
-   if (d100(1) < nWildChance)
-        WildMagicEffects(oCaster, oTarget);
-}
-
-int X2DeadmagicZone()
-{
-    object oCaster = OBJECT_SELF;
-    object oArea = GetArea(oCaster);
-    int nSpellFailure = GetCampaignInt("Deadmagic",GetTag(oArea));
-
-    //  checking if the caster notices the damage to the weave
-    //  this used to check feat 1586, which seemed to lead nowhere
-    //  it now checks for the weave resonance feat
-    if (nSpellFailure > 1 && (GetHasFeat(1599, oCaster)))
-    {
-       SendMessageToPC(oCaster, "You sense strange distortions in the local Weave. Spells cast in this area are prone to failure.");
-       if(nSpellFailure < 33)
-       {
-        SendMessageToPC(oCaster, "Further inspection suggests that the damage to the Weave is probably minor.");
-       }
-       else if (nSpellFailure < 66)
-       {
-        SendMessageToPC(oCaster, "Further inspection suggests significant damage to the fabric of the Weave.");
-       }
-       else
-       {
-        SendMessageToPC(oCaster, "Further inspection suggests extreme damage to the fabric of the Weave. It will be difficult to repair");
-       }
-    }
-
-    // Mearly casting the spell will strenthen or weaken the weave.
-    if (GetLevelByClass(48 , oCaster)  >=1) // shadow channeller
-    {
-    SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure + (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/4));
-    }
-    else if (GetHasFeat(1300, oCaster)) // shadow magic feat
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure + (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/8));
-    }
-    else if(GetLevelByClass(56, oCaster)  >= 1) // mystic knight
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/4));
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - TE_GetCasterLevel(oCaster, GetLastSpellCastClass()));
-    }
-    else if(GetHasFeat(DEITY_Mystra, oCaster) && ( GetLevelByClass(CLASS_TYPE_CLERIC, oCaster)  >= 1 || GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) >= 1))
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - (TE_GetCasterLevel(oCaster, GetLastSpellCastClass())/6));
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - TE_GetCasterLevel(oCaster, GetLastSpellCastClass()));
-    }
-    else if(GetHasFeat(DEITY_Azuth, oCaster) && GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) >= 1)
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea), nSpellFailure - ( TE_GetCasterLevel(oCaster, GetLastSpellCastClass()) / 8 ));
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - ( TE_GetCasterLevel(oCaster, GetLastSpellCastClass()) / 2 ));
-    }
-    else
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea),nSpellFailure - 1);
-        //SetLocalInt(oArea, "Deadmagic", nSpellFailure - 1);
-    }
-
-    // making shure that Deadmagic is no less then 0 (full strength of the weave) or greater than 100 (100% spell falliure)
-    if(GetCampaignInt("Deadmagic",GetTag(oArea)) < 0)   {SetCampaignInt("Deadmagic",GetTag(oArea),0);}
-    if(GetCampaignInt("Deadmagic",GetTag(oArea)) > 100) {SetCampaignInt("Deadmagic",GetTag(oArea),100);}
-
-    // roll for spell failliure
-    if(d100() < nSpellFailure)
-    {
-        // check if caster has reason to ignore thise spell failliure if caster is shadow weave practitioner or Mystran cleric then they ignore it
-
-    if(GetHasFeat(1300, oCaster)==TRUE ||
-      (GetHasFeat(DEITY_Mystra, oCaster)==TRUE && ( GetLevelByClass(CLASS_TYPE_CLERIC, oCaster)  >= 1 || GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) >= 1))
-          )
-
-        {
-          return TRUE;
-        }
-        else
-        {
-            SendMessageToPC(oCaster, "The spell fails, its magic seeming to unravel and disspate inexplicably.");
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
 void X2MythicXP()
 {
     if(GetIsPC(OBJECT_SELF))
     {
-    object oPC = OBJECT_SELF;
-        if(GetLastSpellCastClass() == 56)
+        object oPC = OBJECT_SELF;
+        int nCasterClass = GetLastSpellCastClass();
+        if(nCasterClass == CLASS_TYPE_MYSTICKNIGHT)
         {
            if (d2(1) == 1)
            {
-                int iInt = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT");
-                SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT", iInt+1);
-                if (
-                iInt + 1 == 1000 ||
-                iInt + 1 == 2000 ||
-                iInt + 1 == 4000 ||
-                iInt + 1 == 8000 )
-                {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_INTELLIGENCE, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_INTELLIGENCE)+1);
-                }
+                TickMythicXp(oPC, ABILITY_INTELLIGENCE);
            }
            else
            {
-                int iWis = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS");
-                SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS", iWis+1);
-                if (
-                iWis + 1 == 1000 ||
-                iWis + 1 == 2000 ||
-                iWis + 1 == 4000 ||
-                iWis + 1 == 8000 )
-                {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_WISDOM, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_WISDOM)+1);
-                }
+                TickMythicXp(oPC, ABILITY_WISDOM);
            }
         }
-        else if(TE_ArcaneCasterClass(GetLastSpellCastClass()))
+        else if(TE_ArcaneCasterClass(nCasterClass))
         {
-                int iInt = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT");
-                SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT", iInt+1);
-                if (
-                iInt + 1 == 1000 ||
-                iInt + 1 == 2000 ||
-                iInt + 1 == 4000 ||
-                iInt + 1 == 8000 )
-                {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_INTELLIGENCE, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_INTELLIGENCE)+1);
-                }
+            TickMythicXp(oPC, ABILITY_INTELLIGENCE);
         }
-        else
+        else if(TE_DivineCasterClass(nCasterClass))
         {
-                int iWis = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS");
-                SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS", iWis+1);
-                if (
-                iWis + 1 == 1000 ||
-                iWis + 1 == 2000 ||
-                iWis + 1 == 4000 ||
-                iWis + 1 == 8000 )
-                {
-                NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_WISDOM, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_WISDOM)+1);
-                }
+            TickMythicXp(oPC, ABILITY_WISDOM);
         }
     }
 }
@@ -460,18 +307,10 @@ int X3ShapeShiftSpell(object oTarget)
 //------------------------------------------------------------------------------
 int X2PreSpellCastCode()
 {
-   object oTarget = GetSpellTargetObject();
+    object oTarget = GetSpellTargetObject();
 
-   int nContinue;
+    int nContinue;
 
-
-    //check deadmagic
-    if (X2DeadmagicZone() == FALSE)
-    {
-        return FALSE;
-    }
-    X2WildMagicZone();
-    X2MythicXP();
    //---------------------------------------------------------------------------
    // This small addition will check to see if the target is mounted and the
    // spell is therefor one that should not be permitted.
@@ -496,12 +335,24 @@ int X2PreSpellCastCode()
    // with TRUE (unless they are DM possessed or in the Wild Magic Area in
    // Chapter 2 of Hordes of the Underdark.
    //---------------------------------------------------------------------------
-   if (!GetIsPC(OBJECT_SELF))
+   if (GetIsPlayerCharacter(OBJECT_SELF) == FALSE)
    {
        if( !GetIsDMPossessed(OBJECT_SELF) && !GetLocalInt(GetArea(OBJECT_SELF), "X2_L_WILD_MAGIC"))
        {
             return TRUE;
        }
+   }
+   else
+   {
+        // Only apply wild and dead magic to PCs.
+        // We don't want environmental effects or DM events to break.
+        if (X2DeadmagicZone(OBJECT_SELF) == FALSE)
+        {
+            return FALSE;
+        }
+        X2WildMagicZone(OBJECT_SELF, oTarget);
+
+        X2MythicXP();
    }
 
    //---------------------------------------------------------------------------

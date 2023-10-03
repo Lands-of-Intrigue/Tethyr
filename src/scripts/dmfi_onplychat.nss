@@ -29,6 +29,9 @@
 #include "gs_inc_fixture"
 #include "te_functions"
 #include "gs_inc_shop"
+#include "loi_weave"
+#include "loi_mythicxp"
+#include "colors_inc"
 
 const string DMFI_PLAYERCHAT_SCRIPTNAME = "dmfi_plychat_exe";
 
@@ -176,7 +179,7 @@ void main()
             if(GetLocalInt(oPC,"LangOn") == 1)
             {
                 int iLangSpoken = GetLocalInt(oPC,"LangSpoken");
-                string LANGCOLOR = "<c�E�>";
+                string sLangColor = ColorTokenOrange();
                 object oArea = GetArea(oPC);
                 string sName = GetName(oPC);
 
@@ -190,7 +193,7 @@ void main()
 
                 NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, "Translated ("+sSpeaking+"): "+sOriginal, GetName(oPC));
 
-                string sTranslate = LANGCOLOR+sName+" ("+sSpeaking+"): "+sOriginal+"</c>";
+                string sTranslate = sLangColor+sName+" ("+sSpeaking+"): "+sOriginal+"</c>";
                 string sColorOut = GetColorForLanguage(iLangSpoken);
                 string sOutput=sColorOut+TranslateCommonToLanguage(iLangSpoken,sOriginal)+COLOR_END;
 
@@ -469,7 +472,7 @@ void main()
 
             if(sCurrCommandArg == "help"||sCurrCommandArg == "HELP"||sCurrCommandArg == "Help")
             {
-                string sHelpCommand ="SP Console Command List: \n";
+                string sHelpCommand ="Lands of Intrigue Console Command List: \n";
                 sHelpCommand += "-help : Gives Command List \n";
                 sHelpCommand += "! : Allows you to speak as a valid animal companion. Syntax: !<text>\n";
                 sHelpCommand += "@ : Allows you to speak as a valid familiar. Syntax: @<text>\n";
@@ -480,6 +483,7 @@ void main()
                 sHelpCommand += "-debuff : Allows you to completely remove all spells you have cast on yourself. Syntax: -debuff \n";
                 sHelpCommand += "-decloak : Allows you to remove only the invisibility effect you have cast on yourself. Syntax: -decloak \n";
                 sHelpCommand += "-delete : Allows you to delete a character from your vault. Syntax: -delete \n";
+                // sHelpCommand += "-description : Modify your description. Syntax: -description \n";
                 sHelpCommand += "-disguise : Allows you to disguise yourself using the various toggles on the examine system. (Class Standing, Strength, Dexterity, and Constitution) Syntax: -disguise \"Command\" Use -disguise help for full list.\n";
                 sHelpCommand += "-emote : Allows you to emote doing a particular action. For a full list of available emotes, use \"-emote list\". Syntax: -emote \"Action\" Ex: -emote sit \n";
                 if(GetLevelByClass(47,oPC)>=1)
@@ -493,6 +497,7 @@ void main()
                 }
                 sHelpCommand += "-lang / -speak : Sets new language to speak. Normal speech going forward will be in that language. To no longer speak a language, use \"-lang common\" Syntax: -lang \"language\" Ex: -lang Alzhedo \n";
                 sHelpCommand += "-murder : Perform a coup de grace on the targeted bleeding out PC. \n";
+                sHelpCommand += "-mythic : Returns the current Mythic Points that your character has earned. \n";
                 sHelpCommand += "-name : If disguise is on, this will allow you to change your displayed name. This will not persist across reset or log-out/crash. Syntax: - name \"Disguise Name\" Ex: -name Malcolm Reed \n";
                 if(GetHasFeat(1203,oPC) == TRUE || GetLevelByClass(CLASS_TYPE_DRUID,oPC) >= 13 || GetHasFeat(1458,oPC) == TRUE)
                 {
@@ -500,6 +505,7 @@ void main()
                 }
                 sHelpCommand += "-place : Allows you to update the name or description of a placeable. Functions similarly to the writing system. Type \"-place help\" for all available commands. Syntax: -place. \n";
                 sHelpCommand += "-piety : Returns your current divine standing in the form of piety (0-100)\n";
+                sHelpCommand += "-portrait : Returns your portrait resource reference (res_ref). Type \"-portrait set res_ref\" to reassign your portrait\n";
                 sHelpCommand += "-proficiency : Allows you to select a proficiency if the conversation does not appear for you the first time.\n";
                 sHelpCommand += "-rest : Gives next rest time. \n";
                 sHelpCommand += "-rename : Allows you to change the name and description of an object in your inventory. Type \"-rename help\" for all available commands. Syntax: -rename.\n";
@@ -553,7 +559,7 @@ void main()
                     NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_CHAT_CHANNEL, "Translated ("+sShouting+"): "+sNewOriginal, GetName(oPC));
                 }
 
-                string sTranslateShout = "<c�E�>"+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
+                string sTranslateShout = ColorTokenShout()+sShoutName+" ("+sShouting+"): "+sNewOriginal+"</c>";
                 string sColorShout = GetColorForLanguage(iLangShout);
                 string sShoutOutput=sColorShout+TranslateCommonToLanguage(iLangShout,sNewOriginal)+COLOR_END;
 
@@ -738,13 +744,7 @@ void main()
             }
             else if(sCurrCommandArg == "mythic")
             {
-                SendMessageToPC(oPC,"A new point in each skill is achieved at 1000, 2000, 4000, and 8000 Mythic Points.");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicSTR"))+" Mythic Strength Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicDEX"))+" Mythic Dexterity Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicCON"))+" Mythic Constitution Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicINT"))+" Mythic Intelligence Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicWIS"))+" Mythic Wisdom Points");
-                SendMessageToPC(oPC,IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicCHA"))+" Mythic Charisma Points");
+                ReportMythicXp(oPC);
             }
             else if(sCurrCommandArg == "animation" || sCurrCommandArg == "anim" || sCurrCommandArg == "anime")
             {
@@ -1241,6 +1241,18 @@ void main()
                 string sPiety = IntToString(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"nPiety"));
                 SendMessageToPC(oPC,"Your Piety is currently "+sPiety+".");
             }
+            else if(sCurrCommandArg == "portrait")
+            {
+                if (sCommandArg2 == "set")
+                {
+                    SetPortraitResRef(oPC, sCommandArg3);
+                    SendMessageToPC(oPC,"Your portrait is now set to "+GetPortraitResRef(oPC));
+                }
+                else
+                {
+                    SendMessageToPC(oPC,"Your portrait resource reference is "+GetPortraitResRef(oPC));
+                }
+            }
             else if(sCurrCommandArg == "write")
             {
                 string sDoctext;
@@ -1617,7 +1629,7 @@ void main()
                     NWNX_Player_SetAlwaysWalk(oPC,TRUE);
                     SetLocalInt(oPC,"walk", 1);
                 }
-                else
+                else if (GetStealthMode(oPC) == FALSE)
                 {
                     NWNX_Player_SetAlwaysWalk(oPC,FALSE);
                     SetLocalInt(oPC,"walk", 0);
@@ -1775,7 +1787,7 @@ void main()
                     AssignCommand(oPlayer, PlayAnimation(ANIMATION_LOOPING_CUSTOM20, 1.0, 10000.0));
                 else
                 {
-                    SendMessageToPC(oPC,"I'm sorry Dave, I can't do that. Type \"-emote list\" for a list of all available emotes.");
+                    SendMessageToPC(oPC,"Unrecognized emote. Type \"-emote list\" for a list of all available emotes.");
                 }
             }
             else if(sCurrCommandArg == "roll" || sCurrCommandArg == "Roll" || sCurrCommandArg == "ROLL")
@@ -2507,30 +2519,32 @@ void main()
             }
             else if (sCurrCommandArg == "Weave" || sCurrCommandArg == "weave" || sCurrCommandArg == "WEAVE")
             {
-                int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
+                string sAreaTag = GetTag(oArea);
+                int nDead = FetchDeadMagicChance(sAreaTag);
                 if (GetIsDM(oPC) || GetIsDMPossessed(oPC))
                 {
-                    SendMessageToPC(oPC, "Exact value is: " + IntToString(oDead));
+                    SendMessageToPC(oPC, "Wild magic chance: " + IntToString(FetchWildMagicChance(sAreaTag)) + "%");
+                    SendMessageToPC(oPC, "Dead magic chance: " + IntToString(nDead) + "%");
                 }
                 if (GetHasFeat(1599, oPC) || GetIsDM(oPC) || GetIsDMPossessed(oPC))
                 {
-                    if (oDead >=95)
+                    if (nDead >= 95)
                     {
                         SendMessageToPC(oPC,"The fabric of the Weave here has been so badly damaged, you feel nothing at all - only its absence.");
                     }
-                    else if (oDead >=66)
+                    else if (nDead >= 66)
                     {
                         SendMessageToPC(oPC,"The fabric of the Weave here is unmistakably mangled and torn. It may soon unravel completely.");
                     }
-                    else if (oDead >=33)
+                    else if (nDead >= 33)
                     {
                         SendMessageToPC(oPC,"You sense the fabric of the Weave has suffered significant damage here.");
                     }
-                    else if (oDead >=10)
+                    else if (nDead >= 10)
                     {
                         SendMessageToPC(oPC,"You sense the fabric of the Weave has become disrupted here.");
                     }
-                    else if (oDead >=1)
+                    else if (nDead >= 1)
                     {
                         SendMessageToPC(oPC,"You can sense faint imperfections in the fabric of the Weave here.");
                     }
@@ -2542,27 +2556,23 @@ void main()
             }
             else if ((sCurrCommandArg == "adddeadmagic" || sCurrCommandArg == "AddDeadMagic" || sCurrCommandArg == "ADDDEADMAGIC" || sCurrCommandArg == "Adddeadmagic") && GetIsDM(oPC))
             {
-                int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
-                SetCampaignInt("Deadmagic",GetTag(oArea),oDead + StringToInt(sCommandArg2));
-                SendMessageToPC(oPC, "New Dead Magic: " + IntToString(oDead + StringToInt(sCommandArg2)));
+                int nDead = AddDeadMagicChance(GetTag(oArea), StringToInt(sCommandArg2));
+                SendMessageToPC(oPC, "Dead magic chance: " + IntToString(nDead) + "%");
             }
             else if ((sCurrCommandArg == "removedeadmagic" || sCurrCommandArg == "RemoveDeadMagic" || sCurrCommandArg == "REMOVEDEADMAGIC" || sCurrCommandArg == "Removedeadmagic") && GetIsDM(oPC))
             {
-                int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
-                SetCampaignInt("Deadmagic",GetTag(oArea),oDead - StringToInt(sCommandArg2));
-                SendMessageToPC(oPC, "New Dead Magic: " + IntToString(oDead + StringToInt(sCommandArg2)));
+                int nDead = AddDeadMagicChance(GetTag(oArea), -1 * StringToInt(sCommandArg2));
+                SendMessageToPC(oPC, "Dead magic chance: " + IntToString(nDead) + "%");
             }
             else if ((sCurrCommandArg == "addwildmagic" || sCurrCommandArg == "AddWildMagic" || sCurrCommandArg == "ADDWILDMAGIC" || sCurrCommandArg == "Addwildmagic") && GetIsDM(oPC))
             {
-                int oDead = GetCampaignInt("Wildmagic",GetTag(oArea));
-                SetCampaignInt("Wildmagic",GetTag(oArea),oDead + StringToInt(sCommandArg2));
-                SendMessageToPC(oPC, "New Wild Magic: " + IntToString(oDead + StringToInt(sCommandArg2)));
+                int nWild = AddWildMagicChance(GetTag(oArea), StringToInt(sCommandArg2));
+                SendMessageToPC(oPC, "Wild magic chance: " + IntToString(nWild) + "%");
             }
             else if ((sCurrCommandArg == "removewildmagic" || sCurrCommandArg == "RemoveWildMagic" || sCurrCommandArg == "REMOVEWILDMAGIC" || sCurrCommandArg == "Removewildmagic") && GetIsDM(oPC))
             {
-                int oDead = GetCampaignInt("Deadmagic",GetTag(oArea));
-                SetCampaignInt("Wildmagic",GetTag(oArea),oDead - StringToInt(sCommandArg2));
-                SendMessageToPC(oPC, "New Wild Magic: " + IntToString(oDead + StringToInt(sCommandArg2)));
+                int nWild = AddWildMagicChance(GetTag(oArea), -1 * StringToInt(sCommandArg2));
+                SendMessageToPC(oPC, "Wild magic chance: " + IntToString(nWild) + "%");
             }
             else if ((sCurrCommandArg == "shopset" || sCurrCommandArg == "ShopSet" || sCurrCommandArg == "SHOPSET" || sCurrCommandArg == "Shopset") && GetIsDM(oPC))
             {

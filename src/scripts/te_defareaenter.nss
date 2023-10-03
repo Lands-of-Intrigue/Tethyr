@@ -92,18 +92,6 @@ void main() {
         }
     }
 
-    //Magic Kill/Reset Effects
-    if (GetCampaignString("Tethyr_Database", "KillMagic") == "True")
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea),100);
-        SetCampaignInt("Wildmagic",GetTag(oArea),100);
-    }
-    else if(GetCampaignString("Tethyr_Database", "KillMagic") == "Random")
-    {
-        SetCampaignInt("Deadmagic",GetTag(oArea),d100());
-        SetCampaignInt("Wildmagic",GetTag(oArea),d100());
-    }
-
     //Cleanup bodies
     if(abs(GetLocalInt(oArea,"nCleanup")-nTimeNow) >= 600)
     {

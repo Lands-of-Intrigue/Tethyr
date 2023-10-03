@@ -100,13 +100,6 @@ class ModulePacker:
 
         gffFiles = []
         scriptFiles = []
-        # for f in os.listdir(self.targetDir):
-        #     ext = os.path.splitext(f)[1]
-        #     if ext == '.nss':
-        #         scriptFiles.append(f)
-        #     elif ext != '':
-        #         gffFiles.append(f)
-
         for root, subdirs, files in os.walk(self.targetDir):
             for f in files:
                 ext = os.path.splitext(f)[1]
@@ -187,7 +180,8 @@ class Compiler:
         self.tempDir = tempDir
 
     def compile(self, file):
-        p = subprocess.Popen([self.nwnsc, '-qw', '-n', 'lib', '-b', self.tempDir, '-i', self.srcDir, join(self.srcDir, file)])
+        outfile = os.path.splitext(file)[0] + '.ncs'
+        p = subprocess.Popen([self.nwnsc, '-qw', '-n', 'lib', '-r', join(self.tempDir, outfile), '-i', self.srcDir, join(self.srcDir, file)])
         p.wait()
 
 

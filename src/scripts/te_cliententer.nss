@@ -18,48 +18,12 @@
 #include "nwnx_creature"
 #include "nwnx_webhook"
 #include "nwnx_time"
+#include "nwnx_util"
 #include "nwnx_webhook_rch"
 #include "x3_inc_horse"
-#include "colors_inc"
 
 void main()
 {
-     string COLOR_S_WHITE     = "<cÿÿÿ>";
-     string COLOR_SGREY       = "<c¥¥¥>";
-     string COLOR_SLIGHTGREY  = "<c¥¥¥>";
-     string COLOR_SSANDY      = ColorTokenShout();
-
-     string COLOR_SRED        = ColorTokenRed();
-     string COLOR_SDARKRED    = ColorTokenRed();
-     string COLOR_SPINK       = ColorTokenPink();
-     string COLOR_SLIGHTPINK  = ColorTokenPink();
-
-     string COLOR_SORANGE     = ColorTokenOrange();
-     string COLOR_SYELLOWSERV = ColorTokenServer();
-
-     string COLOR_SLEMON      = ColorTokenYellow();
-     string COLOR_SYELLOW     = ColorTokenYellow();
-
-     string COLOR_SNEONGREEN  = ColorTokenTell();
-     string COLOR_SGREEN      = ColorTokenGreen();
-     string COLOR_SLIME       = ColorTokenGreen();
-     string COLOR_SLIGHTGREEN = ColorTokenGreen();
-
-     string COLOR_SDARKBLUE   = ColorTokenBlue();
-     string COLOR_SBLUE       = ColorTokenSkillCheck();
-
-     string COLOR_SPERIWINKLE = "<czzþ>";
-     string COLOR_SCYAN       = ColorTokenSkillCheck();
-
-     string COLOR_SLIGHTBLUE  = ColorTokenDM();
-     string COLOR_SDMBLUE     = ColorTokenDM();
-     string COLOR_SPALEBLUE   = ColorTokenSkillCheck();
-
-     string COLOR_SVIOLET     = ColorTokenLightPurple();
-     string COLOR_SPURPLE     = ColorTokenPurple();
-
-     string COLOR_SEND  = ColorTokenEnd();
-
     SF_HipsRestrictionOnClientEnter();
     object oPC = GetEnteringObject();
     object oItem = GetItemPossessedBy(oPC, "PC_Data_Object");
@@ -202,16 +166,16 @@ void main()
 //Time based Journal Entries:
 
     //Campaign Clock:
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") > -1)  {AddJournalQuestEntry("te_camp1",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  2)  {AddJournalQuestEntry("te_camp2",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  4)  {AddJournalQuestEntry("te_camp3",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  8)  {AddJournalQuestEntry("te_camp4",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  10) {AddJournalQuestEntry("te_camp5",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  13) {AddJournalQuestEntry("te_camp6",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  15) {AddJournalQuestEntry("te_camp7",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  20) {AddJournalQuestEntry("te_camp8",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  25) {AddJournalQuestEntry("te_camp9",1,oPC);}
-            if(GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"PCTime") >  30) {AddJournalQuestEntry("te_camp10",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") > -1)  {AddJournalQuestEntry("te_camp1",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  2)  {AddJournalQuestEntry("te_camp2",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  4)  {AddJournalQuestEntry("te_camp3",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  8)  {AddJournalQuestEntry("te_camp4",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  10) {AddJournalQuestEntry("te_camp5",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  13) {AddJournalQuestEntry("te_camp6",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  15) {AddJournalQuestEntry("te_camp7",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  20) {AddJournalQuestEntry("te_camp8",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  25) {AddJournalQuestEntry("te_camp9",1,oPC);}
+            if(GetLocalInt(oItem,"PCTime") >  30) {AddJournalQuestEntry("te_camp10",1,oPC);}
 
 
 /*
@@ -396,17 +360,17 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 ////////////////////////////////////////////////////////////////////////////////
 //Begin PC Welcome:
 ////////////////////////////////////////////////////////////////////////////////
-    string sWelcome = COLOR_SGREEN+"Welcome to Lands of Intrigue!";
-    sWelcome += "\n"+COLOR_SPERIWINKLE+"For information about the setting and current timeline please check Discord and your in-game Journal.";
-    sWelcome += "\n"+COLOR_SPERIWINKLE+"This is a Roleplay Server, so above all, we ask that you stay "+COLOR_SRED+"In Character"+COLOR_SPERIWINKLE+" at all times.";
-    sWelcome += "\n"+COLOR_SRED+"Please report all Module and Server specific Bugs in Discord and all NWN:EE specific bugs to Beamdog. ";
-    sWelcome += "\n"+COLOR_SYELLOW+"We hope you enjoy your stay.";
+    string sWelcome = GREEN+"Welcome to Lands of Intrigue!"+COLOR_END;
+    sWelcome += "\n"+WHITE+"For information about the setting and current timeline please check Discord and your in-game Journal."+COLOR_END;
+    sWelcome += "\n"+WHITE+"This is a Roleplay Server, so above all, we ask that you stay "+COLOR_END+BLUE+"In Character"+COLOR_END+WHITE+" at all times. "+COLOR_END;
+    sWelcome += "\n"+LIGHTGREY+"Please report all Module and Server specific Bugs on our forums and all NWN:EE specific bugs to Beamdog. "+COLOR_END;
+    sWelcome += "\n"+YELLOW+"We hope you enjoy your stay."+COLOR_END;
 
     SendMessageToPC(oPC,sWelcome);
 
     if ((GetCurrentHitPoints(oPC) > iHP) && (iHP != 0))
     {
-        SendMessageToPC(oPC,(COLOR_SRED+"Restoring Previously Recorded Hitpoints:"));
+        SendMessageToPC(oPC,(RED+"Restoring Previously Recorded Hitpoints:"+COLOR_END));
         ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectDamage((GetCurrentHitPoints(oPC)-iHP),DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_PLUS_TWENTY),oPC);
     }
 
@@ -519,6 +483,8 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 
     // do any other module OnClientEnter work here
     ExecuteScript("x3_mod_pre_enter",OBJECT_SELF); // Override for other skin systems
+
+    // Horse restoration
     if ((GetIsPC(oPC)||GetIsDM(oPC))&&!GetHasFeat(FEAT_HORSE_MENU,oPC))
     { // add horse menu
         HorseAddHorseMenu(oPC);
@@ -539,4 +505,18 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 
     // initialize DMFI
     dmfiInitialize(oPC);
+
+    PossiblyPayStipend(oPC); 
+    
+    // warning for old mythic XP system
+    object oData = GetItemPossessedBy(oPC,"PC_Data_Object");
+    if (GetLocalInt(oData, "MythicSTR") != 0
+        || GetLocalInt(oData, "MythicDEX") != 0
+        || GetLocalInt(oData, "MythicCON") != 0
+        || GetLocalInt(oData, "MythicINT") != 0
+        || GetLocalInt(oData, "MythicWIS") != 0
+        || GetLocalInt(oData, "MythicCHA") != 0)
+    {
+        SendMessageToPC(oPC,"ALERT! Your character needs to be remade. Please contact a DM. You may continue to play your character in the mean time.");
+    }
 }
