@@ -6,6 +6,7 @@ string GetColorForLanguage(int iLangSpoken)
 
     switch (iLangSpoken)
     {
+        case -1: sReturn = WHITE; break; //Common
         case 1:  sReturn = YELLOW; break; //Elven
         case 2:  sReturn = YELLOW; break; //Gnomish
         case 3:  sReturn = YELLOW; break; //Halfling
@@ -172,6 +173,7 @@ string GetLanguageName(int iLanguage)
     string sSpeaking=" ";
     switch(iLanguage)
         {
+        case -1: sSpeaking = "Common";break;
         case 1:  sSpeaking = "Elven";break;
         case 2:  sSpeaking = "Gnomish"; break;
         case 3:  sSpeaking = "Halfling"; break;
@@ -6188,15 +6190,16 @@ string TranslateCommonToLanguage(int nLang, string sText)
     string sReturn = "";
         switch(nLang)
         {
-            case 1: sReturn = ProcessElven(sText); break;
-            case 2: sReturn = ProcessGnome(sText); break;
-            case 3: sReturn = ProcessHalfling(sText); break;
-            case 4: sReturn = ProcessDwarf(sText); break;
-            case 5: sReturn = ProcessOrc(sText); break;
-            case 6: sReturn = ProcessGoblin(sText); break;
-            case 7: sReturn = ProcessDraconic(sText); break;
-            case 8: sReturn = ProcessAnimal(sText); break;
-            case 9: sReturn = ProcessCant(sText); break;
+            case -1: sReturn = sText; break; // Common
+            case 1:  sReturn = ProcessElven(sText); break;
+            case 2:  sReturn = ProcessGnome(sText); break;
+            case 3:  sReturn = ProcessHalfling(sText); break;
+            case 4:  sReturn = ProcessDwarf(sText); break;
+            case 5:  sReturn = ProcessOrc(sText); break;
+            case 6:  sReturn = ProcessGoblin(sText); break;
+            case 7:  sReturn = ProcessDraconic(sText); break;
+            case 8:  sReturn = ProcessAnimal(sText); break;
+            case 9:  sReturn = ProcessCant(sText); break;
             case 10: sReturn = ProcessCelestial(sText); break;
             case 11: sReturn = ProcessAbyssal(sText); break;
             case 12: sReturn = ProcessInfernal(sText); break;
