@@ -32,6 +32,8 @@ const string EMOTE_STYLE_TOKEN_NARRATIVE = "\"";
 void ProjectSpeechTo(int nAssociateType, string sMessage);
 // Process a player's chat command
 void ProcessCommand(string sCommand);
+// Decide whether to send an obscured or plain chat to a player
+void SendLanguageFilteredMessage(int nChatChannel, int nLang, string sSpeech, string sSpeechObscured, object oPC, object oTarget);
 ////////////////////////////////////////////////////////////////////////
 
 void main()
@@ -131,7 +133,6 @@ void main()
         else // not a command or a projection, so regular RP
         {
             string sOriginal = GetPCChatMessage();
-            object oWhisp;
             location lSpeechSource = GetLocation(oPC);
             object oArea = GetArea(oPC);
 
@@ -152,13 +153,6 @@ void main()
                     }
                     oHeard = GetNextObjectInShape(SHAPE_SPHERE, fTalkRadius, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 }
-            }
-
-            // Hide the player name if they are disguised
-            string sName = GetName(oPC);
-            if(GetLocalInt(oPC,"nDisguiseName") == 1)
-            {
-                sName = NWNX_Rename_GetPCNameOverride(oPC);
             }
 
             // Determine if the player has a language toggled
@@ -184,25 +178,28 @@ void main()
             int bSpeaking = FALSE;
             int bEmoting = FALSE;
             string sSpeech = sSpeechStart;
-            // string sSpeechTranslated = sSpeechStart;
+            string sSpeechObscured = sSpeechStart;
             while (i < GetStringLength(sOriginal))
             {
                 if (sCurrentChar == EMOTE_STYLE_TOKEN_NARRATIVE)
                 {
                     if (!bEmoting && !bSpeaking) // first character
                     {
-                        sSpeech += sSpeechColor + sCurrentChar;
+                        sSpeech         += sSpeechColor + sCurrentChar;
+                        sSpeechObscured += sSpeechColor + sCurrentChar;
                         bSpeaking = TRUE;
                     }
                     else if (bEmoting)
                     {
-                        sSpeech += COLOR_END + sSpeechColor + sCurrentChar;
+                        sSpeech         += COLOR_END + sSpeechColor + sCurrentChar;
+                        sSpeechObscured += COLOR_END + sSpeechColor + sCurrentChar;
                         bSpeaking = TRUE;
                         bEmoting = FALSE;
                     }
                     else if (bSpeaking)
                     {
-                        sSpeech += sCurrentChar + COLOR_END + sEmoteColor;
+                        sSpeech         += sCurrentChar + COLOR_END + sEmoteColor;
+                        sSpeechObscured += sCurrentChar + COLOR_END + sEmoteColor;
                         bSpeaking = FALSE;
                         bEmoting = TRUE;
                     }
@@ -211,238 +208,69 @@ void main()
                 {
                     if (!bEmoting && !bSpeaking) // first character
                     {
-                        sSpeech += sEmoteColor + sCurrentChar;
+                        sSpeech         += sEmoteColor + sCurrentChar;
+                        sSpeechObscured += sEmoteColor + sCurrentChar;
                         bEmoting = TRUE;
                     }
-                    else
+                    else if (bEmoting)
                     {
-                        sSpeech += sCurrentChar;
+                        sSpeech         += sCurrentChar;
+                        sSpeechObscured += sCurrentChar;
+                    }
+                    else if (bSpeaking)
+                    {
+                        sSpeech         += sCurrentChar;
+                        sSpeechObscured += TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
                     }
                 }
                 i++;
                 sCurrentChar = GetSubString(sOriginal, i, 1);
             }
-            SetPCChatMessage(sSpeech); //for talking volume
 
-/*
-            if(GetLocalInt(oPC,"LangOn") == 1)
+            if (GetPCChatVolume() == TALKVOLUME_TALK)
             {
-                int iLangSpoken = GetLocalInt(oPC,"LangSpoken");
-                string sLangColor = ColorTokenOrange();
-                object oArea = GetArea(oPC);
-                string sName = GetName(oPC);
-
-
-                if(GetLocalInt(oPC,"nDisguiseName") == 1)
+                SetPCChatMessage("");
+                object oTalk = GetFirstObjectInShape(SHAPE_SPHERE, 20.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+                while (GetIsObjectValid(oTalk))
                 {
-                    sName = NWNX_Rename_GetPCNameOverride(oPC);
-                }
-
-                string sSpeaking = GetLanguageName(iLangSpoken);
-
-                string sTranslate = sLangColor+sName+" ("+sSpeaking+"): "+sOriginal+"</c>";
-                string sColorOut = GetColorForLanguage(iLangSpoken);
-                string sOutput=sColorOut+TranslateCommonToLanguage(iLangSpoken,sOriginal)+COLOR_END;
-
-                object oListener = GetFirstObjectInArea(oArea);
-                object oItem;
-
-                object oPlayers = GetFirstPC();
-
-                while (GetIsObjectValid(oPlayers))
-                {
-                    if (GetIsDM(oPlayers)||GetIsDMPossessed(oPlayers))
+                    if (!GetObjectHeard(oPC, oTalk) || (!GetIsPC(oTalk) && !GetIsDMPossessed(oTalk)))
                     {
-                        DelayCommand(0.3,SendMessageToPC(oPlayers,sTranslate));
+                        continue;
                     }
-                    oPlayers = GetNextPC();
-                }
-
-                if(GetPCChatVolume()==TALKVOLUME_TALK)
-                {
-                    while (GetIsObjectValid(oListener))
-                    {
-                        if (GetIsPC(oListener))
-                        {
-                            if(GetObjectHeard(oPC,oListener))
-                            {
-                                if(GetIsDM(oListener) != TRUE)
-                                {
-                                    oItem = GetItemPossessedBy(oListener,"PC_Data_Object");
-                                    if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                    {
-                                        DelayCommand(0.3,SendMessageToPC(oListener,sTranslate));
-                                    }
-                                }
-                            }
-                        }
-                        oListener=GetNextObjectInArea(oArea);
-                    }
-                }
-                else if (GetPCChatVolume()==TALKVOLUME_WHISPER)
-                {
-                    oWhisp = GetFirstObjectInShape(SHAPE_SPHERE,10.0f,lSpeechSource,FALSE,OBJECT_TYPE_CREATURE);
-                    while (GetIsObjectValid(oWhisp))
-                    {
-                         if(GetObjectHeard(oPC,oWhisp)||GetDistanceBetween(oPC,oWhisp) <= 3.0f)
-                         {
-                            if(GetIsDM(oWhisp) != TRUE)
-                            {
-                                oItem = GetItemPossessedBy(oWhisp,"PC_Data_Object");
-                                if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                {
-                                    DelayCommand(0.3,SendMessageToPC(oWhisp,sTranslate));
-                                }
-                            }
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) > 3.0f && GetDistanceBetween(oPC,oWhisp) < 3.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 5)
-                         {
-                            if(GetIsDM(oWhisp) != TRUE)
-                            {
-                                oItem = GetItemPossessedBy(oWhisp,"PC_Data_Object");
-                                if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                {
-                                    NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOutput,oPC,oWhisp);
-                                    DelayCommand(0.3,SendMessageToPC(oWhisp,sTranslate));
-                                }
-                            }
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 3.5f && GetDistanceBetween(oPC,oWhisp) < 4.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 10)
-                         {
-                            if(GetIsDM(oWhisp) != TRUE)
-                            {
-                                oItem = GetItemPossessedBy(oWhisp,"PC_Data_Object");
-                                if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                {
-                                    NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOutput,oPC,oWhisp);
-                                    DelayCommand(0.3,SendMessageToPC(oWhisp,sTranslate));
-                                }
-                            }
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 4.5f && GetDistanceBetween(oPC,oWhisp) < 5.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 15)
-                         {
-                            if(GetIsDM(oWhisp) != TRUE)
-                            {
-                                oItem = GetItemPossessedBy(oWhisp,"PC_Data_Object");
-                                if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                {
-                                    NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOutput,oPC,oWhisp);
-                                    DelayCommand(0.3,SendMessageToPC(oWhisp,sTranslate));
-                                }
-                            }
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 5.5f && GetDistanceBetween(oPC,oWhisp) < 6.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 20)
-                         {
-                            if(GetIsDM(oWhisp) != TRUE)
-                            {
-                                oItem = GetItemPossessedBy(oWhisp,"PC_Data_Object");
-                                if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                {
-                                    NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOutput,oPC,oWhisp);
-                                    DelayCommand(0.3,SendMessageToPC(oWhisp,sTranslate));
-                                }
-                            }
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 6.5f && GetDistanceBetween(oPC,oWhisp) < 7.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 25)
-                         {
-                            if(GetIsDM(oWhisp) != TRUE)
-                            {
-                                oItem = GetItemPossessedBy(oWhisp,"PC_Data_Object");
-                                if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                {
-                                    NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOutput,oPC,oWhisp);
-                                    DelayCommand(0.3,SendMessageToPC(oWhisp,sTranslate));
-                                }
-                            }
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 7.5f && GetDistanceBetween(oPC,oWhisp) < 8.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 30)
-                         {
-                            if(GetIsDM(oWhisp) != TRUE)
-                            {
-                                oItem = GetItemPossessedBy(oWhisp,"PC_Data_Object");
-                                if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                {
-                                    NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOutput,oPC,oWhisp);
-                                    DelayCommand(0.3,SendMessageToPC(oWhisp,sTranslate));
-                                }
-                            }
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 8.5f && GetDistanceBetween(oPC,oWhisp) < 9.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 35)
-                         {
-                            if(GetIsDM(oWhisp) != TRUE)
-                            {
-                                oItem = GetItemPossessedBy(oWhisp,"PC_Data_Object");
-                                if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                {
-                                    NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOutput,oPC,oWhisp);
-                                    DelayCommand(0.3,SendMessageToPC(oWhisp,sTranslate));
-                                }
-                            }
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 9.5f && GetDistanceBetween(oPC,oWhisp) < 10.0f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 40)
-                         {
-                            if(GetIsDM(oWhisp) != TRUE)
-                            {
-                                oItem = GetItemPossessedBy(oWhisp,"PC_Data_Object");
-                                if(GetLocalInt(oItem,IntToString(iLangSpoken)) == 1)
-                                {
-                                    NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOutput,oPC,oWhisp);
-                                    DelayCommand(0.3,SendMessageToPC(oWhisp,sTranslate));
-                                }
-                            }
-                         }
-                         oWhisp = GetNextObjectInShape(SHAPE_SPHERE,10.0f,lSpeechSource,FALSE,OBJECT_TYPE_CREATURE);
-                    }
-                }
-                SetPCChatMessage(sOutput);
-            }
-
-            else
-            {
-                if(GetPCChatVolume()==TALKVOLUME_WHISPER)
-                {
-                    oWhisp = GetFirstObjectInShape(SHAPE_SPHERE,10.0f,lSpeechSource,FALSE,OBJECT_TYPE_CREATURE);
-
-                    while (GetIsObjectValid(oWhisp))
-                    {
-                         if(GetDistanceBetween(oPC,oWhisp) > 3.0f && GetDistanceBetween(oPC,oWhisp) < 3.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 5)
-                         {
-                            NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOriginal,oPC,oWhisp);
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 3.5f && GetDistanceBetween(oPC,oWhisp) < 4.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 10)
-                         {
-                            NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOriginal,oPC,oWhisp);
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 4.5f && GetDistanceBetween(oPC,oWhisp) < 5.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 15)
-                         {
-                            NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOriginal,oPC,oWhisp);
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 5.5f && GetDistanceBetween(oPC,oWhisp) < 6.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 20)
-                         {
-                            NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOriginal,oPC,oWhisp);
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 6.5f && GetDistanceBetween(oPC,oWhisp) < 7.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 25)
-                         {
-                            NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOriginal,oPC,oWhisp);
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 7.5f && GetDistanceBetween(oPC,oWhisp) < 8.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 30)
-                         {
-                            NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOriginal,oPC,oWhisp);
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 8.5f && GetDistanceBetween(oPC,oWhisp) < 9.5f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 35)
-                         {
-                            NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOriginal,oPC,oWhisp);
-                         }
-                         else if(GetDistanceBetween(oPC,oWhisp) >= 9.5f && GetDistanceBetween(oPC,oWhisp) < 10.0f && GetSkillRank(SKILL_LISTEN,oWhisp,FALSE) >= 40)
-                         {
-                            NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER,sOriginal,oPC,oWhisp);
-                         }
-
-                          oWhisp = GetNextObjectInShape(SHAPE_SPHERE,10.0f,lSpeechSource,FALSE,OBJECT_TYPE_CREATURE);
-                    }
+                    SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, iLangSpoken, sSpeech, sSpeechObscured, oPC, oTalk);
+                    oTalk = GetNextObjectInShape(SHAPE_SPHERE, 20.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 }
             }
-            */
+            else if (GetPCChatVolume() == TALKVOLUME_WHISPER)
+            {
+                SetPCChatMessage("");
+                object oWhisp = GetFirstObjectInShape(SHAPE_SPHERE, 10.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+
+                while (GetIsObjectValid(oWhisp))
+                {
+                    if (!GetObjectHeard(oPC, oWhisp) || (!GetIsPC(oWhisp) && !GetIsDMPossessed(oWhisp)))
+                    {
+                        continue;
+                    }
+
+                    float fDistance = GetDistanceBetween(oPC, oWhisp);
+                    int nListenRank = GetSkillRank(SKILL_LISTEN, oWhisp, FALSE);
+
+                    if (fDistance <= 3.0f
+                        || (fDistance > 3.0f && fDistance <= 3.5f  && nListenRank >= 5)
+                        || (fDistance > 3.5f && fDistance <= 4.5f  && nListenRank >= 10)
+                        || (fDistance > 4.5f && fDistance <= 5.5f  && nListenRank >= 15)
+                        || (fDistance > 5.5f && fDistance <= 6.5f  && nListenRank >= 20)
+                        || (fDistance > 6.5f && fDistance <= 7.5f  && nListenRank >= 25)
+                        || (fDistance > 7.5f && fDistance <= 8.5f  && nListenRank >= 30)
+                        || (fDistance > 8.5f && fDistance <= 9.5f  && nListenRank >= 35)
+                        || (fDistance > 9.5f && fDistance <= 10.0f && nListenRank >= 40))
+                    {
+                        SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER, iLangSpoken, sSpeech, sSpeechObscured, oPC, oWhisp);
+                    }
+                    oWhisp = GetNextObjectInShape(SHAPE_SPHERE, 10.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+                }
+            }
         }
     }
     else if (GetPCChatVolume() == TALKVOLUME_PARTY)
@@ -2580,4 +2408,18 @@ void ProjectSpeechTo(int nAssociateType, string sMessage)
         AssignCommand(oAssociate, ActionSpeakString(sMessage, GetPCChatVolume()));
         SetPCChatMessage("");
     }
+}
+
+void SendLanguageFilteredMessage(int nChatChannel, int nLang, string sSpeech, string sSpeechObscured, object oPC, object oTarget)
+{
+    string sFiltered = sSpeechObscured;
+    object oItem = GetItemPossessedBy(oTarget,"PC_Data_Object");
+    if (nLang == -1                                        // common
+        || GetLocalInt(oItem, IntToString(nLang)) == 1     // speaks language
+        || GetIsDM(oTarget) || GetIsDMPossessed(oTarget))  // is DM
+    {
+        // set to raw speech
+        sFiltered = sSpeech;
+    }
+    NWNX_Chat_SendMessage(nChatChannel, sFiltered, oPC, oTarget);
 }
