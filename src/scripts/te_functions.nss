@@ -159,7 +159,7 @@ string Q                        = "'";
 // COLORS
 string WHITE      = ColorTokenDialog(); // talk
 string GREY       = ColorTokenWhisper(); // whisper
-string LIGHTGREY  = ColorToken(192,192,192);
+string LIGHTGREY  = ColorTokenWhisper();
 string SANDY      = ColorTokenShout(); // shout
 
 string RED        = ColorTokenRed();
@@ -177,9 +177,9 @@ string GREEN      = ColorTokenGreen(); // name preceding description
 string LIME       = ColorTokenGreen(); // description
 string LIGHTGREEN = ColorTokenGreen();
 
-string DARKBLUE   = ColorTokenBlue();
-string BLUE       = ColorTokenSkillCheck(); // skill blue
-string PERIWINKLE = ColorTokenSkillCheck();
+string BLUE       = ColorTokenDialogReply(); // player name in dialog
+string PERIWINKLE = ColorToken(199, 200, 222); // for emotes
+string DARKBLUE   = ColorToken(118, 120, 159); // for whispered emotes
 string CYAN       = ColorTokenSkillCheck(); // saving throw
 
 string LIGHTBLUE  = ColorTokenDM(); // DM chat

@@ -21,6 +21,10 @@
 
 const string DMFI_PLAYERCHAT_SCRIPTNAME = "dmfi_plychat_exe";
 
+const string EMOTE_STYLE_TOKEN_NARRATIVE = "\"";
+// const string EMOTE_STYLE_TOKEN_BRACKET_1 = "[";
+// const string EMOTE_STYLE_TOKEN_BRACKET_2 = "]";
+
 ////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS, do not call outside of on chat
 
@@ -150,6 +154,77 @@ void main()
                 }
             }
 
+            // Hide the player name if they are disguised
+            string sName = GetName(oPC);
+            if(GetLocalInt(oPC,"nDisguiseName") == 1)
+            {
+                sName = NWNX_Rename_GetPCNameOverride(oPC);
+            }
+
+            // Determine if the player has a language toggled
+            int iLangSpoken = -1; //Common
+            string sSpeechStart = "";
+            if(GetLocalInt(oPC,"LangOn") == 1)
+            {
+                iLangSpoken = GetLocalInt(oPC,"LangSpoken");
+                sSpeechStart = GetColorForLanguage(iLangSpoken) + "[" + GetLanguageName(iLangSpoken) + "] " + COLOR_END;
+            }
+            
+            string sSpeechColor = WHITE;
+            string sEmoteColor = PERIWINKLE;
+            if (GetPCChatVolume() == TALKVOLUME_WHISPER)
+            {
+                sSpeechColor = GREY;
+                sEmoteColor = DARKBLUE;
+            }
+
+            // emote style parsing
+            string sCurrentChar = sFirstChar;
+            int i = 0;
+            int bSpeaking = FALSE;
+            int bEmoting = FALSE;
+            string sSpeech = sSpeechStart;
+            // string sSpeechTranslated = sSpeechStart;
+            while (i < GetStringLength(sOriginal))
+            {
+                if (sCurrentChar == EMOTE_STYLE_TOKEN_NARRATIVE)
+                {
+                    if (!bEmoting && !bSpeaking) // first character
+                    {
+                        sSpeech += sSpeechColor + sCurrentChar;
+                        bSpeaking = TRUE;
+                    }
+                    else if (bEmoting)
+                    {
+                        sSpeech += COLOR_END + sSpeechColor + sCurrentChar;
+                        bSpeaking = TRUE;
+                        bEmoting = FALSE;
+                    }
+                    else if (bSpeaking)
+                    {
+                        sSpeech += sCurrentChar + COLOR_END + sEmoteColor;
+                        bSpeaking = FALSE;
+                        bEmoting = TRUE;
+                    }
+                }
+                else
+                {
+                    if (!bEmoting && !bSpeaking) // first character
+                    {
+                        sSpeech += sEmoteColor + sCurrentChar;
+                        bEmoting = TRUE;
+                    }
+                    else
+                    {
+                        sSpeech += sCurrentChar;
+                    }
+                }
+                i++;
+                sCurrentChar = GetSubString(sOriginal, i, 1);
+            }
+            SetPCChatMessage(sSpeech); //for talking volume
+
+/*
             if(GetLocalInt(oPC,"LangOn") == 1)
             {
                 int iLangSpoken = GetLocalInt(oPC,"LangSpoken");
@@ -367,9 +442,10 @@ void main()
                     }
                 }
             }
+            */
         }
     }
-    else if(GetPCChatVolume() == TALKVOLUME_PARTY)
+    else if (GetPCChatVolume() == TALKVOLUME_PARTY)
     {
         if(!GetIsDM(oPC) && !GetIsDMPossessed(oPC))
         {
