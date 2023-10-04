@@ -296,19 +296,47 @@ void main()
             }
             if (GetPCChatVolume() == TALKVOLUME_TALK)
             {
-                object oTalk = GetFirstObjectInShape(SHAPE_SPHERE, 20.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+                float fTalkDistance = 20.0f;
+
+                // broadcast to DMs
+                object oDM = GetFirstPC();
+                while (GetIsObjectValid(oDM))
+                {
+                    if (GetIsDM(oDM) && GetArea(oPC) == GetArea(oDM) && GetDistanceBetween(oPC, oDM) <= fTalkDistance)
+                    {
+                        SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, iLangSpoken, sSpeech, sSpeechObscured, oPC, oDM);
+                    }
+                    oDM = GetNextPC();
+                }
+
+                // broadcast to PCs
+                object oTalk = GetFirstObjectInShape(SHAPE_SPHERE, fTalkDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 while (GetIsObjectValid(oTalk))
                 {
                     if (GetObjectHeard(oPC, oTalk) && (GetIsPC(oTalk) || GetIsDMPossessed(oTalk)))
                     {
                         SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, iLangSpoken, sSpeech, sSpeechObscured, oPC, oTalk);
                     }
-                    oTalk = GetNextObjectInShape(SHAPE_SPHERE, 20.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+                    oTalk = GetNextObjectInShape(SHAPE_SPHERE, fTalkDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 }
             }
             else if (GetPCChatVolume() == TALKVOLUME_WHISPER)
             {
-                object oWhisp = GetFirstObjectInShape(SHAPE_SPHERE, 10.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+                float fWhispDistance = 10.0f;
+
+                // broadcast to DMs
+                object oDM = GetFirstPC();
+                while (GetIsObjectValid(oDM))
+                {
+                    if (GetIsDM(oDM) && GetArea(oPC) == GetArea(oDM) && GetDistanceBetween(oPC, oDM) <= fWhispDistance)
+                    {
+                        SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER, iLangSpoken, sSpeech, sSpeechObscured, oPC, oDM);
+                    }
+                    oDM = GetNextPC();
+                }
+
+                // broadcast to PCs
+                object oWhisp = GetFirstObjectInShape(SHAPE_SPHERE, fWhispDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 while (GetIsObjectValid(oWhisp))
                 {
                     if (GetObjectHeard(oPC, oWhisp) && (GetIsPC(oWhisp) || GetIsDMPossessed(oWhisp)))
@@ -329,7 +357,7 @@ void main()
                             SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER, iLangSpoken, sSpeech, sSpeechObscured, oPC, oWhisp);
                         }
                     }
-                    oWhisp = GetNextObjectInShape(SHAPE_SPHERE, 10.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+                    oWhisp = GetNextObjectInShape(SHAPE_SPHERE, fWhispDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 }
             }
         }
