@@ -150,7 +150,8 @@ void main()
                 {
                     if(GetIsPC(oHeard) || GetIsDMPossessed(oHeard))
                     {
-                        if(GetStringLength(sOriginal) > 35)
+                        // only award XP if not heard by yourself
+                        if(GetStringLength(sOriginal) > 35 && GetPCPublicCDKey(oPC) != GetPCPublicCDKey(oHeard))
                         {
                             SetLocalInt(oPC,"nXPReward", 1);
                         }
@@ -298,39 +299,35 @@ void main()
                 object oTalk = GetFirstObjectInShape(SHAPE_SPHERE, 20.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 while (GetIsObjectValid(oTalk))
                 {
-                    if (!GetObjectHeard(oPC, oTalk) || (!GetIsPC(oTalk) && !GetIsDMPossessed(oTalk)))
+                    if (GetObjectHeard(oPC, oTalk) && (GetIsPC(oTalk) || GetIsDMPossessed(oTalk)))
                     {
-                        continue;
+                        SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, iLangSpoken, sSpeech, sSpeechObscured, oPC, oTalk);
                     }
-                    SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, iLangSpoken, sSpeech, sSpeechObscured, oPC, oTalk);
                     oTalk = GetNextObjectInShape(SHAPE_SPHERE, 20.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 }
             }
             else if (GetPCChatVolume() == TALKVOLUME_WHISPER)
             {
                 object oWhisp = GetFirstObjectInShape(SHAPE_SPHERE, 10.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
-
                 while (GetIsObjectValid(oWhisp))
                 {
-                    if (!GetObjectHeard(oPC, oWhisp) || (!GetIsPC(oWhisp) && !GetIsDMPossessed(oWhisp)))
+                    if (GetObjectHeard(oPC, oWhisp) && (GetIsPC(oWhisp) || GetIsDMPossessed(oWhisp)))
                     {
-                        continue;
-                    }
+                        float fDistance = GetDistanceBetween(oPC, oWhisp);
+                        int nListenRank = GetSkillRank(SKILL_LISTEN, oWhisp, FALSE);
 
-                    float fDistance = GetDistanceBetween(oPC, oWhisp);
-                    int nListenRank = GetSkillRank(SKILL_LISTEN, oWhisp, FALSE);
-
-                    if (fDistance <= 3.0f
-                        || (fDistance > 3.0f && fDistance <= 3.5f  && nListenRank >= 5)
-                        || (fDistance > 3.5f && fDistance <= 4.5f  && nListenRank >= 10)
-                        || (fDistance > 4.5f && fDistance <= 5.5f  && nListenRank >= 15)
-                        || (fDistance > 5.5f && fDistance <= 6.5f  && nListenRank >= 20)
-                        || (fDistance > 6.5f && fDistance <= 7.5f  && nListenRank >= 25)
-                        || (fDistance > 7.5f && fDistance <= 8.5f  && nListenRank >= 30)
-                        || (fDistance > 8.5f && fDistance <= 9.5f  && nListenRank >= 35)
-                        || (fDistance > 9.5f && fDistance <= 10.0f && nListenRank >= 40))
-                    {
-                        SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER, iLangSpoken, sSpeech, sSpeechObscured, oPC, oWhisp);
+                        if (fDistance <= 3.0f
+                            || (fDistance > 3.0f && fDistance <= 3.5f  && nListenRank >= 5)
+                            || (fDistance > 3.5f && fDistance <= 4.5f  && nListenRank >= 10)
+                            || (fDistance > 4.5f && fDistance <= 5.5f  && nListenRank >= 15)
+                            || (fDistance > 5.5f && fDistance <= 6.5f  && nListenRank >= 20)
+                            || (fDistance > 6.5f && fDistance <= 7.5f  && nListenRank >= 25)
+                            || (fDistance > 7.5f && fDistance <= 8.5f  && nListenRank >= 30)
+                            || (fDistance > 8.5f && fDistance <= 9.5f  && nListenRank >= 35)
+                            || (fDistance > 9.5f && fDistance <= 10.0f && nListenRank >= 40))
+                        {
+                            SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER, iLangSpoken, sSpeech, sSpeechObscured, oPC, oWhisp);
+                        }
                     }
                     oWhisp = GetNextObjectInShape(SHAPE_SPHERE, 10.0f, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 }
