@@ -6,7 +6,7 @@ const int MYTHIC_XP_BONUS_2 = 3000;
 const string MYTHIC_DATA_KEY_PREFIX = "mythicxp_";
 
 // add one point of mythic xp for given PC and their ability
-void TickMythicXp(object oPC, int nAbility);
+void TickMythicXp(object oPC, int nAbility, int nTick = 1);
 
 // determines the suitable extraordinary attribute bonuses and applies them to the PC
 // this should only be called on rest
@@ -20,14 +20,19 @@ void ReportMythicXp(object oPC);
 
 
 
-void TickMythicXp(object oPC, int nAbility)
+void TickMythicXp(object oPC, int nAbility, int nTick = 1)
 {
     object oData = GetItemPossessedBy(oPC,"PC_Data_Object");
     string sDataKey = MYTHIC_DATA_KEY_PREFIX + AbilityToString(nAbility);
     int nMythicXp = GetLocalInt(oData, sDataKey);
     if (nMythicXp < MYTHIC_XP_BONUS_2)
     {
-        SetLocalInt(oData, sDataKey, nMythicXp + 1);
+        int nNextMythicXp = nMythicXp + nTick;
+        if (nNextMythicXp > MYTHIC_XP_BONUS_2)
+        {
+            nNextMythicXp = MYTHIC_XP_BONUS_2;
+        }
+        SetLocalInt(oData, sDataKey, nNextMythicXp);
     }
 }
 
