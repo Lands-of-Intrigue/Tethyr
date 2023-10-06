@@ -52,7 +52,7 @@ void main()
                     iXPBonus = GetXPBonus(oPC);
                     iXP = (iXP + iXPBonus);
                     GiveTrueXPToCreature(oPC, iXP,FALSE);
-                    TickMythicXp(oPC, ABILITY_CHARISMA);
+                    TickMythicXp(oPC, ABILITY_CHARISMA, 5);
                 }
                 ExecuteScript("te_save",oPC);
             }
