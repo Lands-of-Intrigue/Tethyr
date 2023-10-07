@@ -18,6 +18,7 @@
 #include "loi_weave"
 #include "loi_mythicxp"
 #include "colors_inc"
+#include "mk_inc_editor"
 
 const string DMFI_PLAYERCHAT_SCRIPTNAME = "dmfi_plychat_exe";
 
@@ -142,8 +143,11 @@ void main()
             location lSpeechSource = GetLocation(oPC);
             object oArea = GetArea(oPC);
 
-            // hide chat from players, keep for NPCs
+            // hide chat from players, keep for NPCs and dialog box
             SetPCChatVolume(TALKVOLUME_SILENT_TALK);
+
+            // added only for mk editor description modifier
+            SetLocalString(oPC, g_varEditorChatMessageString, sOriginal);
 
             // only trigger XP awards fpr PCs
             if (GetIsPC(oPC) && GetLocalInt(oPC,"nXPReward") != 1 && !GetIsDM(oPC) && !GetIsDMPossessed(oPC))
