@@ -18,6 +18,7 @@
 #include "loi_weave"
 #include "loi_mythicxp"
 #include "colors_inc"
+#include "mk_inc_editor"
 
 const string DMFI_PLAYERCHAT_SCRIPTNAME = "dmfi_plychat_exe";
 
@@ -137,9 +138,16 @@ void main()
         }
         else // not a command or a projection, so regular RP
         {
+            int nChatVolume = GetPCChatVolume();
             string sOriginal = GetPCChatMessage();
             location lSpeechSource = GetLocation(oPC);
             object oArea = GetArea(oPC);
+
+            // hide chat from players, keep for NPCs and dialog box
+            SetPCChatVolume(TALKVOLUME_SILENT_TALK);
+
+            // added only for mk editor description modifier
+            SetLocalString(oPC, g_varEditorChatMessageString, sOriginal);
 
             // only trigger XP awards fpr PCs
             if (GetIsPC(oPC) && GetLocalInt(oPC,"nXPReward") != 1 && !GetIsDM(oPC) && !GetIsDMPossessed(oPC))
@@ -172,7 +180,7 @@ void main()
             
             string sSpeechColor = WHITE;
             string sEmoteColor = PERIWINKLE;
-            if (GetPCChatVolume() == TALKVOLUME_WHISPER)
+            if (nChatVolume == TALKVOLUME_WHISPER)
             {
                 sSpeechColor = GREY;
                 sEmoteColor = DARKBLUE;
@@ -294,7 +302,7 @@ void main()
                     sCurrentChar = GetSubString(sOriginal, i, 1);
                 }
             }
-            if (GetPCChatVolume() == TALKVOLUME_TALK)
+            if (nChatVolume == TALKVOLUME_TALK)
             {
                 float fTalkDistance = 20.0f;
 
@@ -320,7 +328,7 @@ void main()
                     oTalk = GetNextObjectInShape(SHAPE_SPHERE, fTalkDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 }
             }
-            else if (GetPCChatVolume() == TALKVOLUME_WHISPER)
+            else if (nChatVolume == TALKVOLUME_WHISPER)
             {
                 float fWhispDistance = 10.0f;
 
@@ -361,12 +369,15 @@ void main()
                 }
             }
         }
-        SetPCChatMessage("");
     }
     else if (GetPCChatVolume() == TALKVOLUME_PARTY)
     {
         SendMessageToPC(oPC, RED+ "Party Chat is Disabled." +COLOR_END+ " Your message was: " +sChatMessage);
         SetPCChatMessage("");
+    }
+    else if (GetPCChatVolume() == TALKVOLUME_SILENT_SHOUT)
+    {
+        SendMessageToPC(oPC, "Sent to DM channel: " + NEONGREEN + sChatMessage + COLOR_END);
     }
 }
 
