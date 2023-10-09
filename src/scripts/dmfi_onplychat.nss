@@ -107,204 +107,294 @@ void main()
     }
 
 
-    if((GetPCChatVolume() == TALKVOLUME_TALK) || (GetPCChatVolume()==TALKVOLUME_WHISPER))
+    string sFirstChar = GetStringLeft(sChatMessage, 1);
+    string sMessage = GetStringRight(sChatMessage, GetStringLength(sChatMessage) - 1);
+
+    if      (sFirstChar == "-")
     {
-        string sFirstChar = GetStringLeft(sChatMessage, 1);
-        string sMessage = GetStringRight(sChatMessage, GetStringLength(sChatMessage) - 1);
+        ProcessCommand(sMessage);
+    }
+    else if (sFirstChar == "!")
+    {
+        ProjectSpeechTo(ASSOCIATE_TYPE_ANIMALCOMPANION, sMessage);
+    }
+    else if (sFirstChar == "@")
+    {
+        ProjectSpeechTo(ASSOCIATE_TYPE_FAMILIAR, sMessage);
+    }
+    else if (sFirstChar == "^")
+    {
+        ProjectSpeechTo(ASSOCIATE_TYPE_SUMMONED, sMessage);
+    }
+    else if (sFirstChar == "%")
+    {
+        ProjectSpeechTo(ASSOCIATE_TYPE_DOMINATED, sMessage);
+    }
+    else if (sFirstChar == "$")
+    {
+        ProjectSpeechTo(ASSOCIATE_TYPE_HENCHMAN, sMessage);
+    }
+    else if (GetPCChatVolume() == TALKVOLUME_SILENT_SHOUT)
+    {
+        SendMessageToPC(oPC, "Sent to DM channel: " + NEONGREEN + sChatMessage + COLOR_END);
+    }
+    else if (GetPCChatVolume() == TALKVOLUME_SHOUT)
+    {
+        // default handling for DM server wide shouts
+    }
+    else // not a command or a projection, so regular RP
+    {
+        int nChatVolume = GetPCChatVolume();
+        string sOriginal = GetPCChatMessage();
+        location lSpeechSource = GetLocation(oPC);
+        object oArea = GetArea(oPC);
 
-        if      (sFirstChar == "-")
-        {
-            ProcessCommand(sMessage);
-        }
-        else if (sFirstChar == "!")
-        {
-            ProjectSpeechTo(ASSOCIATE_TYPE_ANIMALCOMPANION, sMessage);
-        }
-        else if (sFirstChar == "@")
-        {
-            ProjectSpeechTo(ASSOCIATE_TYPE_FAMILIAR, sMessage);
-        }
-        else if (sFirstChar == "^")
-        {
-            ProjectSpeechTo(ASSOCIATE_TYPE_SUMMONED, sMessage);
-        }
-        else if (sFirstChar == "%")
-        {
-            ProjectSpeechTo(ASSOCIATE_TYPE_DOMINATED, sMessage);
-        }
-        else if (sFirstChar == "$")
-        {
-            ProjectSpeechTo(ASSOCIATE_TYPE_HENCHMAN, sMessage);
-        }
-        else // not a command or a projection, so regular RP
-        {
-            int nChatVolume = GetPCChatVolume();
-            string sOriginal = GetPCChatMessage();
-            location lSpeechSource = GetLocation(oPC);
-            object oArea = GetArea(oPC);
+        // hide chat from players, keep for NPCs and dialog box
+        SetPCChatVolume(TALKVOLUME_SILENT_TALK);
 
-            // hide chat from players, keep for NPCs and dialog box
-            SetPCChatVolume(TALKVOLUME_SILENT_TALK);
+        // added only for mk editor description modifier
+        SetLocalString(oPC, g_varEditorChatMessageString, sOriginal);
 
-            // added only for mk editor description modifier
-            SetLocalString(oPC, g_varEditorChatMessageString, sOriginal);
-
-            // only trigger XP awards fpr PCs
-            if (GetIsPC(oPC) && GetLocalInt(oPC,"nXPReward") != 1 && !GetIsDM(oPC) && !GetIsDMPossessed(oPC))
+        // only trigger XP awards fpr PCs
+        if (GetIsPC(oPC) && GetLocalInt(oPC,"nXPReward") != 1 && !GetIsDM(oPC) && !GetIsDMPossessed(oPC))
+        {
+            float fTalkRadius = 20.0f;
+            object oHeard = GetFirstObjectInShape(SHAPE_SPHERE, fTalkRadius, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+            while (GetIsObjectValid(oHeard))
             {
-                float fTalkRadius = 20.0f;
-                object oHeard = GetFirstObjectInShape(SHAPE_SPHERE, fTalkRadius, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
-                while (GetIsObjectValid(oHeard))
+                if(GetIsPC(oHeard) || GetIsDMPossessed(oHeard))
                 {
-                    if(GetIsPC(oHeard) || GetIsDMPossessed(oHeard))
+                    // only award XP if not heard by yourself
+                    if(GetStringLength(sOriginal) > 35 && GetPCPublicCDKey(oPC) != GetPCPublicCDKey(oHeard))
                     {
-                        // only award XP if not heard by yourself
-                        if(GetStringLength(sOriginal) > 35 && GetPCPublicCDKey(oPC) != GetPCPublicCDKey(oHeard))
-                        {
-                            SetLocalInt(oPC,"nXPReward", 1);
-                        }
-                        break;
+                        SetLocalInt(oPC,"nXPReward", 1);
                     }
-                    oHeard = GetNextObjectInShape(SHAPE_SPHERE, fTalkRadius, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+                    break;
                 }
+                oHeard = GetNextObjectInShape(SHAPE_SPHERE, fTalkRadius, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+            }
+        }
+
+        // Determine if the player has a language toggled
+        int iLangSpoken = -1; //Common
+        string sSpeechStart = "";
+        if(GetLocalInt(oPC,"LangOn") == 1)
+        {
+            iLangSpoken = GetLocalInt(oPC,"LangSpoken");
+            sSpeechStart = GetColorForLanguage(iLangSpoken) + "[" + GetLanguageName(iLangSpoken) + "] " + COLOR_END;
+        }
+        
+        string sSpeechColor = WHITE;
+        string sEmoteColor = PERIWINKLE;
+        if (nChatVolume == TALKVOLUME_WHISPER)
+        {
+            sSpeechColor = GREY;
+            sEmoteColor = DARKBLUE;
+        }
+
+        string sCurrentChar = sFirstChar;
+        int i = 0;
+        int bSpeaking = FALSE;
+        int bEmoting = FALSE;
+        string sSpeech = sSpeechStart;
+        string sSpeechObscured = sSpeechStart;
+
+        int nNarrationStyle = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"), "narration_style");
+
+        if (nNarrationStyle == NARRATION_STYLE_BRACKETS || nNarrationStyle == NARRATION_STYLE_STARS)
+        {
+            string sEmoteStartChar = BRACKET_OPEN_CHARACTER;
+            string sEmoteEndChar = BRACKET_CLOSE_CHARACTER;
+            if (nNarrationStyle == NARRATION_STYLE_STARS)
+            {
+                sEmoteStartChar = STAR_CHARACTER;
+                sEmoteEndChar = STAR_CHARACTER;
             }
 
-            // Determine if the player has a language toggled
-            int iLangSpoken = -1; //Common
-            string sSpeechStart = "";
-            if(GetLocalInt(oPC,"LangOn") == 1)
+            while (i < GetStringLength(sOriginal))
             {
-                iLangSpoken = GetLocalInt(oPC,"LangSpoken");
-                sSpeechStart = GetColorForLanguage(iLangSpoken) + "[" + GetLanguageName(iLangSpoken) + "] " + COLOR_END;
-            }
-            
-            string sSpeechColor = WHITE;
-            string sEmoteColor = PERIWINKLE;
-            if (nChatVolume == TALKVOLUME_WHISPER)
-            {
-                sSpeechColor = GREY;
-                sEmoteColor = DARKBLUE;
-            }
-
-            string sCurrentChar = sFirstChar;
-            int i = 0;
-            int bSpeaking = FALSE;
-            int bEmoting = FALSE;
-            string sSpeech = sSpeechStart;
-            string sSpeechObscured = sSpeechStart;
-
-            int nNarrationStyle = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"), "narration_style");
-
-            if (nNarrationStyle == NARRATION_STYLE_BRACKETS || nNarrationStyle == NARRATION_STYLE_STARS)
-            {
-                string sEmoteStartChar = BRACKET_OPEN_CHARACTER;
-                string sEmoteEndChar = BRACKET_CLOSE_CHARACTER;
-                if (nNarrationStyle == NARRATION_STYLE_STARS)
+                if (!bEmoting && !bSpeaking)
                 {
-                    sEmoteStartChar = STAR_CHARACTER;
-                    sEmoteEndChar = STAR_CHARACTER;
-                }
-
-                while (i < GetStringLength(sOriginal))
-                {
-                    if (!bEmoting && !bSpeaking)
+                    if (sCurrentChar == sEmoteStartChar)
                     {
-                        if (sCurrentChar == sEmoteStartChar)
-                        {
-                            sSpeech         += sEmoteColor + sCurrentChar;
-                            sSpeechObscured += sEmoteColor + sCurrentChar;
-                            bEmoting = TRUE;
-                        }
-                        else
-                        {
-                            sSpeech         += sSpeechColor + sCurrentChar;
-                            sSpeechObscured += sSpeechColor + TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
-                            bSpeaking = TRUE;
-                        }
+                        sSpeech         += sEmoteColor + sCurrentChar;
+                        sSpeechObscured += sEmoteColor + sCurrentChar;
+                        bEmoting = TRUE;
+                    }
+                    else
+                    {
+                        sSpeech         += sSpeechColor + sCurrentChar;
+                        sSpeechObscured += sSpeechColor + TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
+                        bSpeaking = TRUE;
+                    }
+                }
+                else if (bEmoting)
+                {
+                    sSpeech         += sCurrentChar;
+                    sSpeechObscured += sCurrentChar;
+                    if (sCurrentChar == sEmoteEndChar)
+                    {
+                        sSpeech         += COLOR_END;
+                        sSpeechObscured += COLOR_END;
+                        bEmoting = FALSE;
+                    }
+                }
+                else if (bSpeaking)
+                {
+                    if (sCurrentChar == sEmoteStartChar)
+                    {
+                        sSpeech         += COLOR_END + sEmoteColor + sCurrentChar;
+                        sSpeechObscured += COLOR_END + sEmoteColor + sCurrentChar;
+                        bSpeaking = FALSE;
+                        bEmoting = TRUE;
+                    }
+                    else
+                    {
+                        sSpeech         += sCurrentChar;
+                        sSpeechObscured += TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
+                    }
+                }
+                i++;
+                sCurrentChar = GetSubString(sOriginal, i, 1);
+            }
+        }
+        else // default to NARRATION_STYLE_QUOTATIONS
+        {
+            while (i < GetStringLength(sOriginal))
+            {
+                if (sCurrentChar == QUOTATION_CHARACTER)
+                {
+                    if (!bEmoting && !bSpeaking) // first character
+                    {
+                        sSpeech         += sSpeechColor + sCurrentChar;
+                        sSpeechObscured += sSpeechColor + sCurrentChar;
+                        bSpeaking = TRUE;
+                    }
+                    else if (bEmoting)
+                    {
+                        sSpeech         += COLOR_END + sSpeechColor + sCurrentChar;
+                        sSpeechObscured += COLOR_END + sSpeechColor + sCurrentChar;
+                        bSpeaking = TRUE;
+                        bEmoting = FALSE;
+                    }
+                    else if (bSpeaking)
+                    {
+                        sSpeech         += sCurrentChar + COLOR_END + sEmoteColor;
+                        sSpeechObscured += sCurrentChar + COLOR_END + sEmoteColor;
+                        bSpeaking = FALSE;
+                        bEmoting = TRUE;
+                    }
+                }
+                else
+                {
+                    if (!bEmoting && !bSpeaking) // first character
+                    {
+                        sSpeech         += sEmoteColor + sCurrentChar;
+                        sSpeechObscured += sEmoteColor + sCurrentChar;
+                        bEmoting = TRUE;
                     }
                     else if (bEmoting)
                     {
                         sSpeech         += sCurrentChar;
                         sSpeechObscured += sCurrentChar;
-                        if (sCurrentChar == sEmoteEndChar)
-                        {
-                            sSpeech         += COLOR_END;
-                            sSpeechObscured += COLOR_END;
-                            bEmoting = FALSE;
-                        }
                     }
                     else if (bSpeaking)
                     {
-                        if (sCurrentChar == sEmoteStartChar)
-                        {
-                            sSpeech         += COLOR_END + sEmoteColor + sCurrentChar;
-                            sSpeechObscured += COLOR_END + sEmoteColor + sCurrentChar;
-                            bSpeaking = FALSE;
-                            bEmoting = TRUE;
-                        }
-                        else
-                        {
-                            sSpeech         += sCurrentChar;
-                            sSpeechObscured += TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
-                        }
+                        sSpeech         += sCurrentChar;
+                        sSpeechObscured += TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
                     }
-                    i++;
-                    sCurrentChar = GetSubString(sOriginal, i, 1);
                 }
+                i++;
+                sCurrentChar = GetSubString(sOriginal, i, 1);
             }
-            else // default to NARRATION_STYLE_QUOTATIONS
+        }
+        
+        if (nChatVolume == TALKVOLUME_TALK)
+        {
+            float fTalkDistance = 20.0f;
+
+            // broadcast to DMs
+            object oDM = GetFirstPC();
+            while (GetIsObjectValid(oDM))
             {
-                while (i < GetStringLength(sOriginal))
+                if (GetIsDM(oDM) && GetArea(oPC) == GetArea(oDM) && GetDistanceBetween(oPC, oDM) <= fTalkDistance)
                 {
-                    if (sCurrentChar == QUOTATION_CHARACTER)
-                    {
-                        if (!bEmoting && !bSpeaking) // first character
-                        {
-                            sSpeech         += sSpeechColor + sCurrentChar;
-                            sSpeechObscured += sSpeechColor + sCurrentChar;
-                            bSpeaking = TRUE;
-                        }
-                        else if (bEmoting)
-                        {
-                            sSpeech         += COLOR_END + sSpeechColor + sCurrentChar;
-                            sSpeechObscured += COLOR_END + sSpeechColor + sCurrentChar;
-                            bSpeaking = TRUE;
-                            bEmoting = FALSE;
-                        }
-                        else if (bSpeaking)
-                        {
-                            sSpeech         += sCurrentChar + COLOR_END + sEmoteColor;
-                            sSpeechObscured += sCurrentChar + COLOR_END + sEmoteColor;
-                            bSpeaking = FALSE;
-                            bEmoting = TRUE;
-                        }
-                    }
-                    else
-                    {
-                        if (!bEmoting && !bSpeaking) // first character
-                        {
-                            sSpeech         += sEmoteColor + sCurrentChar;
-                            sSpeechObscured += sEmoteColor + sCurrentChar;
-                            bEmoting = TRUE;
-                        }
-                        else if (bEmoting)
-                        {
-                            sSpeech         += sCurrentChar;
-                            sSpeechObscured += sCurrentChar;
-                        }
-                        else if (bSpeaking)
-                        {
-                            sSpeech         += sCurrentChar;
-                            sSpeechObscured += TranslateCommonToLanguage(iLangSpoken,sCurrentChar);
-                        }
-                    }
-                    i++;
-                    sCurrentChar = GetSubString(sOriginal, i, 1);
+                    SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, iLangSpoken, sSpeech, sSpeechObscured, oPC, oDM);
                 }
+                oDM = GetNextPC();
             }
-            if (nChatVolume == TALKVOLUME_TALK)
+
+            // broadcast to PCs that have heard
+            object oTalk = GetFirstObjectInShape(SHAPE_SPHERE, fTalkDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+            while (GetIsObjectValid(oTalk))
             {
-                float fTalkDistance = 20.0f;
+                if (GetObjectHeard(oPC, oTalk) && (GetIsPC(oTalk) || GetIsDMPossessed(oTalk)))
+                {
+                    SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, iLangSpoken, sSpeech, sSpeechObscured, oPC, oTalk);
+                }
+                oTalk = GetNextObjectInShape(SHAPE_SPHERE, fTalkDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+            }
+        }
+        else if (nChatVolume == TALKVOLUME_WHISPER)
+        {
+            float fWhispDistance = 10.0f;
+
+            // broadcast to DMs
+            object oDM = GetFirstPC();
+            while (GetIsObjectValid(oDM))
+            {
+                if (GetIsDM(oDM) && GetArea(oPC) == GetArea(oDM) && GetDistanceBetween(oPC, oDM) <= fWhispDistance)
+                {
+                    SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER, iLangSpoken, sSpeech, sSpeechObscured, oPC, oDM);
+                }
+                oDM = GetNextPC();
+            }
+
+            // broadcast to PCs that have heard
+            object oWhisp = GetFirstObjectInShape(SHAPE_SPHERE, fWhispDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+            while (GetIsObjectValid(oWhisp))
+            {
+                if (GetObjectHeard(oPC, oWhisp) && (GetIsPC(oWhisp) || GetIsDMPossessed(oWhisp)))
+                {
+                    float fDistance = GetDistanceBetween(oPC, oWhisp);
+                    int nListenRank = GetSkillRank(SKILL_LISTEN, oWhisp, FALSE);
+
+                    if (fDistance <= 3.0f
+                        || (fDistance > 3.0f && fDistance <= 3.5f  && nListenRank >= 5)
+                        || (fDistance > 3.5f && fDistance <= 4.5f  && nListenRank >= 10)
+                        || (fDistance > 4.5f && fDistance <= 5.5f  && nListenRank >= 15)
+                        || (fDistance > 5.5f && fDistance <= 6.5f  && nListenRank >= 20)
+                        || (fDistance > 6.5f && fDistance <= 7.5f  && nListenRank >= 25)
+                        || (fDistance > 7.5f && fDistance <= 8.5f  && nListenRank >= 30)
+                        || (fDistance > 8.5f && fDistance <= 9.5f  && nListenRank >= 35)
+                        || (fDistance > 9.5f && fDistance <= 10.0f && nListenRank >= 40))
+                    {
+                        SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER, iLangSpoken, sSpeech, sSpeechObscured, oPC, oWhisp);
+                    }
+                }
+                oWhisp = GetNextObjectInShape(SHAPE_SPHERE, fWhispDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
+            }
+        }
+        else if (nChatVolume == TALKVOLUME_PARTY)
+        {
+            // Party Chat is used as a DM shout
+            if (GetIsDM(oPC) || GetIsDMPossessed(oPC))
+            {
+                float fTalkDistance = 40.0f;
+
+                // create the source object in the speaker's inventory if it doesn't already exist
+                object oPartyShouter = GetItemPossessedBy(oPC,"dmpartyshout");
+                if (oPartyShouter == OBJECT_INVALID)
+                {
+                    oPartyShouter = CreateItemOnObject("dmpartyshout", oPC, 1);
+                    SetIdentified(oPartyShouter, TRUE);
+                    SetName(oPartyShouter, "DM");
+                    OpenInventory(oPC, oPC);
+                    ClearAllActions();
+                }
+
+                // there is no language filtering on shouts
+                string sBroadcast = ORANGE + sOriginal + COLOR_END;
 
                 // broadcast to DMs
                 object oDM = GetFirstPC();
@@ -312,7 +402,7 @@ void main()
                 {
                     if (GetIsDM(oDM) && GetArea(oPC) == GetArea(oDM) && GetDistanceBetween(oPC, oDM) <= fTalkDistance)
                     {
-                        SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, iLangSpoken, sSpeech, sSpeechObscured, oPC, oDM);
+                        NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, sBroadcast, oPartyShouter, oDM);
                     }
                     oDM = GetNextPC();
                 }
@@ -321,63 +411,18 @@ void main()
                 object oTalk = GetFirstObjectInShape(SHAPE_SPHERE, fTalkDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 while (GetIsObjectValid(oTalk))
                 {
-                    if (GetObjectHeard(oPC, oTalk) && (GetIsPC(oTalk) || GetIsDMPossessed(oTalk)))
+                    if (GetIsPC(oTalk) || GetIsDMPossessed(oTalk))
                     {
-                        SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, iLangSpoken, sSpeech, sSpeechObscured, oPC, oTalk);
+                        NWNX_Chat_SendMessage(NWNX_CHAT_CHANNEL_PLAYER_TALK, sBroadcast, oPartyShouter, oTalk);
                     }
                     oTalk = GetNextObjectInShape(SHAPE_SPHERE, fTalkDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
                 }
             }
-            else if (nChatVolume == TALKVOLUME_WHISPER)
+            else
             {
-                float fWhispDistance = 10.0f;
-
-                // broadcast to DMs
-                object oDM = GetFirstPC();
-                while (GetIsObjectValid(oDM))
-                {
-                    if (GetIsDM(oDM) && GetArea(oPC) == GetArea(oDM) && GetDistanceBetween(oPC, oDM) <= fWhispDistance)
-                    {
-                        SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER, iLangSpoken, sSpeech, sSpeechObscured, oPC, oDM);
-                    }
-                    oDM = GetNextPC();
-                }
-
-                // broadcast to PCs
-                object oWhisp = GetFirstObjectInShape(SHAPE_SPHERE, fWhispDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
-                while (GetIsObjectValid(oWhisp))
-                {
-                    if (GetObjectHeard(oPC, oWhisp) && (GetIsPC(oWhisp) || GetIsDMPossessed(oWhisp)))
-                    {
-                        float fDistance = GetDistanceBetween(oPC, oWhisp);
-                        int nListenRank = GetSkillRank(SKILL_LISTEN, oWhisp, FALSE);
-
-                        if (fDistance <= 3.0f
-                            || (fDistance > 3.0f && fDistance <= 3.5f  && nListenRank >= 5)
-                            || (fDistance > 3.5f && fDistance <= 4.5f  && nListenRank >= 10)
-                            || (fDistance > 4.5f && fDistance <= 5.5f  && nListenRank >= 15)
-                            || (fDistance > 5.5f && fDistance <= 6.5f  && nListenRank >= 20)
-                            || (fDistance > 6.5f && fDistance <= 7.5f  && nListenRank >= 25)
-                            || (fDistance > 7.5f && fDistance <= 8.5f  && nListenRank >= 30)
-                            || (fDistance > 8.5f && fDistance <= 9.5f  && nListenRank >= 35)
-                            || (fDistance > 9.5f && fDistance <= 10.0f && nListenRank >= 40))
-                        {
-                            SendLanguageFilteredMessage(NWNX_CHAT_CHANNEL_PLAYER_WHISPER, iLangSpoken, sSpeech, sSpeechObscured, oPC, oWhisp);
-                        }
-                    }
-                    oWhisp = GetNextObjectInShape(SHAPE_SPHERE, fWhispDistance, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
-                }
+                SendMessageToPC(oPC, RED+ "Party Chat is Disabled." +COLOR_END+ " Your message was: " +sChatMessage);
             }
         }
-    }
-    else if (GetPCChatVolume() == TALKVOLUME_PARTY)
-    {
-        SendMessageToPC(oPC, RED+ "Party Chat is Disabled." +COLOR_END+ " Your message was: " +sChatMessage);
-        SetPCChatMessage("");
-    }
-    else if (GetPCChatVolume() == TALKVOLUME_SILENT_SHOUT)
-    {
-        SendMessageToPC(oPC, "Sent to DM channel: " + NEONGREEN + sChatMessage + COLOR_END);
     }
 }
 
