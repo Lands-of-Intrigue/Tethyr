@@ -30,7 +30,7 @@ void main()
 
 
     // If a new player...
-    if ((GetHitDice(oUser) < 3) &&(!GetIsDM(oUser))) //Aka: Below level 3.
+    if ((GetXP(oUser) == 0) &&(!GetIsDM(oUser)))
     {
         SetSubRace(oUser,"");
         //Create PC Data Object
@@ -71,12 +71,6 @@ void main()
         {
             object oCombiner = CreateItemOnObject("ceb_crcombinera",oUser,1);
             SetIdentified(oCombiner,TRUE);
-        }
-
-        if(GetItemPossessedBy(oUser,"ceb_crcraftbox") == OBJECT_INVALID)
-        {
-            object oCraftBox = CreateItemOnObject("ceb_crcraftbox",oUser,1);
-            SetIdentified(oCraftBox,TRUE);
         }
         if(GetItemPossessedBy(oUser,"te_serverrules") == OBJECT_INVALID)
         {

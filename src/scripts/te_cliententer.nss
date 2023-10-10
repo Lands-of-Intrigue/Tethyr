@@ -21,6 +21,7 @@
 #include "nwnx_util"
 #include "nwnx_webhook_rch"
 #include "x3_inc_horse"
+#include "loi_patches"
 
 void main()
 {
@@ -338,33 +339,13 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
-//Begin HACK until we get 2da updates
-////////////////////////////////////////////////////////////////////////////////
-
-    // if character has levels in base full caster classes
-    if(GetLevelByClass(CLASS_TYPE_BARD,oPC)>=1 
-        || GetLevelByClass(CLASS_TYPE_SORCERER,oPC)>=1
-        || GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1)
-    {
-        // and if they don't have Eschew Materials, award it to them
-        if (GetHasFeat(1409,oPC) == FALSE)
-        {
-            NWNX_Creature_AddFeat(oPC, 1409);
-        }
-    }
-
-////////////////////////////////////////////////////////////////////////////////
-//End HACK until we get 2da updates
-////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////
 //Begin PC Welcome:
 ////////////////////////////////////////////////////////////////////////////////
-    string sWelcome = GREEN+"Welcome to Lands of Intrigue!"+COLOR_END;
+    string sWelcome = BLUE+"Welcome to Lands of Intrigue!"+COLOR_END;
     sWelcome += "\n"+WHITE+"For information about the setting and current timeline please check Discord and your in-game Journal."+COLOR_END;
     sWelcome += "\n"+WHITE+"This is a Roleplay Server, so above all, we ask that you stay "+COLOR_END+BLUE+"In Character"+COLOR_END+WHITE+" at all times. "+COLOR_END;
-    sWelcome += "\n"+LIGHTGREY+"Please report all Module and Server specific Bugs on our forums and all NWN:EE specific bugs to Beamdog. "+COLOR_END;
-    sWelcome += "\n"+YELLOW+"We hope you enjoy your stay."+COLOR_END;
+    sWelcome += "\n"+PERIWINKLE+"Please report all Module and Server specific Bugs on our forums and all NWN:EE specific bugs to Beamdog. "+COLOR_END;
+    sWelcome += "\n"+WHITE+"We hope you enjoy your stay."+COLOR_END;
 
     SendMessageToPC(oPC,sWelcome);
 
@@ -519,4 +500,15 @@ if(GetLevelByClass(CLASS_TYPE_WIZARD,oPC)>=1){AddJournalQuestEntry("te_cl_32",1,
     {
         SendMessageToPC(oPC,"ALERT! Your character needs to be remade. Please contact a DM. You may continue to play your character in the mean time.");
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //Begin HACK until we get 2da updates
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    ApplyPatchesTo(oPC);
+    // SetXP(oPC, GetXP(oPC) + 99000);
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //End HACK until we get 2da updates
+    ////////////////////////////////////////////////////////////////////////////////
 }
