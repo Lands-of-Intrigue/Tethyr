@@ -34,7 +34,7 @@ void main()
         SendMessageToPC(oPC, "<cþ  >It is becoming more and more difficult to discover new insights on your own.");
         return;
     }
-    //Warlock Level 5 Gate
+    //Warlock Level 7 Gate
     if ((GetLevelByClass(47,oPC) >= 7)&&(GetItemPossessedBy(oPC,"TE_DM_WAR")== OBJECT_INVALID))
     {
         int nXP = GetXP(oPC);
@@ -64,46 +64,7 @@ void main()
         SendMessageToPC(oPC, "<cþ  >It is becoming more and more difficult to discover new insights on your own.");
         return;
     }
-    //Druid
-    if (GetLevelByClass(CLASS_TYPE_DRUID,oPC) >=1)
-    {
-        if ((GetLevelByClass(CLASS_TYPE_DRUID,oPC) == 12) && (GetItemPossessedBy(oPC, "TE_DM_DR1") == OBJECT_INVALID))
-        {
-            int nXP = GetXP(oPC);
-            int nLXP = ((iCL-1) * 1000);
-            SetXP(oPC,(nXP - nLXP));
-            SetXP(oPC, nXP);
-            SendMessageToPC(oPC, "<cþ  >You must successfully complete the Challenge to advance further in the druidic hierarchy.");
-            return;
-        }
-        else if ((GetLevelByClass(CLASS_TYPE_DRUID,oPC) == 13) && (GetItemPossessedBy(oPC, "TE_DM_DR2") == OBJECT_INVALID))
-        {
-            int nXP = GetXP(oPC);
-            int nLXP = ((iCL-1) * 1000);
-            SetXP(oPC,(nXP - nLXP));
-            SetXP(oPC, nXP);
-            SendMessageToPC(oPC, "<cþ  >You must successfully complete the Challenge to advance further in the druidic hierarchy.");
-            return;
-        }
-        else if ((GetLevelByClass(CLASS_TYPE_DRUID,oPC) == 14) && (GetItemPossessedBy(oPC, "TE_DM_DR3") == OBJECT_INVALID))
-        {
-            int nXP = GetXP(oPC);
-            int nLXP = ((iCL-1) * 1000);
-            SetXP(oPC,(nXP - nLXP));
-            SetXP(oPC, nXP);
-            SendMessageToPC(oPC, "<cþ  >You must successfully complete the Challenge to advance further in the druidic hierarchy.");
-            return;
-        }
-        else if ((GetLevelByClass(CLASS_TYPE_DRUID,oPC) == 15) && (GetItemPossessedBy(oPC, "TE_DM_DR4") == OBJECT_INVALID))
-        {
-            int nXP = GetXP(oPC);
-            int nLXP = ((iCL-1) * 1000);
-            SetXP(oPC,(nXP - nLXP));
-            SetXP(oPC, nXP);
-            SendMessageToPC(oPC, "<cþ  >You must successfully complete the Challenge to advance further in the druidic hierarchy.");
-            return;
-        }
-    }
+
     ////////////////////////////////////////////////////////////////////////
     //EX-BARB
     if(GetHasFeat(1416, oPC) == TRUE)
