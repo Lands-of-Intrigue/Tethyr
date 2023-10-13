@@ -6,6 +6,7 @@ import time
 import multiprocessing
 import yaml
 from os.path import join
+from pathlib import Path
 
 # usage is:
 #     python module_packer.py pack
@@ -15,23 +16,23 @@ def main():
     command = str(sys.argv[1])
 
     config = yaml.safe_load(open("packer_settings.yaml"))
-    targetDir = config['root']
+    targetDir = Path(config['root'])
 
     print(f'Command is to {str(sys.argv[1])}')
     if not os.path.isdir(targetDir):
         print(f'Invalid path to target dicretory {targetDir}')
         return
     
-    tempDir = config['temp']
+    tempDir = Path(config['temp'])
     if os.path.isdir(tempDir):
         shutil.rmtree(tempDir)
     os.mkdir(tempDir)
 
     modulePacker = ModulePacker(config['os'], targetDir, tempDir)
     if command == 'pack':
-        modulePacker.pack(config['module']['to'])
+        modulePacker.pack(Path(config['module']['to']))
     elif command == 'unpack':
-        modulePacker.unpack(config['module']['from'])
+        modulePacker.unpack(Path(config['module']['from']))
     else:
         print('ERROR - unrecognized command. Use pack or unpack.')
     # clean up
