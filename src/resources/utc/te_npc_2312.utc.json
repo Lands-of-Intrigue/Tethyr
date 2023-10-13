@@ -10,11 +10,11 @@
   },
   "Cha": {
     "type": "byte",
-    "value": 8
+    "value": 11
   },
   "ChallengeRating": {
     "type": "float",
-    "value": 5.0
+    "value": 11.0
   },
   "ClassList": {
     "type": "list",
@@ -27,7 +27,18 @@
         },
         "ClassLevel": {
           "type": "short",
-          "value": 5
+          "value": 12
+        }
+      },
+      {
+        "__struct_id": 2,
+        "Class": {
+          "type": "int",
+          "value": 4
+        },
+        "ClassLevel": {
+          "type": "short",
+          "value": 3
         }
       }
     ]
@@ -38,7 +49,7 @@
   },
   "Con": {
     "type": "byte",
-    "value": 12
+    "value": 15
   },
   "Conversation": {
     "type": "resref",
@@ -50,7 +61,7 @@
   },
   "CurrentHitPoints": {
     "type": "short",
-    "value": 32
+    "value": 150
   },
   "DecayTime": {
     "type": "dword",
@@ -68,7 +79,7 @@
   },
   "Dex": {
     "type": "byte",
-    "value": 11
+    "value": 16
   },
   "Disarmable": {
     "type": "byte",
@@ -139,6 +150,27 @@
         "__struct_id": 1,
         "Feat": {
           "type": "word",
+          "value": 17
+        }
+      },
+      {
+        "__struct_id": 1,
+        "Feat": {
+          "type": "word",
+          "value": 40
+        }
+      },
+      {
+        "__struct_id": 1,
+        "Feat": {
+          "type": "word",
+          "value": 291
+        }
+      },
+      {
+        "__struct_id": 1,
+        "Feat": {
+          "type": "word",
           "value": 289
         }
       }
@@ -164,11 +196,11 @@
   },
   "HitPoints": {
     "type": "short",
-    "value": 32
+    "value": 150
   },
   "Int": {
     "type": "byte",
-    "value": 10
+    "value": 8
   },
   "Interruptable": {
     "type": "byte",
@@ -198,11 +230,11 @@
   },
   "MaxHitPoints": {
     "type": "short",
-    "value": 37
+    "value": 195
   },
   "NaturalAC": {
     "type": "byte",
-    "value": 6
+    "value": 10
   },
   "NoPermDeath": {
     "type": "byte",
@@ -214,7 +246,7 @@
   },
   "PerceptionRange": {
     "type": "byte",
-    "value": 9
+    "value": 10
   },
   "Phenotype": {
     "type": "int",
@@ -316,7 +348,7 @@
         "__struct_id": 0,
         "Rank": {
           "type": "byte",
-          "value": 7
+          "value": 15
         }
       },
       {
@@ -337,7 +369,7 @@
         "__struct_id": 0,
         "Rank": {
           "type": "byte",
-          "value": 7
+          "value": 20
         }
       },
       {
@@ -414,7 +446,7 @@
         "__struct_id": 0,
         "Rank": {
           "type": "byte",
-          "value": 7
+          "value": 20
         }
       },
       {
@@ -491,7 +523,7 @@
   },
   "SoundSetFile": {
     "type": "word",
-    "value": 30
+    "value": 29
   },
   "SpecAbilityList": {
     "type": "list",
@@ -579,7 +611,7 @@
   },
   "Str": {
     "type": "byte",
-    "value": 13
+    "value": 20
   },
   "Subrace": {
     "type": "cexostring",
@@ -638,15 +670,15 @@
         "__struct_id": 0,
         "Name": {
           "type": "cexostring",
-          "value": "Natural Effect"
+          "value": "X2_L_SPAWN_USE_SEARCH"
         },
         "Type": {
           "type": "dword",
-          "value": 3
+          "value": 1
         },
         "Value": {
-          "type": "cexostring",
-          "value": "Baby"
+          "type": "int",
+          "value": 1
         }
       }
     ]
@@ -665,6 +697,6 @@
   },
   "Wis": {
     "type": "byte",
-    "value": 9
+    "value": 12
   }
 }

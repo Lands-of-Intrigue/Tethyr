@@ -2,6 +2,8 @@
 #include "te_functions"
 #include "so_inc_weather"
 #include "nwnx_creature"
+#include "loi_mythicxp"
+
 void main()
 {
     float fInterval = 360.0; // number of seconds to repeat
@@ -50,17 +52,7 @@ void main()
                     iXPBonus = GetXPBonus(oPC);
                     iXP = (iXP + iXPBonus);
                     GiveTrueXPToCreature(oPC, iXP,FALSE);
-
-                    int iCha = GetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicCHA");
-                    SetLocalInt(GetItemPossessedBy(oPC,"PC_Data_Object"),"MythicCHA", iCha+1);
-                    if (
-                    iCha + 1 == 1000 ||
-                    iCha + 1 == 2000 ||
-                    iCha + 1 == 4000 ||
-                    iCha + 1 == 8000 )
-                    {
-                    NWNX_Creature_SetRawAbilityScore(oPC, ABILITY_CHARISMA, NWNX_Creature_GetRawAbilityScore(oPC, ABILITY_CHARISMA)+1);
-                    }
+                    TickMythicXp(oPC, ABILITY_CHARISMA, 5);
                 }
                 ExecuteScript("te_save",oPC);
             }

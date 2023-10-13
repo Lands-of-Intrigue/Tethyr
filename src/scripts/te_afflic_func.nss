@@ -1,73 +1,20 @@
-//::///////////////////////////////////////////////
-//:: Lands of Intrigue Affliction Function Handler
-//:: //:: Function(D20) 2017
-//:://////////////////////////////////////////////
-//:://////////////////////////////////////////////
-//:: Format Created By: Jonathan Lorentsen
-//:: Email: jlorents93@hotmail.com
-//:: Created On: 8Jun16
-//:: Functions/Scripts By: David Novotny
-//:: Email: Raetzain@gmail.com
-//:: Created On: 12 Feb 2017
-//:://////////////////////////////////////////////
-const int BACKGROUND_LOWER = 1150;
-const int BACKGROUND_MIDDLE = 1151;
-const int BACKGROUND_UPPER = 1152;
-const int BACKGROUND_AFFLUENCE = 1153;
-const int BACKGROUND_BRAWLER = 1154;
-const int BACKGROUND_COSMOPOLITAN = 1155;
-const int BACKGROUND_CRUSADER = 1156;
-const int BACKGROUND_DUELIST = 1157;
-const int BACKGROUND_EVANGELIST = 1158;
-const int BACKGROUND_FORESTER = 1159;
-const int BACKGROUND_HARD_LABORER = 1160;
-const int BACKGROUND_HEALER = 1161;
-const int BACKGROUND_KNIGHT = 1162;
-const int BACKGROUND_HEDGEMAGE = 1163;
-const int BACKGROUND_MENDICANT = 1164;
-const int BACKGROUND_MERCHANT = 1165;
-const int BACKGROUND_METALSMITH = 1166;
-const int BACKGROUND_MINSTREL = 1167;
-const int BACKGROUND_OCCULTIST = 1168;
-const int BACKGROUND_SABOTEUR = 1169;
-const int BACKGROUND_SCOUT = 1170;
-const int BACKGROUND_SNEAK = 1171;
-const int BACKGROUND_SOLDIER = 1172;
-const int BACKGROUND_TRAVELER = 1173;
-const int BACKGROUND_SPELLFIRE = 1174;
-const int BACKGROUND_NAT_LYCAN = 1175;
-const int BACKGROUND_SHADOW = 1176;
-const int BACKGROUND_COPPER_ELF = 1177;
-const int BACKGROUND_GREEN_ELF = 1178;
-const int BACKGROUND_DARK_ELF = 1179;
-const int BACKGROUND_SILVER_ELF = 1180;
-const int BACKGROUND_GOLD_ELF = 1181;
-const int BACKGROUND_GOLD_DWARF = 1182;
-const int BACKGROUND_GREY_DWARF = 1183;
-const int BACKGROUND_SHIELD_DWARF = 1184;
-const int BACKGROUND_OUTSIDER = 1185;
-const int BACKGROUND_AASIMAR = 1186;
-const int BACKGROUND_TIEFLING = 1187;
-const int BACKGROUND_AMN_TRAINED = 1389;
-const int BACKGROUND_CALISHITE_TRAINED = 1390;
-const int BACKGROUND_CHURCH_ACOLYTE = 1392;
-const int BACKGROUND_CARAVANNER = 1391;
-const int BACKGROUND_CIRCLE_BORN = 1393;
-const int BACKGROUND_ENLIGHTENED_STUDENT = 1394;
-const int BACKGROUND_HAREM_TRAINED = 1395;
-const int BACKGROUND_HARPER = 1396;
-const int BACKGROUND_KNIGHT_SQUIRE = 1397;
-const int BACKGROUND_TALFIRIAN = 1398;
-const int BACKGROUND_THEOCRAT = 1399;
-const int BACKGROUND_WARD_TRIAD = 1400;
-const int BACKGROUND_ZHENTARIM = 1401;
+// For some reason, this has bloated to include constants.
+// This should be split over time.
+
+
+const int CLASS_TYPE_WARLOCK = 47;
+const int CLASS_TYPE_SHADOW_CHANNELER = 48;
 const int CLASS_TYPE_SPELLFIRE = 49;
 const int CLASS_TYPE_BLIGHTER = 50;
 const int CLASS_TYPE_BLACKCOAT = 51;
 const int CLASS_TYPE_WARMAGE = 52;
 const int CLASS_TYPE_BLADESINGER = 53;
 const int CLASS_TYPE_SHADOW_ADEPT = 54;
-const int CLASS_TYPE_WARLOCK = 47;
+const int CLASS_TYPE_ELDKNIGHT = 55;
+const int CLASS_TYPE_MYSTICKNIGHT = 56;
+const int CLASS_TYPE_ARTIFICER = 57;
+const int CLASS_TYPE_MAGE_BREAKER = 58;
+
 const int DEITY_Akadi = 1304;
 const int DEITY_Auril = 1305;
 const int DEITY_Azuth = 1306;
@@ -168,6 +115,7 @@ const int PROFICIENCY_OBSERVATION    = 1484;
 const int PROFICIENCY_SMELTING       = 1485;
 
 #include "loi_functions"
+#include "loi_background"
 //Apply Affliction Skins/Tools
 //oPC - Target PC
 //  None = 0, Werewolf = 1, Vampire Thrall 2,

@@ -100,13 +100,6 @@ class ModulePacker:
 
         gffFiles = []
         scriptFiles = []
-        # for f in os.listdir(self.targetDir):
-        #     ext = os.path.splitext(f)[1]
-        #     if ext == '.nss':
-        #         scriptFiles.append(f)
-        #     elif ext != '':
-        #         gffFiles.append(f)
-
         for root, subdirs, files in os.walk(self.targetDir):
             for f in files:
                 ext = os.path.splitext(f)[1]
