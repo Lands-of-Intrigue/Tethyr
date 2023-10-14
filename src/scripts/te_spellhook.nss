@@ -8,6 +8,7 @@
 #include "inc_spell_func"
 #include "x2_inc_switches"
 #include "te_afflic_func"
+#include "loi_xp"
 
 void main() {
     //Determine who is casting this spell..
@@ -61,7 +62,6 @@ void main() {
 
 
 
-    int nXP = GetXP(oPC);
     int nPiety = GetLocalInt(oItemP,"nPiety");
 
     //Piety Fix
@@ -197,23 +197,25 @@ void main() {
         spell_debug("Spellhook - spell denied", oCaster);
         if( (GetLocalInt(oItemP,"nEschew") == 1)&&(GetHasFeat(1409,oPC)==TRUE))
         {
+            int nCostXp = 0;
             if(nSL>=6)
             {
                 SetModuleOverrideSpellScriptFinished();
                 return;
             }
             else if(nSL == 5)
-            {SetXP(oPC,nXP-90);}
+                nCostXp = 90;
             else if(nSL == 4)
-            {SetXP(oPC,nXP-60);}
+                nCostXp = 60;
             else if(nSL == 3)
-            {SetXP(oPC,nXP-30);}
+                nCostXp = 30;
             else if(nSL == 2)
-            {SetXP(oPC,nXP-20);}
+                nCostXp = 20;
             else if(nSL == 1)
-            {SetXP(oPC,nXP-15);}
+                nCostXp = 15;
             else if(nSL == 0)
-            {SetXP(oPC,nXP-10);}
+                nCostXp = 10;
+            RemoveXP(oPC, nCostXp);
         }
         else
         {

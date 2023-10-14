@@ -12,42 +12,6 @@
 //:: Created For: Knights of Noromath
 //:://////////////////////////////////////////////
 
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass);
-
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass)
-{
-    if(nXPToGive < 0)
-    {
-        SetXP(oPC,GetXP(oPC)+(nXPToGive));
-    }
-    else
-    {
-        if(nMulticlass == TRUE)
-        {
-            object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
-            if(GetLocalInt(oItem,"iMulticlass") == TRUE)
-            {
-                nXPToGive = (nXPToGive - FloatToInt(IntToFloat(nXPToGive)*0.20));
-                SetXP(oPC,GetXP(oPC)+nXPToGive);
-            }
-            else
-            {
-                SetXP(oPC,GetXP(oPC)+(nXPToGive));
-            }
-        }
-        else
-        {
-            SetXP(oPC,GetXP(oPC)+(nXPToGive));
-        }
-    }
-}
-
 void main()
 {
     object oPGram = GetNearestObjectByTag("tn_dpgram");
@@ -82,16 +46,4 @@ void main()
     DelayCommand(0.12,DestroyObject(oLight6));
     CreateObject(OBJECT_TYPE_CREATURE, "te_shad4b", GetLocation(GetNearestObjectByTag("tn_shadowspawn2", OBJECT_SELF)), FALSE);
     DelayCommand(5.0, SetLocalInt(GetNearestObjectByTag("StartHeartbeat"), "Active", 1));
-
-    object oPC = GetFirstObjectInArea(GetArea(OBJECT_SELF));
-
-    while (oPC != OBJECT_INVALID)
-    {
-        if(GetIsPC(oPC) == TRUE)
-        {
-            GiveTrueXPToCreature(oPC, 500,FALSE);
-        }
-
-        oPC = GetNextObjectInArea(GetArea(OBJECT_SELF));
-    }
 }

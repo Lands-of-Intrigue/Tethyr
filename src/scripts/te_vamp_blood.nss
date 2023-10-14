@@ -1,10 +1,7 @@
 #include "te_functions"
 #include "loi_functions"
 #include "te_afflic_func"
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass);
+#include "loi_xp"
 
 void main()
 {
@@ -127,7 +124,7 @@ void main()
                                  if ((GetLocalInt(oItem,"nBloodUse") < iNow)&&GetIsPC(oTarget)==TRUE)
                                  {
                                     SetLocalInt(oItem,"nBloodUse",iNow);
-                                    GiveTrueXPToCreature(oPC,500,TRUE);
+                                    AwardXP(oPC,500);
                                  }
                             }
                             else
@@ -151,36 +148,5 @@ void main()
             }
 
             SendMessageToPC(oPC,sFeedback);
-    }
-}
-
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass)
-{
-    if(nXPToGive < 0)
-    {
-        SetXP(oPC,GetXP(oPC)+(nXPToGive));
-    }
-    else
-    {
-        if(nMulticlass == TRUE)
-        {
-            object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
-            if(GetLocalInt(oItem,"iMulticlass") == TRUE)
-            {
-                nXPToGive = (nXPToGive - FloatToInt(IntToFloat(nXPToGive)*0.20));
-                SetXP(oPC,GetXP(oPC)+nXPToGive);
-            }
-            else
-            {
-                SetXP(oPC,GetXP(oPC)+(nXPToGive));
-            }
-        }
-        else
-        {
-            SetXP(oPC,GetXP(oPC)+(nXPToGive));
-        }
     }
 }

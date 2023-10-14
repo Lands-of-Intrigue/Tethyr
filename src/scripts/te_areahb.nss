@@ -10,6 +10,8 @@
 #include "spawn_main"
 #include "nw_i0_spells"
 #include "x0_i0_match"
+#include "loi_xp"
+
 void main()
 {
     object oPC = GetEnteringObject();
@@ -100,7 +102,7 @@ void main()
             {
                 SetLocalInt(oPC,"PrevTimeMinute",GetTimeMinute());
                 //XP AWARDING SYSTEM
-                GiveTrueXPToCreature(oPC, iXP,FALSE);
+                AwardXP(oPC, iXP);
             }
         }
 

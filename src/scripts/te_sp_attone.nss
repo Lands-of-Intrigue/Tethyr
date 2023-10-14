@@ -15,6 +15,7 @@
 #include "x2_inc_spellhook"
 #include "te_functions"
 #include "te_afflic_func"
+#include "loi_xp"
 
 void main()
 {
@@ -71,6 +72,6 @@ void main()
     }
 
     SetLocalInt(oItem, "iTrans",0);
-    SetXP(oCaster, GetXP(oCaster) - 500);
+    RemoveXP(oCaster, 500);
 }
 

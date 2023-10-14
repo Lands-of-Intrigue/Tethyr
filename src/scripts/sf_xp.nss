@@ -7,6 +7,7 @@
 */
 //////////////////////////////////////////////////
 #include "te_afflic_func"
+#include "loi_xp"
 //:: CONSTANTS
 //:: You can adjust these constants to suit your module
 
@@ -140,10 +141,6 @@ void XPDebugMessage(object oPC, float fCR, int nDiff, int nLoLevel,
 
 int nHiLevel, float fAvLevel);
 
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass);
 ////////////////////////////////////////////////////////////////////////////////
 void main()
 {
@@ -476,36 +473,5 @@ void XPDebugMessage(object oPC, float fCR, int nDiff, int nLoLevel, int nHiLevel
                                 "\nAverage Party Level: "+FloatToString(fAvLevel));
         }
         oParty = GetNextPC();
-    }
-}
-
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass)
-{
-    if(nXPToGive < 0)
-    {
-        SetXP(oPC,GetXP(oPC)+(nXPToGive));
-    }
-    else
-    {
-        if(nMulticlass == TRUE)
-        {
-            object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
-            if(GetLocalInt(oItem,"iMulticlass") == TRUE)
-            {
-                nXPToGive = (nXPToGive - FloatToInt(IntToFloat(nXPToGive)*0.20));
-                SetXP(oPC,GetXP(oPC)+nXPToGive);
-            }
-            else
-            {
-                SetXP(oPC,GetXP(oPC)+(nXPToGive));
-            }
-        }
-        else
-        {
-            SetXP(oPC,GetXP(oPC)+(nXPToGive));
-        }
     }
 }

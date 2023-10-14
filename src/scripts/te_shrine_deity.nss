@@ -1,4 +1,6 @@
 #include "nwnx_creature"
+#include "loi_xp"
+
 void main()
 {
     object oPC = GetPCSpeaker();
@@ -79,7 +81,6 @@ void main()
     SendMessageToPC(oPC,"You are now worshipping a new deity as your patron...");
     SetLocalInt(oPC,"nPiety",0);
     int iHD = GetHitDice(oPC);
-    int iXP = GetXP(oPC);
     int iXPPen = iHD*500;
-    SetXP(oPC, iXP - iXPPen);
+    RemoveXP(oPC, iXPPen);
 }

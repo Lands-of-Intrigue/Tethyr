@@ -53,11 +53,6 @@ const float VALUE_STONE               = 20.0f    ;
 const float VALUE_WAGON               = 25.0f     ;
 const float VALUE_SUPPLIES            = 100.0f   ;
 
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass);
-
 //Gets how many of the item are produced.
 int GetProductionValue(string sSettlement);
 
@@ -655,37 +650,6 @@ string GetSettlementName(string sSettlement)
         return "";
     }
 
-}
-
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass)
-{
-    if(nXPToGive < 0)
-    {
-        SetXP(oPC,GetXP(oPC)+(nXPToGive));
-    }
-    else
-    {
-        if(nMulticlass == TRUE)
-        {
-            object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
-            if(GetLocalInt(oItem,"iMulticlass") == TRUE)
-            {
-                nXPToGive = (nXPToGive - FloatToInt(IntToFloat(nXPToGive)*0.20));
-                SetXP(oPC,GetXP(oPC)+nXPToGive);
-            }
-            else
-            {
-                SetXP(oPC,GetXP(oPC)+(nXPToGive));
-            }
-        }
-        else
-        {
-            SetXP(oPC,GetXP(oPC)+(nXPToGive));
-        }
-    }
 }
 
 //Return ownership tag for faction/barony of a settlement

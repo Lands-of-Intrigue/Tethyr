@@ -106,6 +106,7 @@ const int PLACEABLE_TYPE_CONTAINER = 4;
 const int PLACEABLE_TYPE_SIEGE = 5;
 
 #include "gs_inc_fixture"
+#include "loi_xp"
 
 //:://////////////////////////////////////////////
 /*
@@ -725,14 +726,13 @@ void EventRevivePCBody(object oTarget, object oReviver=OBJECT_INVALID)
         SetPCDeadStatus(oTargetPC, 0);
         SetLocalInt(GetItemPossessedBy(oTargetPC,"PC_Data_Object"),"ShoonAfflic",0);
 
-        int iXP = GetXP(oTargetPC);
         int iXPPenPerLevel = 500;
         if (GetIsObjectValid(oReviver))
         {
             iXPPenPerLevel = 250;
         }
         int iXPPen = PenaltyForResurrection(oTargetPC, iXPPenPerLevel); 
-        SetXP(oTargetPC, iXP - iXPPen);
+        RemoveXP(oTargetPC, iXPPen);
 
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oTargetPC);
         TeleportObjectToLocation(oTargetPC, lTarget);
@@ -768,9 +768,8 @@ void EventResurrectPCBody(object oTarget, object oReviver=OBJECT_INVALID)
         SetLocalInt(GetItemPossessedBy(oTargetPC,"PC_Data_Object"),"ShoonAfflic",0);
         SetPCDeadStatus(oTargetPC, 0);
 
-        int iXP = GetXP(oTargetPC);
         int iXPPen = PenaltyForResurrection(oTargetPC, 100);
-        SetXP(oTargetPC, iXP - iXPPen);
+        RemoveXP(oTargetPC, iXPPen);
 
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oTargetPC);
         TeleportObjectToLocation(oTargetPC, lTarget);
@@ -805,9 +804,8 @@ void EventReviveUndPCBody(object oTarget, object oReviver=OBJECT_INVALID)
         DestroyObject(oTarget);
         SetPCDeadStatus(oTargetPC, 0);
 
-        int iXP = GetXP(oTargetPC);
         int iXPPen = PenaltyForResurrection(oTargetPC, 250);
-        SetXP(oTargetPC, iXP - iXPPen);
+        RemoveXP(oTargetPC, iXPPen);
         
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oTargetPC);
         TeleportObjectToLocation(oTargetPC, lTarget);
@@ -991,9 +989,8 @@ void EventRespawnSafePCBody(object oTarget, object oReviver=OBJECT_INVALID)
         DestroyObject(oTarget);
         SetPCDeadStatus(oTargetPC, 0);
 
-        int iXP = GetXP(oTargetPC);
         int iXPPen = PenaltyForResurrection(oTargetPC, 500);
-        SetXP(oTargetPC, iXP - iXPPen);
+        RemoveXP(oTargetPC, iXPPen);
 
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oTargetPC);
         TeleportObjectToLocation(oTargetPC, lTarget);
@@ -1021,9 +1018,8 @@ void EventRespawnSafeNoBody(object oPC)
     {
         SetPCDeadStatus(oPC, 0);
 
-        int iXP = GetXP(oPC);
         int iXPPen = PenaltyForResurrection(oPC, 500);
-        SetXP(oPC, iXP - iXPPen);
+        RemoveXP(oPC, iXPPen);
 
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(),oPC);
         TeleportObjectToLocation(oPC, lTarget);

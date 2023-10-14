@@ -1,8 +1,5 @@
 #include "nwnx_time"
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass);
+#include "loi_xp"
 
 void main()
 {
@@ -39,8 +36,8 @@ void main()
                 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_LIGHT_WHITE_20), OBJECT_SELF, 3.0);
                 if (nCandle < 10)
                 {
-                GiveTrueXPToCreature(oPC, 25,FALSE);
-                SetLocalInt(GetItemPossessedBy(oPC, "PC_Data_Object"), "QuestDWCandle", nCandle+1);
+                    AwardXP(oPC, 5);
+                    SetLocalInt(GetItemPossessedBy(oPC, "PC_Data_Object"), "QuestDWCandle", nCandle+1);
                 }
                 if (GetLocalInt(GetNearestObjectByTag("tn_dwcandle", OBJECT_SELF, 1), "Active") == 1)
                 {
@@ -52,37 +49,6 @@ void main()
                     SetLocalInt(oDoor2, "TimeOpened",nTimeNow+(60*90));
                 }
             }
-        }
-    }
-}
-
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass)
-{
-    if(nXPToGive < 0)
-    {
-        SetXP(oPC,GetXP(oPC)+(nXPToGive));
-    }
-    else
-    {
-        if(nMulticlass == TRUE)
-        {
-            object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
-            if(GetLocalInt(oItem,"iMulticlass") == TRUE)
-            {
-                nXPToGive = (nXPToGive - FloatToInt(IntToFloat(nXPToGive)*0.20));
-                SetXP(oPC,GetXP(oPC)+nXPToGive);
-            }
-            else
-            {
-                SetXP(oPC,GetXP(oPC)+(nXPToGive));
-            }
-        }
-        else
-        {
-            SetXP(oPC,GetXP(oPC)+(nXPToGive));
         }
     }
 }

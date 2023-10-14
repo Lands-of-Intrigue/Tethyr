@@ -1,33 +1,4 @@
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass)
-{
-    if(nXPToGive < 0)
-    {
-        SetXP(oPC,GetXP(oPC)+(nXPToGive));
-    }
-    else
-    {
-        if(nMulticlass == TRUE)
-        {
-            object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
-            if(GetLocalInt(oItem,"iMulticlass") == TRUE)
-            {
-                nXPToGive = (nXPToGive - FloatToInt(IntToFloat(nXPToGive)*0.20));
-                SetXP(oPC,GetXP(oPC)+nXPToGive);
-            }
-            else
-            {
-                SetXP(oPC,GetXP(oPC)+(nXPToGive));
-            }
-        }
-        else
-        {
-            SetXP(oPC,GetXP(oPC)+(nXPToGive));
-        }
-    }
-}
+#include "loi_xp"
 
 void main()
 {
@@ -68,7 +39,7 @@ void main()
     nMod += GetLevelByClass(47,oPC);
     nMod += GetLevelByClass(CLASS_TYPE_BLACKGUARD,oPC);
 
-    GiveTrueXPToCreature(oPC,50,0);
+    AwardXP(oPC, 50);
 
     if(GetAlignmentGoodEvil(oPC) != ALIGNMENT_NEUTRAL)
     {
