@@ -145,10 +145,10 @@ int AddDeadMagicChance(string sAreaTag, int nAmount)
 
 int FetchWeaveCorruption(string sCorruptionDB, string sAreaTag)
 {
-    string sWildData = GetCampaignString(sCorruptionDB, sAreaTag);
-    int nChance = StringToInt(StringParse(sWildData, TOKENIZER_CHAR));
+    string sData = GetCampaignString(sCorruptionDB, sAreaTag);
+    int nChance = StringToInt(StringParse(sData, TOKENIZER_CHAR));
 
-    int nLastTimestamp = StringToInt(StringParse(sWildData, TOKENIZER_CHAR, TRUE));
+    int nLastTimestamp = StringToInt(StringParse(sData, TOKENIZER_CHAR, TRUE));
     int nDecayPeriod = FloatToInt(HoursToSeconds(DECAY_HOURS));
     int nNow = SQLite_GetTimeStamp();
     int nIntervals = (nNow - nLastTimestamp) / nDecayPeriod;
@@ -159,10 +159,10 @@ int FetchWeaveCorruption(string sCorruptionDB, string sAreaTag)
         {
             nChance = 0;
         }
-        string sWildData = IntToString(nChance) 
+        sData = IntToString(nChance) 
             + TOKENIZER_CHAR 
             + IntToString(nLastTimestamp + nIntervals * nDecayPeriod);
-        SetCampaignString(sCorruptionDB, sAreaTag, sWildData);
+        SetCampaignString(sCorruptionDB, sAreaTag, sData);
     }
     return nChance;
 }
@@ -180,8 +180,8 @@ int AddWeaveCorruption(string sCorruptionDB, string sAreaTag, int nAmount)
         nTotal = 0;
     }
     int nTimestamp = SQLite_GetTimeStamp();
-    string sWildData = IntToString(nTotal) + TOKENIZER_CHAR + IntToString(nTimestamp);
-    SetCampaignString(sCorruptionDB, sAreaTag, sWildData);
+    string sData = IntToString(nTotal) + TOKENIZER_CHAR + IntToString(nTimestamp);
+    SetCampaignString(sCorruptionDB, sAreaTag, sData);
     return nTotal;
 }
 

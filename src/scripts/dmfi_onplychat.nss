@@ -147,7 +147,6 @@ void main()
         int nChatVolume = GetPCChatVolume();
         string sOriginal = GetPCChatMessage();
         location lSpeechSource = GetLocation(oPC);
-        object oArea = GetArea(oPC);
 
         // hide chat from players, keep for NPCs and dialog box
         SetPCChatVolume(TALKVOLUME_SILENT_TALK);
@@ -420,6 +419,7 @@ void main()
             }
             else
             {
+                SetPCChatMessage();
                 SendMessageToPC(oPC, RED+ "Party Chat is Disabled." +COLOR_END+ " Your message was: " +sChatMessage);
             }
         }
@@ -429,9 +429,13 @@ void main()
 void ProcessCommand(string sCommand)
 {
     object oPC = GetPCChatSpeaker();
+    string sAreaTag = GetTag(GetArea(oPC));
     string sOriginal = GetPCChatMessage();
     string sChatMessage = sCommand;
     
+    // clear out the command
+    SetPCChatMessage();
+
     object oDataObject = GetItemPossessedBy(oPC,"PC_Data_Object");
 
     string sCurrCommandArg = parseArgs(sCommand,0);
@@ -2494,14 +2498,13 @@ void ProcessCommand(string sCommand)
     }
     else if (sCurrCommandArg == "Weave" || sCurrCommandArg == "weave" || sCurrCommandArg == "WEAVE")
     {
-        string sAreaTag = GetTag(oArea);
         int nDead = FetchDeadMagicChance(sAreaTag);
         if (GetIsDM(oPC) || GetIsDMPossessed(oPC))
         {
             SendMessageToPC(oPC, "Wild magic chance: " + IntToString(FetchWildMagicChance(sAreaTag)) + "%");
             SendMessageToPC(oPC, "Dead magic chance: " + IntToString(nDead) + "%");
         }
-        if (GetHasFeat(1599, oPC) || GetIsDM(oPC) || GetIsDMPossessed(oPC))
+        if (GetHasFeat(FEAT_WEAVE_RESONANCE, oPC) || GetIsDM(oPC) || GetIsDMPossessed(oPC))
         {
             if (nDead >= 95)
             {
@@ -2531,22 +2534,22 @@ void ProcessCommand(string sCommand)
     }
     else if ((sCurrCommandArg == "adddeadmagic" || sCurrCommandArg == "AddDeadMagic" || sCurrCommandArg == "ADDDEADMAGIC" || sCurrCommandArg == "Adddeadmagic") && GetIsDM(oPC))
     {
-        int nDead = AddDeadMagicChance(GetTag(oArea), StringToInt(sCommandArg2));
+        int nDead = AddDeadMagicChance(sAreaTag, StringToInt(sCommandArg2));
         SendMessageToPC(oPC, "Dead magic chance: " + IntToString(nDead) + "%");
     }
     else if ((sCurrCommandArg == "removedeadmagic" || sCurrCommandArg == "RemoveDeadMagic" || sCurrCommandArg == "REMOVEDEADMAGIC" || sCurrCommandArg == "Removedeadmagic") && GetIsDM(oPC))
     {
-        int nDead = AddDeadMagicChance(GetTag(oArea), -1 * StringToInt(sCommandArg2));
+        int nDead = AddDeadMagicChance(sAreaTag, -1 * StringToInt(sCommandArg2));
         SendMessageToPC(oPC, "Dead magic chance: " + IntToString(nDead) + "%");
     }
     else if ((sCurrCommandArg == "addwildmagic" || sCurrCommandArg == "AddWildMagic" || sCurrCommandArg == "ADDWILDMAGIC" || sCurrCommandArg == "Addwildmagic") && GetIsDM(oPC))
     {
-        int nWild = AddWildMagicChance(GetTag(oArea), StringToInt(sCommandArg2));
+        int nWild = AddWildMagicChance(sAreaTag, StringToInt(sCommandArg2));
         SendMessageToPC(oPC, "Wild magic chance: " + IntToString(nWild) + "%");
     }
     else if ((sCurrCommandArg == "removewildmagic" || sCurrCommandArg == "RemoveWildMagic" || sCurrCommandArg == "REMOVEWILDMAGIC" || sCurrCommandArg == "Removewildmagic") && GetIsDM(oPC))
     {
-        int nWild = AddWildMagicChance(GetTag(oArea), -1 * StringToInt(sCommandArg2));
+        int nWild = AddWildMagicChance(sAreaTag, -1 * StringToInt(sCommandArg2));
         SendMessageToPC(oPC, "Wild magic chance: " + IntToString(nWild) + "%");
     }
     else if ((sCurrCommandArg == "shopset" || sCurrCommandArg == "ShopSet" || sCurrCommandArg == "SHOPSET" || sCurrCommandArg == "Shopset") && GetIsDM(oPC))
