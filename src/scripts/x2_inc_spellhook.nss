@@ -347,13 +347,12 @@ int X2PreSpellCastCode()
         // Get the level of the spell being cast
         // so we can exclude cantrips from corrupting the Weave
         int nSpellLevel = GetLastSpellLevel();
+        int nSpell = GetSpellId();
 
         // Only apply wild and dead magic to PCs.
         // We don't want environmental effects or DM events to break.
-        if (X2DeadmagicZone(OBJECT_SELF, nSpellLevel) == FALSE)
+        if (X2DeadmagicZone(OBJECT_SELF, nSpellLevel, nSpell) == FALSE)
         {
-            int nSpellID = GetSpellId();
-            SpellFizzle(OBJECT_SELF, nSpellID);
             return FALSE;
         }
         X2WildMagicZone(OBJECT_SELF, oTarget, nSpellLevel);

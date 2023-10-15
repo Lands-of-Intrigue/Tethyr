@@ -10,11 +10,10 @@ void main()
     int nSL = SFGetInnateSpellLevelByClass(nSpell, CLASS_TYPE_WIZARD);
     int nMetamagic = StringToInt(NWNX_Events_GetEventData("METAMAGIC"));
 
-    int nCasterClassIndex = StringToInt(NWNX_Events_GetEventData("CLASS"));
-    int nCasterClass = GetClassByPosition(nCasterClassIndex + 1);
-
     if (nSL == 0 && nMetamagic == METAMAGIC_NONE)
     {
+        int nCasterClassIndex = StringToInt(NWNX_Events_GetEventData("CLASS"));
+        int nCasterClass = GetClassByPosition(nCasterClassIndex + 1);
 
         if (nCasterClass == CLASS_TYPE_SORCERER)
         {
@@ -31,12 +30,12 @@ void main()
             // loop down the cantrips section of the spellbook
             // if you find one with the same id as cast, refund it
             // index bounds 0 <= nIndex < GetMemorizedSpellCountByLevel()
-            while (nSlot > 0)
+            int i
+            for (i = 0; i < nSlot; i++)
             {
-                nSlot -= 1;
-                if (GetMemorizedSpellId(oPC, CLASS_TYPE_WIZARD, 0, nSlot) == nSpell)
+                if (GetMemorizedSpellId(oPC, CLASS_TYPE_WIZARD, 0, i) == nSpell)
                 {
-                    SetMemorizedSpellReady(oPC, CLASS_TYPE_WIZARD, 0, nSlot, TRUE);
+                    SetMemorizedSpellReady(oPC, CLASS_TYPE_WIZARD, 0, i, TRUE);
                 }
             }
         }

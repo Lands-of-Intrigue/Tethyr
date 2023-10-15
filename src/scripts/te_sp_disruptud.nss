@@ -23,7 +23,6 @@ void main()
     int nCasterLevel = TE_GetCasterLevel(OBJECT_SELF,GetLastSpellCastClass());
     int nTouch = TouchAttackRanged(oTarget,TRUE);
 
-    effect eVis = EffectVisualEffect(VFX_IMP_DEATH);
     effect eFail = EffectVisualEffect(VFX_IMP_MAGIC_RESISTANCE_USE);
 
     if (nTouch > 0)
@@ -36,12 +35,13 @@ void main()
             //Make SR Check
             if(!MyResistSpell(OBJECT_SELF, oTarget))
             {
-                //Set damage effect
+                //Set damage and vfx
+                effect eVis = EffectVisualEffect(VFX_IMP_DEATH);
                 effect eBad = EffectDamage(MaximizeOrEmpower(6, 1, GetMetaMagicFeat()), DAMAGE_TYPE_POSITIVE);
                 if (nTouch == 2)
                 {
+                    eVis = EffectVisualEffect(VFX_IMP_DEATH_L);
                     eBad = EffectDamage(MaximizeOrEmpower(6, 2, GetMetaMagicFeat()), DAMAGE_TYPE_POSITIVE);
-                    effect eVis = EffectVisualEffect(VFX_IMP_DEATH_L);
                 }
                 //Apply the VFX impact and damage effect
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);

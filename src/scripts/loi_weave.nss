@@ -28,7 +28,7 @@ int AddWildMagicChance(string sAreaTag, int nAmount);
 // this function will check if the caster is in a Deadmagic zone and
 // to what degree the deadmagic affects the caster Shadow weave practitioners
 // and Mystran specialty priests will be immune
-int X2DeadmagicZone(object oCaster, int nSpellLevel);
+int X2DeadmagicZone(object oCaster, int nSpellLevel, int nSpell);
 
 // Returns the percent chance of dead magic for the area
 int FetchDeadMagicChance(string sAreaTag);
@@ -37,7 +37,7 @@ int FetchDeadMagicChance(string sAreaTag);
 int AddDeadMagicChance(string sAreaTag, int nAmount);
 
 // A little function that plays the appropriate "fizzle out" VFX for the spell if it fails
-void SpellFizzle(object oPC, int nSpellID);
+void SpellFizzle(object oPC, int nSpell);
 
 // PRIVATE METHODS, DO NOT CALL THESE OUTSIDE THIS SCRIPT
 int FetchWeaveCorruption(string sCorruptionDB, string sAreaTag);
@@ -82,7 +82,7 @@ int AddWildMagicChance(string sAreaTag, int nAmount)
 
 
 
-int X2DeadmagicZone(object oCaster, int nSpellLevel)
+int X2DeadmagicZone(object oCaster, int nSpellLevel, int nSpell)
 {
     string sAreaTag = GetTag(GetArea(oCaster));
     int nSpellFailure = FetchDeadMagicChance(sAreaTag);
@@ -121,6 +121,7 @@ int X2DeadmagicZone(object oCaster, int nSpellLevel)
         DetectionCheck(oCaster);
         if (d100(1) < nSpellFailure)
         {
+            SpellFizzle(oCaster, nSpell);
             return FALSE;
         }
     }
@@ -137,9 +138,9 @@ int AddDeadMagicChance(string sAreaTag, int nAmount)
     return AddWeaveCorruption(DEADMAGIC_DB, sAreaTag, nAmount);
 }
 
-void SpellFizzle(object oPC, int nSpellID)
+void SpellFizzle(object oPC, int nSpell)
 {
-    string sAnimType = Get2DAString("Spells", "ConjAnim", nSpellID);
+    string sAnimType = Get2DAString("Spells", "ConjAnim", nSpell);
     effect eVis = EffectVisualEffect(292);
     if (sAnimType == "hand")
     {
