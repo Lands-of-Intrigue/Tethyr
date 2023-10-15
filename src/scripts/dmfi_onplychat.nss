@@ -389,7 +389,6 @@ void main()
                     SetIdentified(oPartyShouter, TRUE);
                     SetName(oPartyShouter, "DM");
                     OpenInventory(oPC, oPC);
-                    ClearAllActions();
                 }
 
                 // there is no language filtering on shouts
