@@ -619,5 +619,5 @@ void DoDragonLoot(object oPC)
 
 void DoIntMythic(object oPC)
 {
-    TickMythicXp(oPC, ABILITY_INTELLIGENCE);
+    TickMythicXp(oPC, ABILITY_INTELLIGENCE, 2);
 }
