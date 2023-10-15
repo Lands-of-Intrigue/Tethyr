@@ -14,7 +14,7 @@ const int DECAY_PERCENTAGE = 17;
 // Wildmagic zone
 // This function will check for any wild magic effects and send calls to the
 // wild magic tables based on that.
-void X2WildMagicZone(object oCaster, object oTarget);
+void X2WildMagicZone(object oCaster, object oTarget, int nSpellLevel);
 
 // Returns the percent chance of wild magic for the area
 int FetchWildMagicChance(string sAreaTag);
@@ -28,7 +28,7 @@ int AddWildMagicChance(string sAreaTag, int nAmount);
 // this function will check if the caster is in a Deadmagic zone and
 // to what degree the deadmagic affects the caster Shadow weave practitioners
 // and Mystran specialty priests will be immune
-int X2DeadmagicZone(object oCaster);
+int X2DeadmagicZone(object oCaster, int nSpellLevel, int nSpell);
 
 // Returns the percent chance of dead magic for the area
 int FetchDeadMagicChance(string sAreaTag);
@@ -37,16 +37,23 @@ int FetchDeadMagicChance(string sAreaTag);
 int AddDeadMagicChance(string sAreaTag, int nAmount);
 
 
-
 // PRIVATE METHODS, DO NOT CALL THESE OUTSIDE THIS SCRIPT
 int FetchWeaveCorruption(string sCorruptionDB, string sAreaTag);
 int AddWeaveCorruption(string sCorruptionDB, string sAreaTag, int nAmount);
 void DetectionCheck(object oPC);
+// A little function that plays the appropriate "fizzle out" VFX for the spell if it fails
+void SpellFizzle(object oPC, int nSpell);
 
 
 
-void X2WildMagicZone(object oCaster, object oTarget)
+void X2WildMagicZone(object oCaster, object oTarget, int nSpellLevel)
 {
+    if (nSpellLevel == 0)
+    {
+        // cantrips are not subject to weave corruption
+        return;
+    }
+
     string sAreaTag = GetTag(GetArea(oCaster));
     int nWildChance = FetchWildMagicChance(sAreaTag);
 
@@ -83,8 +90,14 @@ int AddWildMagicChance(string sAreaTag, int nAmount)
 
 
 
-int X2DeadmagicZone(object oCaster)
+int X2DeadmagicZone(object oCaster, int nSpellLevel, int nSpell)
 {
+    if (nSpellLevel == 0)
+    {
+        // cantrips are not subject to weave corruption
+        return TRUE;
+    }
+
     string sAreaTag = GetTag(GetArea(oCaster));
     int nSpellFailure = FetchDeadMagicChance(sAreaTag);
 
@@ -122,6 +135,7 @@ int X2DeadmagicZone(object oCaster)
         DetectionCheck(oCaster);
         if (d100(1) < nSpellFailure)
         {
+            SpellFizzle(oCaster, nSpell);
             return FALSE;
         }
     }
@@ -137,8 +151,6 @@ int AddDeadMagicChance(string sAreaTag, int nAmount)
 {
     return AddWeaveCorruption(DEADMAGIC_DB, sAreaTag, nAmount);
 }
-
-
 
 
 // PRIVATE METHODS, DO NOT CALL THESE OUTSIDE THIS SCRIPT
@@ -191,4 +203,15 @@ void DetectionCheck(object oPC)
     {
         SendMessageToPC(oPC, "As you draw upon the local Weave, you sense something is amiss.");
     }
+}
+
+void SpellFizzle(object oPC, int nSpell)
+{
+    string sAnimType = Get2DAString("Spells", "ConjAnim", nSpell);
+    effect eVis = EffectVisualEffect(292);
+    if (sAnimType == "hand")
+    {
+        eVis = EffectVisualEffect(293);
+    }
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
 }
