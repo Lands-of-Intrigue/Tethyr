@@ -15,7 +15,6 @@ void main()
 
     if (nSL == 0 && nMetamagic == METAMAGIC_NONE)
     {
-        GiveXPToCreature(oPC, 1000);
 
         if (nCasterClass == CLASS_TYPE_SORCERER)
         {
