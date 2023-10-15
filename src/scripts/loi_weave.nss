@@ -14,7 +14,7 @@ const int DECAY_PERCENTAGE = 17;
 // Wildmagic zone
 // This function will check for any wild magic effects and send calls to the
 // wild magic tables based on that.
-void X2WildMagicZone(object oCaster, object oTarget);
+void X2WildMagicZone(object oCaster, object oTarget, int nSpellLevel);
 
 // Returns the percent chance of wild magic for the area
 int FetchWildMagicChance(string sAreaTag);
@@ -28,7 +28,7 @@ int AddWildMagicChance(string sAreaTag, int nAmount);
 // this function will check if the caster is in a Deadmagic zone and
 // to what degree the deadmagic affects the caster Shadow weave practitioners
 // and Mystran specialty priests will be immune
-int X2DeadmagicZone(object oCaster);
+int X2DeadmagicZone(object oCaster, int nSpellLevel);
 
 // Returns the percent chance of dead magic for the area
 int FetchDeadMagicChance(string sAreaTag);
@@ -36,26 +36,25 @@ int FetchDeadMagicChance(string sAreaTag);
 // Adds to the percent chance of dead magic for the area, returns new total
 int AddDeadMagicChance(string sAreaTag, int nAmount);
 
-
+// A little function that plays the appropriate "fizzle out" VFX for the spell if it fails
+void SpellFizzle(object oPC, int nSpellID);
 
 // PRIVATE METHODS, DO NOT CALL THESE OUTSIDE THIS SCRIPT
 int FetchWeaveCorruption(string sCorruptionDB, string sAreaTag);
 int AddWeaveCorruption(string sCorruptionDB, string sAreaTag, int nAmount);
 void DetectionCheck(object oPC);
 
-
-
-void X2WildMagicZone(object oCaster, object oTarget)
+void X2WildMagicZone(object oCaster, object oTarget, int nSpellLevel)
 {
     string sAreaTag = GetTag(GetArea(oCaster));
     int nWildChance = FetchWildMagicChance(sAreaTag);
 
-    if (GetLevelByClass(CLASS_TYPE_SPELLFIRE, oCaster) >= 1)
+    if (nSpellLevel > 0 && GetLevelByClass(CLASS_TYPE_SPELLFIRE, oCaster) >= 1)
     {
         nWildChance = AddWildMagicChance(sAreaTag, d4(1));
         return; // corruptor, so exit without invoking wild magic reduction or effect
     } 
-    else if (nWildChance > 1)
+    else if (nSpellLevel > 0 && nWildChance > 1)
     {
         nWildChance = AddWildMagicChance(sAreaTag, -1);
     }
@@ -83,14 +82,14 @@ int AddWildMagicChance(string sAreaTag, int nAmount)
 
 
 
-int X2DeadmagicZone(object oCaster)
+int X2DeadmagicZone(object oCaster, int nSpellLevel)
 {
     string sAreaTag = GetTag(GetArea(oCaster));
     int nSpellFailure = FetchDeadMagicChance(sAreaTag);
 
-    if (GetHasFeat(FEAT_SHADOW_WEAVE_MAGIC, oCaster)
+    if (nSpellLevel > 0 && (GetHasFeat(FEAT_SHADOW_WEAVE_MAGIC, oCaster)
         || GetLevelByClass(CLASS_TYPE_SHADOW_ADEPT, oCaster)  >=1
-        || GetLevelByClass(CLASS_TYPE_SHADOW_CHANNELER, oCaster)  >=1)
+        || GetLevelByClass(CLASS_TYPE_SHADOW_CHANNELER, oCaster)  >=1))
     {
         nSpellFailure = AddDeadMagicChance(sAreaTag, 1 + d4(1));
         return TRUE;
@@ -99,7 +98,7 @@ int X2DeadmagicZone(object oCaster)
     {
         return TRUE; // Shar worshippers are immune to shadow weave
     }
-    else if (nSpellFailure > 1)
+    else if (nSpellLevel > 0 && nSpellFailure > 1)
     {
         int nChanceToRemove = -1;
         if (GetHasFeat(DEITY_Mystra, oCaster))
@@ -138,7 +137,16 @@ int AddDeadMagicChance(string sAreaTag, int nAmount)
     return AddWeaveCorruption(DEADMAGIC_DB, sAreaTag, nAmount);
 }
 
-
+void SpellFizzle(object oPC, int nSpellID)
+{
+    string sAnimType = Get2DAString("Spells", "ConjAnim", nSpellID);
+    effect eVis = EffectVisualEffect(292);
+    if (sAnimType == "hand")
+    {
+        eVis = EffectVisualEffect(293);
+    }
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+}
 
 
 // PRIVATE METHODS, DO NOT CALL THESE OUTSIDE THIS SCRIPT

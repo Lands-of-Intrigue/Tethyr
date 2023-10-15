@@ -223,4 +223,6 @@ void main()
     NWNX_Events_SubscribeEvent("NWNX_ON_DM_GIVE_LEVEL_AFTER","event_dm");
     NWNX_Events_SubscribeEvent("NWNX_ON_DM_GIVE_ALIGNMENT_AFTER","event_dm");
     NWNX_Events_SubscribeEvent("NWNX_ON_CLIENT_DISCONNECT_BEFORE","event_leave");
+
+    NWNX_Events_SubscribeEvent("NWNX_ON_DECREMENT_SPELL_COUNT_AFTER", "loi_refund_spell");
 }
