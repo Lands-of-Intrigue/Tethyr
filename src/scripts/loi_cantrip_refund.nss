@@ -30,7 +30,7 @@ void main()
             // loop down the cantrips section of the spellbook
             // if you find one with the same id as cast, refund it
             // index bounds 0 <= nIndex < GetMemorizedSpellCountByLevel()
-            int i
+            int i;
             for (i = 0; i < nSlot; i++)
             {
                 if (GetMemorizedSpellId(oPC, CLASS_TYPE_WIZARD, 0, i) == nSpell)
