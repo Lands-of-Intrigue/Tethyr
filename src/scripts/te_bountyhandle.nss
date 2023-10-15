@@ -1,11 +1,7 @@
 #include "nwnx_time"
+#include "loi_xp"
 
 void TE_DeathHandle(object oDead, object oKiller);
-
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature_Bount(object oPC, int nXPToGive, int nMulticlass);
 
 void TE_DeathHandle(object oDead, object oKiller)
 {
@@ -17,7 +13,7 @@ void TE_DeathHandle(object oDead, object oKiller)
     {
         SendMessageToPC(oKiller,"You gain the benefits of imparted knowledge on this kill! - "+IntToString(GetLocalInt(oKiller,"nLead"))+" additional XP awarded.");
         SetLocalInt(oKiller,"nLead",0);
-        GiveTrueXPToCreature_Bount(oKiller,GetLocalInt(oKiller,"nLead"),FALSE);
+        AwardXP(oKiller,GetLocalInt(oKiller,"nLead"));
     }
 
     if(GetLevelByClass(CLASS_TYPE_PALADIN,oKiller) >= 1 && GetLevelByClass(CLASS_TYPE_BLACKGUARD,oKiller) < 1 && GetLevelByClass(51,oKiller) < 1)
@@ -61,7 +57,6 @@ void TE_DeathHandle(object oDead, object oKiller)
             else
             {
                 SetLocalInt(oItem,"nPiety",nPiety+1);
-                GiveTrueXPToCreature_Bount(oKiller,5,FALSE);
             }
         }
     }
@@ -581,34 +576,3 @@ void TE_DeathHandle(object oDead, object oKiller)
     }
 }
 
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature_Bount(object oPC, int nXPToGive, int nMulticlass)
-{
-    if(nXPToGive < 0)
-    {
-        SetXP(oPC,GetXP(oPC)+(nXPToGive));
-    }
-    else
-    {
-        if(nMulticlass == TRUE)
-        {
-            object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
-            if(GetLocalInt(oItem,"iMulticlass") == TRUE)
-            {
-                nXPToGive = (nXPToGive - FloatToInt(IntToFloat(nXPToGive)*0.20));
-                SetXP(oPC,GetXP(oPC)+nXPToGive);
-            }
-            else
-            {
-                SetXP(oPC,GetXP(oPC)+(nXPToGive));
-            }
-        }
-        else
-        {
-            SetXP(oPC,GetXP(oPC)+(nXPToGive));
-        }
-    }
-}
-//void main(){}

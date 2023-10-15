@@ -26,8 +26,6 @@
 // we don't execute the script, else we do. :-P
 void DeathCheck(int nDeaths);
 
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass);
-
 void main()
 {
     // If we are set to, don't fire this script at all

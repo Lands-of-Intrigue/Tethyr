@@ -51,7 +51,7 @@ void main()
                     SetLocalInt(oPC,"nXPReward",0);
                     iXPBonus = GetXPBonus(oPC);
                     iXP = (iXP + iXPBonus);
-                    GiveTrueXPToCreature(oPC, iXP,FALSE);
+                    AwardXP(oPC, iXP, TRUE);
                     TickMythicXp(oPC, ABILITY_CHARISMA, 5);
                 }
                 ExecuteScript("te_save",oPC);

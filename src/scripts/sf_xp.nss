@@ -329,12 +329,12 @@ void GiveXP(object oKiller, int nXPToGive, float fKillerBonus, int nDiff, int nP
                     }
                     else
                     {
-                        GiveTrueXPToCreature(oParty, (nXPToGive + FloatToInt(fKillerBonus)),FALSE);
+                        AwardXP(oParty, (nXPToGive + FloatToInt(fKillerBonus)));
 
                         if(nBossReward != 0)
                         {
                             SendMessageToPC(oParty,"You receive a bonus for killing a boss!");
-                            GiveTrueXPToCreature(oParty,nBossReward,FALSE);
+                            AwardXP(oParty,nBossReward);
                         }
                     }
                 }
@@ -347,11 +347,11 @@ void GiveXP(object oKiller, int nXPToGive, float fKillerBonus, int nDiff, int nP
                     }
                     else
                     {
-                        GiveTrueXPToCreature(oParty, nXPToGive,FALSE);
+                        AwardXP(oParty, nXPToGive);
                         if(nBossReward != 0)
                         {
                             SendMessageToPC(oParty,"You receive a bonus for killing a boss!");
-                            GiveTrueXPToCreature(oParty,nBossReward,FALSE);
+                            AwardXP(oParty,nBossReward);
                         }
                     }
                 }

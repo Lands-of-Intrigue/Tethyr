@@ -5,7 +5,8 @@ const int SOFT_XP_CAP = 91000; // level 14
 // Adds XP to a player character
 // Only as high as the soft cap
 // Does nothing if nXP <= 0
-void AwardXP(object oPC, int nXP);
+// If bForce is true, bypass softcap restrictions
+void AwardXP(object oPC, int nXP, int bForce = FALSE);
 
 // Removes XP from a player character
 // Cannot take them below 1 XP
@@ -20,19 +21,20 @@ int DelevelToSoftCap(object oPC);
 // Should only be used sparingly
 void FullRelevel(object oPC);
 
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass);
 
 
-
-void AwardXP(object oPC, int nXP)
+void AwardXP(object oPC, int nXP, int bForce = FALSE)
 {
     if (nXP <= 0)
         return;
 
     int nBeforeXP = GetXP(oPC);
+    if (bForce)
+    {
+        SetXP(oPC, nBeforeXP + nXP);
+        return;
+    }
+
     if (nBeforeXP == SOFT_XP_CAP)
         return;
 
@@ -75,33 +77,4 @@ void FullRelevel(object oPC)
     int nXP = GetXP(oPC);
     SetXP(oPC, 50);
     SetXP(oPC, nXP);
-}
-
-
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass)
-{
-    if(nXPToGive < 0)
-    {
-        SetXP(oPC,GetXP(oPC)+(nXPToGive));
-    }
-    else
-    {
-        if(nMulticlass == TRUE)
-        {
-            object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
-            if(GetLocalInt(oItem,"iMulticlass") == TRUE)
-            {
-                nXPToGive = (nXPToGive - FloatToInt(IntToFloat(nXPToGive)*0.20));
-                SetXP(oPC,GetXP(oPC)+nXPToGive);
-            }
-            else
-            {
-                SetXP(oPC,GetXP(oPC)+(nXPToGive));
-            }
-        }
-        else
-        {
-            SetXP(oPC,GetXP(oPC)+(nXPToGive));
-        }
-    }
 }

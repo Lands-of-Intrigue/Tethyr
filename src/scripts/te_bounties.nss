@@ -1,35 +1,6 @@
 #include "nwnx_webhook"
+#include "loi_xp"
 
-//oPC == Object you wish to give XP to. Only PCs have multiclassing penalty.
-//nXPToGive == Amount of XP Reward. If negative, multiclassing penalty will never be calculated or looked at.
-//nMulticlass == TRUE for assessing multiclassing penalty. Default = 0/False.
-void GiveTrueXPToCreature(object oPC, int nXPToGive, int nMulticlass)
-{
-    if(nXPToGive < 0)
-    {
-        SetXP(oPC,GetXP(oPC)+(nXPToGive));
-    }
-    else
-    {
-        if(nMulticlass == TRUE)
-        {
-            object oItem = GetItemPossessedBy(oPC,"PC_Data_Object");
-            if(GetLocalInt(oItem,"iMulticlass") == TRUE)
-            {
-                nXPToGive = (nXPToGive - FloatToInt(IntToFloat(nXPToGive)*0.20));
-                SetXP(oPC,GetXP(oPC)+nXPToGive);
-            }
-            else
-            {
-                SetXP(oPC,GetXP(oPC)+(nXPToGive));
-            }
-        }
-        else
-        {
-            SetXP(oPC,GetXP(oPC)+(nXPToGive));
-        }
-    }
-}
 //::///////////////////////////////////////////////
 //:: FileName te_bounties
 //:://////////////////////////////////////////////
@@ -255,7 +226,7 @@ void main()
     SetCampaignInt(GetName(oMod),sTownC,GetCampaignInt(GetName(GetModule()),sTownC)+nTaxAmount);
     SetCampaignInt(GetName(oMod),sTownH,GetCampaignInt(GetName(GetModule()),sTownH)+nTaxAmount);
     GiveGoldToCreature(oPC,nRemain);
-    GiveTrueXPToCreature(oPC,nGold/10,0);
+    AwardXP(oPC,nGold/10);
 
     string sReturn = "**"+GetName(oPC)+"** ("+GetPCPlayerName(oPC)+"/"+GetPCPublicCDKey(oPC)+") turned in bounties worth "+IntToString(nGold)+" gold, adding "+IntToString(nTax)+" in taxes to the holding. **Total Gold in Coffers:** "+IntToString(GetCampaignInt(GetName(GetModule()),sTownC))+" **Total Gold in Holding:** "+IntToString(GetCampaignInt(GetName(GetModule()),sTownH));
     NWNX_WebHook_SendWebHookHTTPS("discordapp.com", WEBHOOK_BANK_CHANNEL, sReturn, sTown);

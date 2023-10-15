@@ -9,6 +9,8 @@
 //:://////////////////////////////////////////////
 #include "loi_functions"
 #include "nwnx_creature"
+#include "loi_xp"
+
 void main()
 {
     object oUser = GetEnteringObject();
@@ -60,7 +62,7 @@ void main()
         SetLocalInt(oItem,"iPCSubBonus",0);
 
         //Make them level 3
-        SetXP(oUser, 3000);
+        AwardXP(oUser, 3000);
         AssignCommand(oUser, JumpToLocation(GetLocation(GetObjectByTag("WP_NewCharacter")))); //Put them in the Starting Area.
 
 
