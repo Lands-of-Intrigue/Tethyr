@@ -376,6 +376,7 @@ void main()
         }
         else if (nChatVolume == TALKVOLUME_PARTY)
         {
+            /*
             // Party Chat is used as a DM shout
             if (GetIsDM(oPC) || GetIsDMPossessed(oPC))
             {
@@ -417,10 +418,10 @@ void main()
                 }
             }
             else
-            {
+            {*/
                 SetPCChatMessage();
                 SendMessageToPC(oPC, RED+ "Party Chat is Disabled." +COLOR_END+ " Your message was: " +sChatMessage);
-            }
+            //}
         }
     }
 }
