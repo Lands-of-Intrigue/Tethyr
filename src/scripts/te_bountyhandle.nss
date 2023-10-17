@@ -22,21 +22,32 @@ void TE_DeathHandle(object oDead, object oKiller)
 
     if(GetLevelByClass(CLASS_TYPE_PALADIN,oKiller) >= 1 && GetLevelByClass(CLASS_TYPE_BLACKGUARD,oKiller) < 1 && GetLevelByClass(51,oKiller) < 1)
     {
-        if(GetRacialType(oDead) != RACIAL_TYPE_CONSTRUCT &&
-        GetRacialType(oDead) != RACIAL_TYPE_VERMIN &&
-        GetRacialType(oDead) != RACIAL_TYPE_DRAGON &&
-        GetRacialType(oDead) != RACIAL_TYPE_UNDEAD)
+        int nType = GetRacialType(oDead)
+
+        if(nType != RACIAL_TYPE_UNDEAD &&
+        nType != RACIAL_TYPE_ANIMAL &&
+        nType != RACIAL_TYPE_VERMIN &&
+        nType != RACIAL_TYPE_MAGICAL_BEAST &&
+        nType != RACIAL_TYPE_BEAST &&
+        nType != RACIAL_TYPE_OOZE &&
+        nType != RACIAL_TYPE_ABERRATION &&
+        nType != RACIAL_TYPE_CONSTRUCT &&
+        nType != RACIAL_TYPE_ELEMENTAL &&
+        nType != RACIAL_TYPE_DRAGON)
         {
             if(GetAlignmentGoodEvil(oDead) == ALIGNMENT_NEUTRAL)
             {
                 SetLocalInt(oItem,"nPiety",nPiety-10);
                 AdjustAlignment(oKiller,ALIGNMENT_CHAOTIC,5,FALSE);
+                SendMessageToPC(oKiller,"This unnecessary bloodshed tarnishes you in the eyes of your deity.");
             }
             else if(GetAlignmentGoodEvil(oDead) == ALIGNMENT_GOOD)
             {
                 SetLocalInt(oItem,"nPiety",0);
+                SetLocalInt(oItem,"iTrans",1);
                 AdjustAlignment(oKiller,ALIGNMENT_EVIL,25,FALSE);
                 AdjustAlignment(oKiller,ALIGNMENT_CHAOTIC,25,FALSE);
+                SendMessageToPC(oKiller,"The murder of a righteous person weighs heavily on your soul. You have fallen from the grace of your deity.");
             }
         }
     }
@@ -44,7 +55,9 @@ void TE_DeathHandle(object oDead, object oKiller)
     {
         if(nPiety >= 50)
         {
-            if(GetRacialType(oDead) == RACIAL_TYPE_UNDEAD || GetRacialType(oDead) == RACIAL_TYPE_OUTSIDER)
+            int nType = GetRacialType(oDead)
+
+            if(nType == RACIAL_TYPE_UNDEAD || nType == RACIAL_TYPE_OUTSIDER)
             {
                 SetLocalInt(oItem,"nPiety",nPiety+2);
             }
