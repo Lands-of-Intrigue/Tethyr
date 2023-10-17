@@ -884,12 +884,12 @@ void spellDumpInfo(object oCaster, struct spell_st spellInfo, int nSpellID) {
 int checkSpellComponents(int nSpellID, object oCaster) {
 
         //not a PC
-    if(!GetIsPC(oCaster)) {
+    if (!GetIsPC(oCaster)) {
         return TRUE;
     }
 
     // is a DM?
-    if(GetIsDM(oCaster)) {
+    if (GetIsDM(oCaster) || GetIsDMPossessed(oCaster)) {
         return TRUE;
     }
 
