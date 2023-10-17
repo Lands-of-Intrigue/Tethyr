@@ -902,6 +902,12 @@ int checkSpellComponents(int nSpellID, object oCaster) {
     int nClass = GetLastSpellCastClass();
     int nCastLevel = GetCasterLevel(OBJECT_SELF);
 
+    // Cantrips never need components
+    if (SFGetInnateSpellLevelByClass(nSpellID, nClass) == 0)
+    {
+        return TRUE;
+    }
+
     //int nNonHostile = GetIsNonHostileSpell(nSpell);
     //object sTarget = GetSpellTargetObject();
     //object oArea = GetArea(oCaster);
