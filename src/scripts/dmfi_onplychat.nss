@@ -155,19 +155,18 @@ void main()
         SetLocalString(oPC, g_varEditorChatMessageString, sOriginal);
 
         // only trigger XP awards fpr PCs
-        if (GetIsPC(oPC) && GetLocalInt(oPC,"nXPReward") != 1 && !GetIsDM(oPC) && !GetIsDMPossessed(oPC))
+        if (GetIsPC(oPC) && GetLocalInt(oPC,"nXPReward") != 1 && GetStringLength(sOriginal) > 35 
+            && !GetIsDM(oPC) && !GetIsDMPossessed(oPC))
         {
             float fTalkRadius = 20.0f;
             object oHeard = GetFirstObjectInShape(SHAPE_SPHERE, fTalkRadius, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
             while (GetIsObjectValid(oHeard))
             {
-                if(GetIsPC(oHeard) || GetIsDMPossessed(oHeard))
+                if ((GetIsPC(oHeard) || GetIsDMPossessed(oHeard)) 
+                    && GetPCPublicCDKey(oPC) != GetPCPublicCDKey(oHeard))
                 {
                     // only award XP if not heard by yourself
-                    if(GetStringLength(sOriginal) > 35 && GetPCPublicCDKey(oPC) != GetPCPublicCDKey(oHeard))
-                    {
-                        SetLocalInt(oPC,"nXPReward", 1);
-                    }
+                    SetLocalInt(oPC,"nXPReward", 1);
                     break;
                 }
                 oHeard = GetNextObjectInShape(SHAPE_SPHERE, fTalkRadius, lSpeechSource, FALSE, OBJECT_TYPE_CREATURE);
