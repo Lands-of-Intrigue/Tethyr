@@ -230,16 +230,23 @@ void main()
                     SetLocalString(oPC,"sj_footprint_visual","60");
                 }
 
-                if(GetLocalInt(oData,"nMud") >= 30 && GetLocalFloat(oPC,"sj_footprint_duration") <= 3.0 && HorseGetIsMounted(oPC) == FALSE)
-                {
-                    SetLocalFloat(oPC,"sj_footprint_duration",600.0);
-                    SJ_Footprint_Start(oPC);
-                }
-                else
-                {
-                    SetLocalFloat(oPC,"sj_footprint_duration",3.0);
-                    SJ_Footprint_Start(oPC);
-                }
+                // -- New footprint update --
+
+                SetLocalFloat(oPC,"sj_footprint_duration", 3.0);
+                SJ_Footprint_Start(oPC);
+
+                // -- Old footprint update --
+
+                //if(GetLocalInt(oData,"nMud") >= 30 && GetLocalFloat(oPC,"sj_footprint_duration") <= 3.0 && HorseGetIsMounted(oPC) == FALSE)
+                //{
+                //    SetLocalFloat(oPC,"sj_footprint_duration",600.0);
+                //    SJ_Footprint_Start(oPC);
+                //}
+                //else
+                //{
+                //    SetLocalFloat(oPC,"sj_footprint_duration",3.0);
+                //    SJ_Footprint_Start(oPC);
+                //}
 
                 if(GetLocalInt(oData,"nWet") >= 50)
                 {
