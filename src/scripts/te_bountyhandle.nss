@@ -22,7 +22,7 @@ void TE_DeathHandle(object oDead, object oKiller)
 
     if(GetLevelByClass(CLASS_TYPE_PALADIN,oKiller) >= 1 && GetLevelByClass(CLASS_TYPE_BLACKGUARD,oKiller) < 1 && GetLevelByClass(51,oKiller) < 1)
     {
-        int nType = GetRacialType(oDead)
+        int nType = GetRacialType(oDead);
 
         if(nType != RACIAL_TYPE_UNDEAD &&
         nType != RACIAL_TYPE_ANIMAL &&
@@ -55,7 +55,7 @@ void TE_DeathHandle(object oDead, object oKiller)
     {
         if(nPiety >= 50)
         {
-            int nType = GetRacialType(oDead)
+            int nType = GetRacialType(oDead);
 
             if(nType == RACIAL_TYPE_UNDEAD || nType == RACIAL_TYPE_OUTSIDER)
             {
