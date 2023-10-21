@@ -10,21 +10,32 @@
 int StartingConditional()
 {
     object oPC = GetPCSpeaker();
-    if (GetLocalInt(oPC, "RUMOR_TIMER") == 0){
-    // Make sure the player has rolled above 25 on Diplomacy
-        if(GetSkillRank(SKILL_PERSUADE, oPC) + d20(1) >= 25){
-            TickMythicXp(oPC, ABILITY_CHARISMA, 5);
-            SetLocalInt(oPC, "RESEARCH_TIMER", 1);
-            DelayCommand(43200.0, DeleteLocalInt(oPC,"RESEARCH_TIMER" ));
-            return TRUE;
-        }
-        else
-        {
-            SetLocalInt(oPC, "RESEARCH_TIMER", 1);
-            DelayCommand(43200.0, DeleteLocalInt(oPC,"RESEARCH_TIMER" ));
-            return FALSE;
-        }
+    int nRumorDay = GetLocalInt(oPC, "nRumorLast");
+    int nDay = GetCalendarDay();
+    int nRoll = d20(1);
+    int nMod = GetSkillRank(SKILL_PERSUADE, oPC);
+    int nDC = 25;
+
+    if (nRumorDay == nDay)
+    {
+        SendMessageToPC(oPC, "You are unable to ask for rumors right now. Try asking again another day.");
+        return FALSE;
     }
-    SendMessageToPC(oPC, "You are unable to ask for rumors right now");
-    return FALSE;
+
+    if(nRoll + nMod >= nDC)
+    {
+        SendMessageToPC(oPC, IntToString(nRoll) + " + " + IntToString(nMod) + " = " + IntToString(nRoll + nMod) + ". Persuasion check succeeded.");
+        TickMythicXp(oPC, ABILITY_CHARISMA, 5);
+        SetLocalInt(oPC, "nRumorLast", nDay);
+        return TRUE;
+    }
+
+    else
+    {
+        SendMessageToPC(oPC, IntToString(nRoll) + " + " + IntToString(nMod) + " = " + IntToString(nRoll + nMod) + ". Persuasion check failed.");
+        SetLocalInt(oPC, "nRumorLast", nDay);
+        return FALSE;
+    }
+    
  }
+
