@@ -114,14 +114,6 @@ int AmIAHumanoid(object oTarget)
 
 void doRewardForCure(object oCaster, object oTarget, int nDamageLVL)
 {
-    // if(!GetIsReactionTypeHostile(oTarget))
-    // {
-    //     AdjustAlignment(oCaster, ALIGNMENT_GOOD, 1, FALSE);
-    // }
-    // else
-    // {
-    //     AdjustAlignment(oCaster, ALIGNMENT_EVIL, 1, FALSE);
-    // }
     if (nDamageLVL == 4)
     {
         if (GetHitDice(oCaster) <=10)
@@ -305,7 +297,6 @@ void spellsCure(int nDamage, int nMaxExtraDamage, int nMaximized, int vfx_impact
     {
       if (nStartHP < 0)
       {
-        // AdjustAlignment(OBJECT_SELF, ALIGNMENT_GOOD, 1, FALSE);
         GiveXPToCreature(OBJECT_SELF, 25);
       }
     }

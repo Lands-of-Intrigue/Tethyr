@@ -316,8 +316,6 @@ void EndRest(object oPC)
             SetPCAffliction(oPC, 2);
             SetLocalInt(oItem,"iUndead",0);
             SendMessageToPC(oPC, DARKRED+"Something twists inside your stomach and you feel a gnawing hunger that cannot be satiated by mere food...");
-            AdjustAlignment(oPC,ALIGNMENT_CHAOTIC,1,FALSE);
-            AdjustAlignment(oPC,ALIGNMENT_EVIL,1,FALSE);
             NWNX_Creature_AddFeat(oPC, 1413);
         }
         else
