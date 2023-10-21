@@ -26,6 +26,7 @@ void bandage(object oPC , object oTarget)
           {
                SendMessageToPC(oTarget, "The bandages stop the bleeding.");
           }
+          TickMythicXp(oPC, ABILITY_WISDOM, 2);
      }
      else
      {
