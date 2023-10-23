@@ -72,7 +72,6 @@ void main()
             }
             else
             {
-                AdjustAlignment(oPC,ALIGNMENT_EVIL,1,FALSE);
                 SendMessageToPC(oPC,"This berry has a sulphorous taste.");
             }
 

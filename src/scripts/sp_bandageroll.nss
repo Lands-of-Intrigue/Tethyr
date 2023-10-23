@@ -1,5 +1,6 @@
 #include "x2_inc_switches"
 #include "nwnx_item"
+#include "loi_mythicxp"
 void bandage(object oPC , object oTarget)
 {
      int roll = d20(1);
@@ -26,6 +27,7 @@ void bandage(object oPC , object oTarget)
           {
                SendMessageToPC(oTarget, "The bandages stop the bleeding.");
           }
+          TickMythicXp(oPC, ABILITY_WISDOM, 2);
      }
      else
      {

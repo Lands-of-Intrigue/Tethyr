@@ -9,8 +9,8 @@ void GiveTrueXPToCreature_Bount(object oPC, int nXPToGive, int nMulticlass);
 
 void TE_DeathHandle(object oDead, object oKiller)
 {
-       //PIETY STUFF, LEADERSHIP STUFF
-       object oItem = GetItemPossessedBy(oKiller,"PC_Data_Object");
+    //PIETY STUFF, LEADERSHIP STUFF
+    object oItem = GetItemPossessedBy(oKiller,"PC_Data_Object");
     int nPiety = GetLocalInt(oItem,"nPiety");
 
     if(GetLocalInt(oKiller,"nLead") > 0 && GetLocalInt(oKiller,"nXPReward") == 1)
@@ -38,15 +38,12 @@ void TE_DeathHandle(object oDead, object oKiller)
             if(GetAlignmentGoodEvil(oDead) == ALIGNMENT_NEUTRAL)
             {
                 SetLocalInt(oItem,"nPiety",nPiety-10);
-                AdjustAlignment(oKiller,ALIGNMENT_CHAOTIC,5,FALSE);
                 SendMessageToPC(oKiller,"This unnecessary bloodshed tarnishes you in the eyes of your deity.");
             }
             else if(GetAlignmentGoodEvil(oDead) == ALIGNMENT_GOOD)
             {
                 SetLocalInt(oItem,"nPiety",0);
                 SetLocalInt(oItem,"iTrans",1);
-                AdjustAlignment(oKiller,ALIGNMENT_EVIL,25,FALSE);
-                AdjustAlignment(oKiller,ALIGNMENT_CHAOTIC,25,FALSE);
                 SendMessageToPC(oKiller,"The murder of a righteous person weighs heavily on your soul. You have fallen from the grace of your deity.");
             }
         }
@@ -74,7 +71,6 @@ void TE_DeathHandle(object oDead, object oKiller)
             else
             {
                 SetLocalInt(oItem,"nPiety",nPiety+1);
-                GiveTrueXPToCreature_Bount(oKiller,5,FALSE);
             }
         }
     }

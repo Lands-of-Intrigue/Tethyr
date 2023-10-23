@@ -94,26 +94,7 @@ void main()
     {
         ApplyEffectAtLocation(DURATION_TYPE_INSTANT, EffectVisualEffect(nDeathEffect), GetLocation(OBJECT_SELF));
     }
-    // Default Commoner alignment changing. (If the commoner is not evil!)
-    if(GetLevelByClass(CLASS_TYPE_COMMONER) > 0 &&
-       GetAlignmentGoodEvil(OBJECT_SELF) != ALIGNMENT_EVIL &&
-      !GetSpawnInCondition(AI_FLAG_OTHER_NO_COMMONER_ALIGNMENT_CHANGE, AI_OTHER_MASTER))
-    {
-        if(GetIsPC(oKiller))
-        {
-            AdjustAlignment(oKiller, ALIGNMENT_EVIL, 5);
-        }
-        else
-        {
-            // If it is a summon, henchmen or familar of a PC, we adust the PC itself
-            // Clever, eh?
-            object oMaster = GetMaster(oKiller);
-            if(GetIsObjectValid(oMaster) && GetIsPC(oMaster))
-            {
-                AdjustAlignment(oMaster, ALIGNMENT_EVIL, 5);
-            }
-        }
-    }
+    
     // Always shout when we are killed. Reactions - Morale penalty, and
     // attack the killer.
     AISpeakString(AI_SHOUT_I_WAS_KILLED);
