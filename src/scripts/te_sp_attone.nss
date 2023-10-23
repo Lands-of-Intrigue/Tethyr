@@ -15,6 +15,7 @@
 #include "x2_inc_spellhook"
 #include "te_functions"
 #include "te_afflic_func"
+#include "nw_i0_plot"
 
 void main()
 {
@@ -41,7 +42,28 @@ void main()
     object oCaster = OBJECT_SELF;
     object oItem = GetItemPossessedBy(oTarget,"PC_Data_Object");
 
+    // You can't cast this on a hostile entity
+    if (GetIsReactionTypeHostile(oTarget))
+    {
+        FloatingTextStringOnCreature("Only a willing creature is a valid target for this spell.", oCaster, FALSE);
+        return;
+    }
+
+    // Only a DM can cast this spell
+    if (!GetIsDM(oCaster) && !GetIsDMPossessed(oCaster))
+    {
+        FloatingTextStringOnCreature("This spell may require divine intercession. It will not function without a DM present.", oCaster, FALSE);
+        return;
+    }
+
+    // You can't cast this on an NPC
+    if (!GetIsPlayerCharacter(oTarget))
+    {
+        return;
+    }
+
     SetLocalInt(oItem,"nPiety",100);
+    SetLocalInt(oItem, "iTrans",0);
 
     int nCasterGEValue = GetGoodEvilValue(oCaster);
     int nCasterLCValue = GetLawChaosValue(oCaster);
@@ -70,7 +92,6 @@ void main()
         AdjustAlignment(oTarget, ALIGNMENT_LAWFUL, nChange, FALSE);
     }
 
-    SetLocalInt(oItem, "iTrans",0);
     SetXP(oCaster, GetXP(oCaster) - 500);
 }
 
